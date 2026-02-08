@@ -78,6 +78,7 @@ const StyledNavItem = styled(ListItemButton, {
     // Root item
     ...(!subItem && {
       ...theme.typography.body2,
+      color: 'gray',
       padding: 0,
       height: '100%',
       fontWeight: theme.typography.fontWeightMedium,
@@ -87,16 +88,16 @@ const StyledNavItem = styled(ListItemButton, {
       '&:hover': {
         opacity: 0.64,
         backgroundColor: 'transparent',
-        '&:before': {
-          ...dotStyles,
-        },
+        // '&:before': {
+        //   ...dotStyles,
+        // },
       },
       ...(active && {
-        color: theme.palette.primary.main,
+        color: 'black',
         fontWeight: theme.typography.fontWeightSemiBold,
-        '&:before': {
-          ...dotStyles,
-        },
+        // '&:before': {
+        //   ...dotStyles,
+        // },
       }),
       ...(opened && {
         opacity: 0.64,

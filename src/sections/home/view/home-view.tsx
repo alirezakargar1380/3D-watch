@@ -19,6 +19,8 @@ import HomeColorPresets from '../home-color-presets';
 import HomeAdvertisement from '../home-advertisement';
 import HomeCleanInterfaces from '../home-clean-interfaces';
 import HomeHugePackElements from '../home-hugepack-elements';
+import Image from 'src/components/image';
+import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -55,7 +57,24 @@ export default function HomeView() {
     <MainLayout>
       <ScrollProgress scrollYProgress={scrollYProgress} />
 
-      <HomeHero />
+      <Box mt={30} px={10} >
+        <Typography mb={2} variant='h4'><span style={{ color: '#ff3d51' }}>The Latest.</span> All new and Lovable</Typography>
+        <Box position={'relative'}>
+          <Box position={'absolute'} pl={'30px'} pt={'30px'} zIndex={10}>
+            <Typography color={'white'} variant={'h3'} pt={'24px'} fontSize={'28px!important'}>Clock 3D</Typography>
+            <Box pt={'10px'}>
+              <Typography color={'white'} variant={'body1'}>Pro Clock for Wall and Room</Typography>
+              <Typography color={'white'} variant={'caption'}>low price & high quality</Typography>
+            </Box>
+          </Box>
+          <Box width={400} height={500} borderRadius={'18px'} overflow={'hidden'}>
+            <Image src='/assets/images/Untitled2.jpg' height={1} />
+          </Box>
+        </Box>
+
+      </Box>
+
+      {/* <HomeHero />
 
       <Box
         sx={{
@@ -85,7 +104,7 @@ export default function HomeView() {
         <HomeLookingFor />
 
         <HomeAdvertisement />
-      </Box>
+      </Box> */}
     </MainLayout>
   );
 }

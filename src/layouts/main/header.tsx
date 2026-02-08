@@ -25,6 +25,8 @@ import { navConfig } from './config-navigation';
 import LoginButton from '../common/login-button';
 import HeaderShadow from '../common/header-shadow';
 import SettingsButton from '../common/settings-button';
+import Iconify from 'src/components/iconify';
+import { IconButton } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -41,72 +43,62 @@ export default function Header() {
         disableGutters
         sx={{
           height: {
-            xs: HEADER.H_MOBILE,
+            // xs: HEADER.H_MOBILE,
             md: HEADER.H_DESKTOP,
           },
-          transition: theme.transitions.create(['height'], {
-            easing: theme.transitions.easing.easeInOut,
-            duration: theme.transitions.duration.shorter,
+          // transition: theme.transitions.create(['height'], {
+          //   easing: theme.transitions.easing.easeInOut,
+          //   duration: theme.transitions.duration.shorter,
+          // }),
+          ...bgBlur({
+            color: theme.palette.background.default,
           }),
-          ...(offsetTop && {
-            ...bgBlur({
-              color: theme.palette.background.default,
-            }),
-            height: {
-              md: HEADER.H_DESKTOP_OFFSET,
-            },
-          }),
+          // ...(offsetTop && {
+          //   ...bgBlur({
+          //     color: theme.palette.background.default,
+          //   }),
+          //   height: {
+          //     md: HEADER.H_DESKTOP_OFFSET,
+          //   },
+          // }),
         }}
       >
-        <Container sx={{ height: 1, display: 'flex', alignItems: 'center' }}>
+        <Container sx={{ height: 1, display: 'flex', justifyContent: 'space-between' }}>
           <Badge
             sx={{
+              alignItems: 'center',
               [`& .${badgeClasses.badge}`]: {
                 top: 8,
                 right: -16,
               },
             }}
-            badgeContent={
-              <Link
-                href={paths.changelog}
-                target="_blank"
-                rel="noopener"
-                underline="none"
-                sx={{ ml: 1 }}
-              >
-                <Label color="info" sx={{ textTransform: 'unset', height: 22, px: 0.5 }}>
-                  v5.6.0
-                </Label>
-              </Link>
-            }
           >
             <Logo />
           </Badge>
 
-          <Box sx={{ flexGrow: 1 }} />
+          {/* <Box sx={{ flexGrow: 1 }} /> */}
 
           {mdUp && <NavDesktop data={navConfig} />}
 
           <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
-            <Button variant="contained" target="_blank" rel="noopener" href={paths.minimalUI}>
-              Purchase Now
-            </Button>
 
-            {mdUp && <LoginButton />}
+            {/* {mdUp && <LoginButton />} */}
 
-            <SettingsButton
-              sx={{
-                ml: { xs: 1, md: 0 },
-                mr: { md: 2 },
-              }}
-            />
+            <IconButton>
+              <Iconify icon={'mingcute:user-1-line'} />
+            </IconButton>
+
+            <IconButton>
+              <Iconify icon={'mdi:shopping-outline'} />
+            </IconButton>
 
             {!mdUp && <NavMobile data={navConfig} />}
           </Stack>
         </Container>
       </Toolbar>
 
-      {offsetTop && <HeaderShadow />}
+      <HeaderShadow />
+      {/* {offsetTop && <HeaderShadow />} */}
     </AppBar>
   );
 }
