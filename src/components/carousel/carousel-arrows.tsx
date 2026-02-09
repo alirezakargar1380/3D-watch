@@ -17,6 +17,8 @@ const StyledIconButton = styled(IconButton, {
   shouldForwardProp: (prop) => prop !== 'filled' && prop !== 'hasChild' && prop !== 'shape',
 })<StyledIconButtonProps>(({ filled, shape, hasChild, theme }) => ({
   color: 'inherit',
+  width: '50px',
+  height: '50px',
   transition: theme.transitions.create('all', {
     duration: theme.transitions.duration.shorter,
   }),
@@ -30,8 +32,8 @@ const StyledIconButton = styled(IconButton, {
     },
   }),
   ...(filled && {
-    color: alpha(theme.palette.common.white, 0.8),
-    backgroundColor: alpha(theme.palette.grey[900], 0.48),
+    color: alpha(theme.palette.common.white, 0.99),
+    backgroundColor: "#555555",
     '&:hover': {
       color: theme.palette.common.white,
       backgroundColor: theme.palette.grey[900],

@@ -20,7 +20,16 @@ import HomeAdvertisement from '../home-advertisement';
 import HomeCleanInterfaces from '../home-clean-interfaces';
 import HomeHugePackElements from '../home-hugepack-elements';
 import Image from 'src/components/image';
-import { Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Card, CardContent, CardHeader, Container, Stack, Typography } from '@mui/material';
+import CarouselBasic1 from 'src/sections/_examples/extra/carousel-view/carousel-basic-1';
+import CarouselBasic2 from 'src/sections/_examples/extra/carousel-view/carousel-basic-2';
+import CarouselBasic3 from 'src/sections/_examples/extra/carousel-view/carousel-basic-3';
+import CarouselBasic4 from 'src/sections/_examples/extra/carousel-view/carousel-basic-4';
+import { _mock } from 'src/_mock';
+import ProductCarousel from 'src/sections/_examples/extra/carousel-view/product-carousel';
+import AccordionView from 'src/sections/_examples/mui/accordion-view';
+import Iconify from 'src/components/iconify';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -48,31 +57,118 @@ const StyledPolygon = styled('div')<StyledPolygonProps>(({ anchor = 'top', theme
   }),
 }));
 
+
+const _carouselsExample = [...Array(20)].map((_, index) => ({
+  id: _mock.id(index),
+  title: _mock.postTitle(index),
+  coverUrl: _mock.image.cover(index),
+  description: _mock.description(index),
+}));
+
+// ----------------------------------------------------------------------
+
+const _accordions = [...Array(3)].map((_, index) => ({
+  id: _mock.id(index),
+  value: `panel${index + 1}`,
+  heading: `Accordion ${index + 1}`,
+  subHeading: _mock.postTitle(index),
+  detail: _mock.description(index),
+}));
+
 // ----------------------------------------------------------------------
 
 export default function HomeView() {
   const { scrollYProgress } = useScroll();
 
+  const [controlled, setControlled] = useState<string | false>(false);
+
+  const handleChangeControlled =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setControlled(isExpanded ? panel : false);
+    };
+
   return (
     <MainLayout>
       <ScrollProgress scrollYProgress={scrollYProgress} />
 
-      <Box mt={30} px={10} >
-        <Typography mb={2} variant='h4'><span style={{ color: '#ff3d51' }}>The Latest.</span> All new and Lovable</Typography>
-        <Box position={'relative'}>
-          <Box position={'absolute'} pl={'30px'} pt={'30px'} zIndex={10}>
-            <Typography color={'white'} variant={'h3'} pt={'24px'} fontSize={'28px!important'}>Clock 3D</Typography>
-            <Box pt={'10px'}>
-              <Typography color={'white'} variant={'body1'}>Pro Clock for Wall and Room</Typography>
-              <Typography color={'white'} variant={'caption'}>low price & high quality</Typography>
-            </Box>
-          </Box>
-          <Box width={400} height={500} borderRadius={'18px'} overflow={'hidden'}>
-            <Image src='/assets/images/Untitled2.jpg' height={1} />
-          </Box>
+
+      <Box sx={(theme) => ({
+        mt: 10,
+        position: 'relative',
+
+        [theme.breakpoints.up('lg')]: {
+          ml: `calc((100vw - ${theme.breakpoints.values.lg}px) / 2)`,
+          mr: 'calc(-50vw + 50%)',
+        },
+
+        [theme.breakpoints.up('xl')]: {
+          ml: `calc((100vw - ${theme.breakpoints.values.xl}px) / 2)`,
+        },
+      })}
+      >
+        <ProductCarousel data={_carouselsExample.slice(1, 20)} />
+      </Box>
+      <Container maxWidth={'xl'} sx={{
+        mt: 30
+      }}>
+        <Box>
+          {/* <Card>
+            <CardHeader title="Carousel Basic 1" />
+            <CardContent>
+              <CarouselBasic1 data={_carouselsExample.slice(0, 4)} />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader title="Carousel Basic 2" />
+            <CardContent>
+              <CarouselBasic2 data={_carouselsExample.slice(4, 8)} />
+            </CardContent>
+          </Card> */}
+
+
+
+          {/* <Card>
+            <CardHeader title="Carousel Basic 4" />
+            <CardContent>
+              <CarouselBasic4 data={_carouselsExample.slice(12, 16)} />
+            </CardContent>
+          </Card> */}
         </Box>
 
-      </Box>
+        <Box mb={3}>
+          <Typography variant='h2'>Customize <span style={{ color: '#ff3d51' }}>Your Watch.</span></Typography>
+        </Box>
+        <Box bgcolor={'#d2d2d7a3'} borderRadius={'28px'}>
+          <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+            <Box pl={3} pt={0} width={'50%'}>
+              {_accordions.map((item, index) => (
+                <Accordion
+                  key={item.value}
+                  disabled={index === 3}
+                  expanded={controlled === item.value}
+                  onChange={handleChangeControlled(item.value)}
+                >
+                  <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
+                    <Typography variant="h1" fontWeight={500} sx={{ width: '90%', flexShrink: 0 }}>
+                      {item.heading}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>{item.detail}</Typography>
+                  </AccordionDetails>
+                </Accordion>
+              ))}
+            </Box>
+            <Box height={750} width={'50%'} textAlign={'right'}>
+              <Image src='/assets/images/Untitled7.png' py={3} width={'fit-content'} height={1} />
+            </Box>
+
+          </Stack>
+
+        </Box>
+
+      </Container>
 
       {/* <HomeHero />
 
