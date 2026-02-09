@@ -168,6 +168,10 @@ export default function HomeView() {
 
         </Box>
 
+        <Box mt={30}>
+          <Typography color={"#6e6e73"} variant='h4' fontWeight={600}><span style={{ color: '#ff3d51' }}>Customize Watch.</span> Something You can't experience anywhere</Typography>
+        </Box>
+
       </Container>
 
       {/* <HomeHero />

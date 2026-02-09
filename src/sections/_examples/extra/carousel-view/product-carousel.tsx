@@ -55,7 +55,7 @@ export default function ProductCarousel({ data }: Props) {
                     background: 'none',
                     '& .slick-list': {
                         borderRadius: 2,
-                        boxShadow: theme.customShadows.z16,
+                        // boxShadow: theme.customShadows.z16,
                     },
                 }}
             >
