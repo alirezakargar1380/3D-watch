@@ -20,8 +20,3 @@ export default function UserEditPage({ params }: Props) {
   return <UserEditView id={id} />;
 }
 
-export async function generateStaticParams() {
-  return _userList.map((user) => ({
-    id: user.id,
-  }));
-}

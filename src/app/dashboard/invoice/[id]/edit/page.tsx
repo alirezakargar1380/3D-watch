@@ -19,9 +19,3 @@ export default function InvoiceEditPage({ params }: Props) {
 
   return <InvoiceEditView id={id} />;
 }
-
-export async function generateStaticParams() {
-  return _invoices.map((invoice) => ({
-    id: invoice.id,
-  }));
-}

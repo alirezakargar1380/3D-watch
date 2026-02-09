@@ -19,9 +19,3 @@ export default function JobEditPage({ params }: Props) {
 
   return <JobEditView id={id} />;
 }
-
-export async function generateStaticParams() {
-  return _jobs.map((job) => ({
-    id: job.id,
-  }));
-}

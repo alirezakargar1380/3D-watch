@@ -19,9 +19,3 @@ export default function TourEditPage({ params }: Props) {
 
   return <TourEditView id={id} />;
 }
-
-export async function generateStaticParams() {
-  return _tours.map((tour) => ({
-    id: tour.id,
-  }));
-}
