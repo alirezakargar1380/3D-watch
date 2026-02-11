@@ -29,6 +29,7 @@ import { ProductDetailsSkeleton } from '../product-skeleton';
 import ProductDetailsSummary from '../product-details-summary';
 import ProductDetailsCarousel from '../product-details-carousel';
 import ProductDetailsDescription from '../product-details-description';
+import Viewer from '../watch';
 
 // ----------------------------------------------------------------------
 
@@ -197,9 +198,14 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
         mb: 15,
       }}
     >
+
+      <Box height={500} sx={{ mb: 5 }}>
+        <Viewer />
+      </Box>
+
       <CartIcon totalItems={checkout.totalItems} />
 
-      {productLoading && renderSkeleton}
+      {/* {productLoading && renderSkeleton} */}
 
       {/* {productError && renderError} */}
 

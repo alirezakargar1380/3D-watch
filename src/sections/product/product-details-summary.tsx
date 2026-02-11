@@ -25,6 +25,7 @@ import { IProductItem } from 'src/types/product';
 import { ICheckoutItem } from 'src/types/checkout';
 
 import IncrementerButton from './common/incrementer-button';
+import Viewer from './watch';
 
 // ----------------------------------------------------------------------
 
@@ -251,7 +252,7 @@ export default function ProductDetailsSummary({
           onIncrease={() => setValue('quantity', 6 + 1)}
           // onIncrease={() => setValue('quantity', values.quantity + 1)}
           onDecrease={() => setValue('quantity', 4 - 1)}
-          // onDecrease={() => setValue('quantity', values.quantity - 1)}
+        // onDecrease={() => setValue('quantity', values.quantity - 1)}
         />
 
         <Typography variant="caption" component="div" sx={{ textAlign: 'right' }}>
@@ -277,7 +278,7 @@ export default function ProductDetailsSummary({
       </Button>
 
       <Button fullWidth size="large" type="submit" variant="contained" disabled={disabledActions}>
-        Buy Now
+        Customize This Clock
       </Button>
     </Stack>
   );
