@@ -140,7 +140,7 @@ export default function HomeView() {
 
       <Box mt={10} bgcolor={'#f5f5f7'} py={18}>
         <Container maxWidth={'xl'} sx={{ px: 6 }}>
-          <Typography color={"#000000"} variant='h1' fontWeight={700} mb={4}>
+          <Typography color={"#000000"} variant='h2' fontWeight={700} mb={4}>
             Why Apple is the best <br />
             place to buy iPhone.
           </Typography>

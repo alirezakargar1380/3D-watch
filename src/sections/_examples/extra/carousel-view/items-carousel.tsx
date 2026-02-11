@@ -90,7 +90,7 @@ function CarouselItem({ item }: { item: CarouselItemProps }) {
                 </IconButton>
             </Box>
             <Box height={'50%'} width={1}>
-                <Typography color={'black'} variant={'h3'} pt={'24px'} fontSize={'28px!important'}>Special Hand Clock</Typography>
+                <Typography color={'black'} variant={'h3'} pt={'24px'} fontSize={'28px!important'}>Special Clock Hand</Typography>
                 <Box pt={'10px'}>
                     <Typography color={'black'} variant={'body1'}>Pro. Beyond.</Typography>
                     <Typography color={'black'} variant={'caption'}>From $41.62/mo. for 24 mo. or $999 before trade‑in</Typography>

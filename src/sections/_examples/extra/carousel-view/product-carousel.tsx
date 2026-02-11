@@ -3,7 +3,8 @@ import { useTheme } from '@mui/material/styles';
 
 import Image from 'src/components/image';
 import Carousel, { useCarousel, CarouselDots, CarouselArrows } from 'src/components/carousel';
-import { Typography } from '@mui/material';
+import { Link, Typography } from '@mui/material';
+import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -83,17 +84,19 @@ function CarouselItem({ item }: { item: CarouselItemProps }) {
     const { coverUrl, title } = item;
 
     return (
-        <Box position={'relative'} mr={2}>
-            <Box position={'absolute'} pl={'30px'} pt={'30px'} zIndex={10}>
-                <Typography color={'white'} variant={'h3'} pt={'24px'} fontSize={'28px!important'}>Clock 3D</Typography>
-                <Box pt={'10px'}>
-                    <Typography color={'white'} variant={'body1'}>Pro Clock for Wall and Room</Typography>
-                    <Typography color={'white'} variant={'caption'}>low price & high quality</Typography>
+        <Link href={paths.product.details('234')}>
+            <Box position={'relative'} mr={2}>
+                <Box position={'absolute'} pl={'30px'} pt={'30px'} zIndex={10}>
+                    <Typography color={'white'} variant={'h3'} pt={'24px'} fontSize={'28px!important'}>Clock 3D</Typography>
+                    <Box pt={'10px'}>
+                        <Typography color={'white'} variant={'body1'}>Pro Clock for Wall and Room</Typography>
+                        <Typography color={'white'} variant={'caption'}>low price & high quality</Typography>
+                    </Box>
+                </Box>
+                <Box width={400} height={500} borderRadius={'18px'} overflow={'hidden'}>
+                    <Image src='/assets/images/Untitled4.jpg' height={1} width={1} />
                 </Box>
             </Box>
-            <Box width={400} height={500} borderRadius={'18px'} overflow={'hidden'}>
-                <Image src='/assets/images/Untitled4.jpg' height={1} width={1} />
-            </Box>
-        </Box>
+        </Link>
     )
 }

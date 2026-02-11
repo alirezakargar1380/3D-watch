@@ -1,6 +1,4 @@
-import axios, { endpoints } from 'src/utils/axios';
-
-import { ProductShopDetailsView } from 'src/sections/product/view';
+import ProductShopDetailsViewCustomize from 'src/sections/product/view/product-shop-details-view-customize';
 
 // ----------------------------------------------------------------------
 
@@ -17,5 +15,5 @@ type Props = {
 export default function ProductShopDetailsPage({ params }: Props) {
   const { id } = params;
 
-  return <ProductShopDetailsView id={id} />;
+  return <ProductShopDetailsViewCustomize id={id} />;
 }
