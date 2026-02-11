@@ -20,7 +20,7 @@ import HomeAdvertisement from '../home-advertisement';
 import HomeCleanInterfaces from '../home-clean-interfaces';
 import HomeHugePackElements from '../home-hugepack-elements';
 import Image from 'src/components/image';
-import { Accordion, AccordionDetails, AccordionSummary, Card, CardContent, CardHeader, Container, Stack, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Card, CardContent, CardHeader, Container, IconButton, Stack, Typography } from '@mui/material';
 import CarouselBasic1 from 'src/sections/_examples/extra/carousel-view/carousel-basic-1';
 import CarouselBasic2 from 'src/sections/_examples/extra/carousel-view/carousel-basic-2';
 import CarouselBasic3 from 'src/sections/_examples/extra/carousel-view/carousel-basic-3';
@@ -30,6 +30,7 @@ import ProductCarousel from 'src/sections/_examples/extra/carousel-view/product-
 import AccordionView from 'src/sections/_examples/mui/accordion-view';
 import Iconify from 'src/components/iconify';
 import { useState } from 'react';
+import ItemsCarousel from 'src/sections/_examples/extra/carousel-view/items-carousel';
 
 // ----------------------------------------------------------------------
 
@@ -92,87 +93,81 @@ export default function HomeView() {
       <ScrollProgress scrollYProgress={scrollYProgress} />
 
 
-      <Box sx={(theme) => ({
-        mt: 10,
-        position: 'relative',
-
-        [theme.breakpoints.up('lg')]: {
-          ml: `calc((100vw - ${theme.breakpoints.values.lg}px) / 2)`,
-          mr: 'calc(-50vw + 50%)',
-        },
-
-        [theme.breakpoints.up('xl')]: {
-          ml: `calc((100vw - ${theme.breakpoints.values.xl}px) / 2)`,
-        },
-      })}
-      >
-        <ProductCarousel data={_carouselsExample.slice(1, 20)} />
-      </Box>
-      <Container maxWidth={'xl'} sx={{
-        mt: 30
-      }}>
-        <Box>
-          {/* <Card>
-            <CardHeader title="Carousel Basic 1" />
-            <CardContent>
-              <CarouselBasic1 data={_carouselsExample.slice(0, 4)} />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader title="Carousel Basic 2" />
-            <CardContent>
-              <CarouselBasic2 data={_carouselsExample.slice(4, 8)} />
-            </CardContent>
-          </Card> */}
+      <Container maxWidth={'xl'} sx={{ mt: 20 }}>
+        <Stack spacing={10}>
 
 
+          <Box>
+            <ProductCarousel data={_carouselsExample.slice(1, 20)} />
+          </Box>
 
-          {/* <Card>
-            <CardHeader title="Carousel Basic 4" />
-            <CardContent>
-              <CarouselBasic4 data={_carouselsExample.slice(12, 16)} />
-            </CardContent>
-          </Card> */}
-        </Box>
 
-        <Box mb={3}>
-          <Typography variant='h2'>Customize <span style={{ color: '#ff3d51' }}>Your Watch.</span></Typography>
-        </Box>
-        <Box bgcolor={'#d2d2d7a3'} borderRadius={'28px'}>
-          <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-            <Box pl={3} pt={0} width={'50%'}>
-              {_accordions.map((item, index) => (
-                <Accordion
-                  key={item.value}
-                  disabled={index === 3}
-                  expanded={controlled === item.value}
-                  onChange={handleChangeControlled(item.value)}
-                >
-                  <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
-                    <Typography variant="h1" fontWeight={500} sx={{ width: '90%', flexShrink: 0 }}>
-                      {item.heading}
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography>{item.detail}</Typography>
-                  </AccordionDetails>
-                </Accordion>
-              ))}
+          <Box>
+            <Box mb={2}>
+              <Typography variant='h4'>Customize <span style={{ color: '#ff3d51' }}>Your Watch.</span></Typography>
             </Box>
-            <Box height={750} width={'50%'} textAlign={'right'}>
-              <Image src='/assets/images/Untitled7.png' py={3} width={'fit-content'} height={1} />
+            <Box bgcolor={'#d2d2d7a3'} borderRadius={'28px'}>
+              <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+                <Box pl={3} pt={0} width={'50%'}>
+                  {_accordions.map((item, index) => (
+                    <Accordion
+                      key={item.value}
+                      disabled={index === 3}
+                      expanded={controlled === item.value}
+                      onChange={handleChangeControlled(item.value)}
+                    >
+                      <AccordionSummary expandIcon={<Iconify icon="eva:arrow-ios-downward-fill" />}>
+                        <Typography variant="h1" fontWeight={500} sx={{ width: '90%', flexShrink: 0 }}>
+                          {item.heading}
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <Typography>{item.detail}</Typography>
+                      </AccordionDetails>
+                    </Accordion>
+                  ))}
+                </Box>
+                <Box height={750} width={'50%'} textAlign={'right'}>
+                  <Image src='/assets/images/Untitled7.png' py={3} width={'fit-content'} height={1} />
+                </Box>
+              </Stack>
             </Box>
+          </Box>
 
-          </Stack>
-
-        </Box>
-
-        <Box mt={30}>
-          <Typography color={"#6e6e73"} variant='h4' fontWeight={600}><span style={{ color: '#ff3d51' }}>Customize Watch.</span> Something You can't experience anywhere</Typography>
-        </Box>
-
+        </Stack>
+        {/* </Container> */}
       </Container>
+
+      <Box mt={10} bgcolor={'#f5f5f7'} py={18}>
+        <Container maxWidth={'xl'} sx={{ px: 6 }}>
+          <Typography color={"#000000"} variant='h1' fontWeight={700} mb={4}>
+            Why Apple is the best <br />
+            place to buy iPhone.
+          </Typography>
+
+          <ItemsCarousel data={_carouselsExample.slice(1, 20)} />
+
+          {/* <Box position={'relative'} p={3} width={370} height={500} bgcolor={'white'} borderRadius={'28px'} overflow={'hidden'}>
+            <Box position={'absolute'} zIndex={1} bottom={20} right={20}>
+              <IconButton sx={{ bgcolor: 'black' }}>
+                <Iconify icon={'pepicons-pop:plus'} color={'white'} width={24} height={24} />
+              </IconButton>
+            </Box>
+            <Box height={'50%'} width={1}>
+              <Typography color={'black'} variant={'h3'} pt={'24px'} fontSize={'28px!important'}>Special Hand Clock</Typography>
+              <Box pt={'10px'}>
+                <Typography color={'black'} variant={'body1'}>Pro. Beyond.</Typography>
+                <Typography color={'black'} variant={'caption'}>From $41.62/mo. for 24 mo. or $999 before trade‑in</Typography>
+              </Box>
+            </Box>
+            <Box height={'50%'} width={1}>
+              <Image src='/assets/images/hand.jpg' width={1} height={1} />
+            </Box>
+
+          </Box> */}
+        </Container>
+
+      </Box>
 
       {/* <HomeHero />
 

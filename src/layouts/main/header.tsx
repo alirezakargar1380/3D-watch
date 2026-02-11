@@ -63,7 +63,7 @@ export default function Header() {
           // }),
         }}
       >
-        <Container sx={{ height: 1, display: 'flex', justifyContent: 'space-between' }}>
+        <Container maxWidth={'xl'} sx={{ height: 1, display: 'flex', justifyContent: 'space-between' }}>
           <Badge
             sx={{
               alignItems: 'center',

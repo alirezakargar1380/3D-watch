@@ -3,7 +3,8 @@ import { useTheme } from '@mui/material/styles';
 
 import Image from 'src/components/image';
 import Carousel, { useCarousel, CarouselDots, CarouselArrows } from 'src/components/carousel';
-import { Typography } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
+import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
@@ -16,7 +17,7 @@ type Props = {
     }[];
 };
 
-export default function ProductCarousel({ data }: Props) {
+export default function ItemsCarousel({ data }: Props) {
     const theme = useTheme();
 
     const carousel = useCarousel({
@@ -48,7 +49,6 @@ export default function ProductCarousel({ data }: Props) {
 
     return (
         <Box>
-            <Typography mb={2} pl={1} variant='h4'><span style={{ color: '#ff3d51' }}>The Latest.</span> All new and Lovable</Typography>
             <Box
                 sx={{
                     position: 'relative',
@@ -83,17 +83,23 @@ function CarouselItem({ item }: { item: CarouselItemProps }) {
     const { coverUrl, title } = item;
 
     return (
-        <Box position={'relative'} mr={2}>
-            <Box position={'absolute'} pl={'30px'} pt={'30px'} zIndex={10}>
-                <Typography color={'white'} variant={'h3'} pt={'24px'} fontSize={'28px!important'}>Clock 3D</Typography>
+        <Box position={'relative'} mr={2} p={3} width={370} height={500} bgcolor={'white'} borderRadius={'28px'} overflow={'hidden'}>
+            <Box position={'absolute'} zIndex={1} bottom={20} right={20}>
+                <IconButton sx={{ bgcolor: 'black' }}>
+                    <Iconify icon={'pepicons-pop:plus'} color={'white'} width={24} height={24} />
+                </IconButton>
+            </Box>
+            <Box height={'50%'} width={1}>
+                <Typography color={'black'} variant={'h3'} pt={'24px'} fontSize={'28px!important'}>Special Hand Clock</Typography>
                 <Box pt={'10px'}>
-                    <Typography color={'white'} variant={'body1'}>Pro Clock for Wall and Room</Typography>
-                    <Typography color={'white'} variant={'caption'}>low price & high quality</Typography>
+                    <Typography color={'black'} variant={'body1'}>Pro. Beyond.</Typography>
+                    <Typography color={'black'} variant={'caption'}>From $41.62/mo. for 24 mo. or $999 before trade‑in</Typography>
                 </Box>
             </Box>
-            <Box width={400} height={500} borderRadius={'18px'} overflow={'hidden'}>
-                <Image src='/assets/images/Untitled4.jpg' height={1} width={1} />
+            <Box height={'50%'} width={1}>
+                <Image src='/assets/images/hand.jpg' width={1} height={1} />
             </Box>
+
         </Box>
     )
 }
