@@ -20,7 +20,7 @@ import HomeAdvertisement from '../home-advertisement';
 import HomeCleanInterfaces from '../home-clean-interfaces';
 import HomeHugePackElements from '../home-hugepack-elements';
 import Image from 'src/components/image';
-import { Accordion, AccordionDetails, AccordionSummary, Card, CardContent, CardHeader, Container, IconButton, Stack, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Container, Stack, Typography } from '@mui/material';
 import CarouselBasic1 from 'src/sections/_examples/extra/carousel-view/carousel-basic-1';
 import CarouselBasic2 from 'src/sections/_examples/extra/carousel-view/carousel-basic-2';
 import CarouselBasic3 from 'src/sections/_examples/extra/carousel-view/carousel-basic-3';
@@ -97,18 +97,18 @@ export default function HomeView() {
         <Stack spacing={10}>
 
 
-          <Box>
+          <Box component="div">
             <ProductCarousel data={_carouselsExample.slice(1, 20)} />
           </Box>
 
 
-          <Box>
-            <Box mb={2}>
+          <Box component="div">
+            <Box component="div" mb={2}>
               <Typography variant='h4'>Customize <span style={{ color: '#ff3d51' }}>Your Watch.</span></Typography>
             </Box>
-            <Box bgcolor={'#d2d2d7a3'} borderRadius={'28px'}>
+            <Box component="div" bgcolor={'#d2d2d7a3'} borderRadius={'28px'}>
               <Stack direction={{ xs: 'column-reverse', md: 'row' }} justifyContent={'space-between'} alignItems={'center'}>
-                <Box pl={3} pt={0} pb={{ xs: 6, md: 0 }} pr={{ xs: 3, md: 0 }} width={{ xs: '100%', md: '50%' }}>
+                <Box component="div" pl={3} pt={0} pb={{ xs: 6, md: 0 }} pr={{ xs: 3, md: 0 }} width={{ xs: '100%', md: '50%' }}>
                   {_accordions.map((item, index) => (
                     <Accordion
                       key={item.value}
@@ -127,7 +127,7 @@ export default function HomeView() {
                     </Accordion>
                   ))}
                 </Box>
-                <Box height={750} width={{ xs: '100%', md: '50%' }} textAlign={'right'}>
+                <Box component="div" height={750} width={{ xs: '100%', md: '50%' }} textAlign={'right'}>
                   <Image src='/assets/images/Untitled7.png' py={3} width={'fit-content'} height={1} />
                 </Box>
               </Stack>
@@ -138,8 +138,8 @@ export default function HomeView() {
         {/* </Container> */}
       </Container>
 
-      <Box mt={10} bgcolor={'#f5f5f7'} py={18}>
-        <Container maxWidth={'xl'} sx={{ px: 6 }}>
+      <Box component="div" mt={10} bgcolor={'#f5f5f7'} py={18}>
+        <Container maxWidth={'xl'} sx={{ px: { xs: 3, md: 6 } }}>
           <Typography color={"#000000"} variant='h2' fontWeight={700} mb={4}>
             Why Apple is the best <br />
             place to buy iPhone.
@@ -147,20 +147,20 @@ export default function HomeView() {
 
           <ItemsCarousel data={_carouselsExample.slice(1, 20)} />
 
-          {/* <Box position={'relative'} p={3} width={370} height={500} bgcolor={'white'} borderRadius={'28px'} overflow={'hidden'}>
-            <Box position={'absolute'} zIndex={1} bottom={20} right={20}>
+          {/*  <Box component="div" position={'relative'} p={3} width={370} height={500} bgcolor={'white'} borderRadius={'28px'} overflow={'hidden'}>
+             <Box component="div" position={'absolute'} zIndex={1} bottom={20} right={20}>
               <IconButton sx={{ bgcolor: 'black' }}>
                 <Iconify icon={'pepicons-pop:plus'} color={'white'} width={24} height={24} />
               </IconButton>
             </Box>
-            <Box height={'50%'} width={1}>
+             <Box component="div" height={'50%'} width={1}>
               <Typography color={'black'} variant={'h3'} pt={'24px'} fontSize={'28px!important'}>Special Hand Clock</Typography>
-              <Box pt={'10px'}>
+               <Box component="div" pt={'10px'}>
                 <Typography color={'black'} variant={'body1'}>Pro. Beyond.</Typography>
                 <Typography color={'black'} variant={'caption'}>From $41.62/mo. for 24 mo. or $999 before trade‑in</Typography>
               </Box>
             </Box>
-            <Box height={'50%'} width={1}>
+             <Box component="div" height={'50%'} width={1}>
               <Image src='/assets/images/hand.jpg' width={1} height={1} />
             </Box>
 
@@ -171,7 +171,7 @@ export default function HomeView() {
 
       {/* <HomeHero />
 
-      <Box
+       <Box component="div"
         sx={{
           overflow: 'hidden',
           position: 'relative',
@@ -182,7 +182,7 @@ export default function HomeView() {
 
         <HomeHugePackElements />
 
-        <Box sx={{ position: 'relative' }}>
+         <Box component="div" sx={{ position: 'relative' }}>
           <StyledPolygon />
           <HomeForDesigner />
           <StyledPolygon anchor="bottom" />
