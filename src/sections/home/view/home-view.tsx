@@ -107,8 +107,8 @@ export default function HomeView() {
               <Typography variant='h4'>Customize <span style={{ color: '#ff3d51' }}>Your Watch.</span></Typography>
             </Box>
             <Box bgcolor={'#d2d2d7a3'} borderRadius={'28px'}>
-              <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-                <Box pl={3} pt={0} width={'50%'}>
+              <Stack direction={{ xs: 'column-reverse', md: 'row' }} justifyContent={'space-between'} alignItems={'center'}>
+                <Box pl={3} pt={0} pb={{ xs: 6, md: 0 }} pr={{ xs: 3, md: 0 }} width={{ xs: '100%', md: '50%' }}>
                   {_accordions.map((item, index) => (
                     <Accordion
                       key={item.value}
@@ -127,7 +127,7 @@ export default function HomeView() {
                     </Accordion>
                   ))}
                 </Box>
-                <Box height={750} width={'50%'} textAlign={'right'}>
+                <Box height={750} width={{ xs: '100%', md: '50%' }} textAlign={'right'}>
                   <Image src='/assets/images/Untitled7.png' py={3} width={'fit-content'} height={1} />
                 </Box>
               </Stack>
