@@ -30,6 +30,8 @@ import ProductDetailsSummary from '../product-details-summary';
 import ProductDetailsCarousel from '../product-details-carousel';
 import ProductDetailsDescription from '../product-details-description';
 import Viewer from '../watch';
+import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import { useBoolean } from 'src/hooks/use-boolean';
 
 // ----------------------------------------------------------------------
 
@@ -61,6 +63,8 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
   const settings = useSettingsContext();
 
   const checkout = useCheckoutContext();
+
+  const dialog = useBoolean(true);
 
   const [currentTab, setCurrentTab] = useState('description');
 
@@ -123,11 +127,12 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
             items={checkout.items}
             onAddCart={checkout.onAddToCart}
             onGotoStep={checkout.onGotoStep}
+            onCustomize={dialog.onTrue}
           />
         </Grid>
       </Grid>
 
-      <Box
+      <Box component={'div'}
         gap={5}
         display="grid"
         gridTemplateColumns={{
@@ -137,7 +142,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
         sx={{ my: 10 }}
       >
         {SUMMARY.map((item) => (
-          <Box key={item.title} sx={{ textAlign: 'center', px: 5 }}>
+          <Box key={item.title} sx={{ textAlign: 'center', px: 5 }} component={'div'}>
             <Iconify icon={item.icon} width={32} sx={{ color: 'primary.main' }} />
 
             <Typography variant="subtitle1" sx={{ mb: 1, mt: 2 }}>
@@ -199,9 +204,21 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
       }}
     >
 
-      <Box height={500} sx={{ mb: 5 }}>
-        <Viewer />
-      </Box>
+      <Dialog open={dialog.value} onClose={dialog.onFalse} fullScreen>
+        <DialogTitle>
+          <IconButton color='error' onClick={dialog.onFalse}>
+            Close
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Box height={500} component={'div'}>
+            <Viewer />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button variant='contained' color='primary'>Send This To Cart</Button>
+        </DialogActions>
+      </Dialog>
 
       <CartIcon totalItems={checkout.totalItems} />
 

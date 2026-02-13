@@ -35,6 +35,7 @@ type Props = {
   disabledActions?: boolean;
   onGotoStep?: (step: number) => void;
   onAddCart?: (cartItem: ICheckoutItem) => void;
+  onCustomize?: () => void;
 };
 
 export default function ProductDetailsSummary({
@@ -42,6 +43,7 @@ export default function ProductDetailsSummary({
   product,
   onAddCart,
   onGotoStep,
+  onCustomize,
   disabledActions,
   ...other
 }: Props) {
@@ -125,7 +127,7 @@ export default function ProductDetailsSummary({
   }, [onAddCart, values]);
 
   const renderPrice = (
-    <Box sx={{ typography: 'h5' }}>
+    <Box sx={{ typography: 'h5' }} component={'div'}>
       {/* {priceSale && (
         <Box
           component="span"
@@ -277,8 +279,12 @@ export default function ProductDetailsSummary({
         Add to Cart
       </Button>
 
-      <Button fullWidth size="large" type="submit" variant="contained" disabled={disabledActions}>
-        Customize This Clock
+      <Button
+        fullWidth
+        size="large"
+        // type="submit" 
+        variant="contained" onClick={() => onCustomize?.()} disabled={disabledActions}>
+        Customize Clock
       </Button>
     </Stack>
   );
