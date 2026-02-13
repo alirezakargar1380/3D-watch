@@ -64,7 +64,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
 
   const checkout = useCheckoutContext();
 
-  const dialog = useBoolean(true);
+  const dialog = useBoolean();
 
   const [currentTab, setCurrentTab] = useState('description');
 
