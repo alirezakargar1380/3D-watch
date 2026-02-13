@@ -35,7 +35,31 @@ export function useGetPost(title: string) {
 
   const memoizedValue = useMemo(
     () => ({
-      post: data?.post as IPostItem,
+      post: {
+        author: {
+          name: 'alireza',
+          avatarUrl: '/assets/images/ak.jpg',
+        },
+        content: 'hello \n this a test description about the clocks history \n\n\n in this blog we want to talk about how a clock made',
+        coverUrl: '/assets/images/unnamed.jpg',
+        title: 'Clock History!',
+        description: 'How Clocks Are made? and how their works',
+        totalViews: 140000,
+        totalComments: 890000,
+        tags: ['historical'],
+        comments: [
+          {
+            avatarUrl: '/assets/images/ak.jpg',
+            id: "",
+            userId: '',
+            message: 'This a comment for test',
+            name: 'User',
+            postedAt: new Date(),
+            replyComment: [],
+            users: []
+          }
+        ]
+      } as IPostItem,
       postLoading: isLoading,
       postError: error,
       postValidating: isValidating,

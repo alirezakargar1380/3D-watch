@@ -20,7 +20,7 @@ export const navConfig = [
   {
     title: 'Blog',
     icon: <Iconify icon="solar:atom-bold-duotone" />,
-    path: paths.components,
+    path: paths.post.root,
   },
   // {
   //   title: 'Components',

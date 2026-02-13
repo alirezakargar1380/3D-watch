@@ -62,7 +62,8 @@ export default function PostDetailsHomeView({ title }: Props) {
     </Container>
   );
 
-  const renderPost = post && (
+  // const renderPost = post && (
+  const renderPost = (
     <>
       <PostDetailsHero
         title={post.title}
@@ -135,7 +136,7 @@ export default function PostDetailsHomeView({ title }: Props) {
               />
 
               <AvatarGroup>
-                {post.favoritePerson.map((person) => (
+                {post.favoritePerson?.map((person) => (
                   <Avatar key={person.name} alt={person.name} src={person.avatarUrl} />
                 ))}
               </AvatarGroup>
@@ -146,7 +147,7 @@ export default function PostDetailsHomeView({ title }: Props) {
             <Typography variant="h4">Comments</Typography>
 
             <Typography variant="subtitle2" sx={{ color: 'text.disabled' }}>
-              ({post.comments.length})
+              ({post.comments?.length})
             </Typography>
           </Stack>
 
@@ -176,11 +177,12 @@ export default function PostDetailsHomeView({ title }: Props) {
 
   return (
     <>
-      {postLoading && renderSkeleton}
+      {/* {postLoading && renderSkeleton}
 
-      {postError && renderError}
+      {postError && renderError} */}
 
-      {post && renderPost}
+      {/* {post && renderPost} */}
+      {renderPost}
 
       <Container sx={{ pb: 15 }}>{!!latestPosts.length && renderLatestPosts}</Container>
     </>

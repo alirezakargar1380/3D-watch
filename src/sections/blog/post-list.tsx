@@ -30,9 +30,32 @@ export default function PostList({ posts, loading, disabledIndex }: Props) {
 
   const renderList = (
     <>
-      {posts.map((post, index) => (
-        <Grid key={post.id} xs={12} sm={6} md={!disabledIndex && index === 0 ? 6 : 3}>
-          <PostItem post={post} index={!disabledIndex ? index : undefined} />
+      {[...new Array(26)].map((post, index) => (
+        <Grid key={index} xs={12} sm={6} md={!disabledIndex && index === 0 ? 6 : 3}>
+          <PostItem post={{
+            author: {
+              name: 'alireza',
+              avatarUrl: '/assets/images/ak.jpg',
+            },
+            content: 'hello',
+            coverUrl: '/assets/images/unnamed.jpg',
+            title: 'Clock History!',
+            description: 'How Clocks Are made? and how their works',
+            totalViews: 140000,
+            totalComments: 890000,
+            tags: ['historical'],
+            comments: [
+              {
+                id: "1",
+                avatarUrl: '',
+                message: 'This a comment for test',
+                name: 'User',
+                postedAt: new Date(),
+                replyComment: [],
+                users: []
+              }
+            ]
+          }} index={!disabledIndex ? index : undefined} />
         </Grid>
       ))}
     </>
@@ -41,7 +64,8 @@ export default function PostList({ posts, loading, disabledIndex }: Props) {
   return (
     <>
       <Grid container spacing={3}>
-        {loading ? renderSkeleton : renderList}
+        {/* {loading ? renderSkeleton : renderList} */}
+        {renderList}
       </Grid>
 
       {posts.length > 8 && (
