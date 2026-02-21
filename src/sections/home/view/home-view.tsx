@@ -20,7 +20,7 @@ import HomeAdvertisement from '../home-advertisement';
 import HomeCleanInterfaces from '../home-clean-interfaces';
 import HomeHugePackElements from '../home-hugepack-elements';
 import Image from 'src/components/image';
-import { Accordion, AccordionDetails, AccordionSummary, Container, Stack, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Button, Container, Stack, Typography } from '@mui/material';
 import CarouselBasic1 from 'src/sections/_examples/extra/carousel-view/carousel-basic-1';
 import CarouselBasic2 from 'src/sections/_examples/extra/carousel-view/carousel-basic-2';
 import CarouselBasic3 from 'src/sections/_examples/extra/carousel-view/carousel-basic-3';
@@ -31,6 +31,7 @@ import AccordionView from 'src/sections/_examples/mui/accordion-view';
 import Iconify from 'src/components/iconify';
 import { useState } from 'react';
 import ItemsCarousel from 'src/sections/_examples/extra/carousel-view/items-carousel';
+import CarouselAnimation from 'src/sections/_examples/extra/carousel-view/carousel-animation';
 
 // ----------------------------------------------------------------------
 
@@ -62,7 +63,7 @@ const StyledPolygon = styled('div')<StyledPolygonProps>(({ anchor = 'top', theme
 const _carouselsExample = [...Array(20)].map((_, index) => ({
   id: _mock.id(index),
   title: _mock.postTitle(index),
-  coverUrl: _mock.image.cover(index),
+  coverUrl: (index % 2 === 0) ? '/assets/images/Untitled2.jpg' : '/assets/images/Untitled3.jpg',
   description: _mock.description(index),
 }));
 
@@ -93,9 +94,10 @@ export default function HomeView() {
       <ScrollProgress scrollYProgress={scrollYProgress} />
 
 
-      <Container maxWidth={'xl'} sx={{ mt: 20 }}>
+      <Container maxWidth={'xl'} sx={{ mt: 12 }}>
         <Stack spacing={10}>
 
+          <CarouselAnimation data={_carouselsExample.slice(0, 4)} />
 
           <Box component="div">
             <ProductCarousel data={_carouselsExample.slice(1, 20)} />
@@ -168,6 +170,25 @@ export default function HomeView() {
         </Container>
 
       </Box>
+
+      <Container maxWidth={'xl'} sx={{ mt: 16, pb: 16 }}>
+        <Stack direction={'row'} justifyContent={'space-between'}>
+          <Box component={'div'}>
+            <Typography variant='h2' fontWeight={800} mb={2}>Build Wierd Clocks!</Typography>
+            <Typography variant='body1' fontWeight={400} mb={2}>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod accusamus quos ea aliquam est asperiores eligendi praesentium quibusdam, provident magnam sit maiores expedita officia nostrum ab doloribus, soluta porro quas.
+              <br />
+              <br />
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod accusamus quos ea aliquam est asperiores eligendi praesentium quibusdam, provident magnam sit maiores expedita officia nostrum ab doloribus, soluta porro quas.
+              <br />
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod accusamus quos ea aliquam est asperiores eligendi praesentium quibusdam, provident magnam sit maiores expedita officia nostrum ab doloribus, soluta porro quas.
+            </Typography>
+            <Button variant='soft'>Read More</Button>
+          </Box>
+          <Image src='/assets/images/clock.png' width={1} height={1} borderRadius={3} />
+        </Stack>
+
+      </Container>
 
       {/* <HomeHero />
 
