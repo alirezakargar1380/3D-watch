@@ -118,7 +118,8 @@ interface Props {
 
 export default function Viewer({ dialog }: Props) {
     const [ob, setOb] = useState<any>({});
-    const [zoom, setZoom] = useState(4)
+    const [zoom, setZoom] = useState(4);
+    const [isLocked, setIsLocked] = useState(false);
 
     const handleChange = (key: string, newValue: any) => {
         setOb((prevState: any) => ({
@@ -162,6 +163,11 @@ export default function Viewer({ dialog }: Props) {
                 <Box component={'div'} position={'absolute'} zIndex={10} top={20} right={20}>
                     <Button color='secondary' variant='outlined' onClick={dialog.onFalse}>done</Button>
                 </Box>
+                <Box component={'div'} position={'absolute'} zIndex={10} top={20} left={20}>
+                    <IconButton onClick={() => setIsLocked(!isLocked)}>
+                        <Iconify color={'black'} icon={!isLocked ? "ic:twotone-lock" : "eva:unlock-outline"} width={36} />
+                    </IconButton>
+                </Box>
                 <Box height={1} component={'div'}>
                     <Box component={'div'} sx={{ height: 1 }}>
                         <Box component={'div'} sx={{ height: 1 }}>
@@ -189,7 +195,7 @@ export default function Viewer({ dialog }: Props) {
                                     onSendColor={(obj: any) => setOb(obj)}
                                 />
 
-                                <OrbitControls enableDamping={false} enablePan={false} enableRotate={false} enableZoom={false} />
+                                <OrbitControls enableDamping={isLocked} enablePan={isLocked} enableRotate={isLocked} enableZoom={isLocked} />
                             </Canvas>
                         </Box>
 
