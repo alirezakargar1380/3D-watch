@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 
 // ----------------------------------------------------------------------
 
-interface ReturnType {
+export interface ReturnType {
   value: boolean;
   onTrue: () => void;
   onFalse: () => void;

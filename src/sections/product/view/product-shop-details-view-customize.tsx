@@ -204,21 +204,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
       }}
     >
 
-      <Dialog open={dialog.value} onClose={dialog.onFalse} fullScreen>
-        <DialogTitle>
-          <IconButton color='error' onClick={dialog.onFalse}>
-            Close
-          </IconButton>
-        </DialogTitle>
-        <DialogContent>
-          <Box height={500} component={'div'}>
-            <Viewer />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button variant='contained' color='primary'>Send This To Cart</Button>
-        </DialogActions>
-      </Dialog>
+      <Viewer dialog={dialog} />
 
       <CartIcon totalItems={checkout.totalItems} />
 

@@ -63,7 +63,7 @@ const StyledThumbnailsContainer = styled('div')<{ length: number }>(({ length, t
 // ----------------------------------------------------------------------
 
 type Props = {
-  product: IProductItem;
+  product: IProductItem | any;
 };
 
 export default function ProductDetailsCarousel({ product }: Props) {
