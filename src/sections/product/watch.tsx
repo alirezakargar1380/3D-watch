@@ -218,7 +218,7 @@ export default function Viewer({ dialog }: Props) {
                 <Stack direction={{ xs: 'column', md: 'row' }} sx={{ mx: 0, mt: 2 }} justifyContent={'center'} spacing={1}>
                     <Box component={'div'} textAlign={'center'}>
                         <ColorPicker
-                            colors={['#979797', '#ffff00', '#fd0000', '#000']}
+                            colors={['#979797', '#ffff00', '#fd0000', '#000', '#ff9900', '#0051ff']}
                             selected={''}
                             onSelectColor={(color: any) => handleSelectColors(color, TABS.find((tb) => tb.value === scrollableTab)?.key || '')}
                         />
