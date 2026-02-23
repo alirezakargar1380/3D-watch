@@ -2,7 +2,7 @@
 
 import { Canvas, useThree } from '@react-three/fiber'
 import { Environment, OrbitControls, useGLTF } from '@react-three/drei'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Stack, Tab, Tabs } from '@mui/material'
 import { ColorPicker, ColorPreview } from 'src/components/color-utils'
 import { MuiColorInput } from 'mui-color-input'
@@ -73,7 +73,7 @@ function SceneBackground({ color }: { color: string }) {
 // }
 
 
-function Watch({ bodyColor, bezelColor, strapColor, colorObject, model_path, onSendColor, }: any) {
+function Watch({ colorObject, model_path, onSendColor, }: any) {
     const { materials, nodes }: any = useGLTF(model_path)
     const [ob, setOb] = useState<any>({});
     //   const { materials, nodes }: any = useGLTF('/models/watch.glb')
@@ -190,43 +190,51 @@ function Watch({ bodyColor, bezelColor, strapColor, colorObject, model_path, onS
 }
 
 interface Props {
+    zoom?: number;
     selected?: boolean
     model_path: string;
+    onGetColorKeys: (colorObj: any) => void;
 }
 
-export default function WatchDemoViewer({ selected, model_path }: Props) {
+export default function WatchDemoViewer({ onGetColorKeys, zoom = 5, selected, model_path }: Props) {
     const [ob, setOb] = useState<any>({});
-    const [zoom, setZoom] = useState(4);
+    // const [zoom, setZoom] = useState(4);
     const [isLocked, setIsLocked] = useState(true);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        onGetColorKeys(ob)
+    }, [ob])
 
     return (
-        <Box component={'div'} borderRadius={2} overflow={'hidden'} height={200} sx={{
+        <Box ref={containerRef} component={'div'} borderRadius={2} overflow={'hidden'} height={200} sx={{
             ...(selected && {
                 outline: '3px solid #000'
             })
         }}>
             <Canvas
+                key={model_path}
+                eventSource={containerRef.current || undefined}
                 camera={{
-                    // position: [0, 10, 0],
                     position: [0, 10, 0],
-                    zoom: 5
-                    // zoom: TABS.find((tb) => tb.value === scrollableTab)?.zoom || 4,
+                    zoom
                 }}
                 gl={{
-                    // physicallyCorrectLights: true,
                     toneMapping: THREE.ACESFilmicToneMapping,
                     outputColorSpace: THREE.SRGBColorSpace,
-                    toneMappingExposure: 1.2
+                    toneMappingExposure: 1.2,
+                    antialias: true,
+                    alpha: true,
+                    preserveDrawingBuffer: true
                 }}
+                flat
+                legacy={false}
             >
 
                 <color attach="background" args={['#ececec']} />
                 <Environment preset="forest" blur={10} />
 
-                {/* <CameraController zoom={TABS.find((tb) => tb.value === scrollableTab)?.zoom || 8} position={TABS.find((tb) => tb.value === scrollableTab)?.position} /> */}
-
                 <ambientLight intensity={0.05} />
-                {/* <directionalLight position={[0, 10, 0]} intensity={1} /> */}
 
                 <Watch
                     colorObject={ob}
