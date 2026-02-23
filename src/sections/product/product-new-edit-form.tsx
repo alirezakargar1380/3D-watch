@@ -42,6 +42,8 @@ import FormProvider, {
 } from 'src/components/hook-form';
 
 import { IProductItem } from 'src/types/product';
+import WatchDemoViewer from './watch-item';
+import { Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -238,6 +240,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
 
           <Stack spacing={3} sx={{ p: 3 }}>
             <Box
+              component={'div'}
               columnGap={2}
               rowGap={3}
               display="grid"
@@ -333,6 +336,23 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
                 disabled={!values.newLabel.enabled}
               />
             </Stack>
+
+            <Divider sx={{ borderStyle: 'dashed' }} />
+
+            <Typography variant='subtitle2'>Customization Tabs</Typography>
+
+            <Stack spacing={2}>
+              <RHFTextField name='' label='Tab Name' />
+              <RHFTextField name='' label='Key' />
+              <RHFTextField name='' label='Zoom' />
+              <Stack direction={'row'} spacing={2}>
+                <RHFTextField name='' label='X' />
+                <RHFTextField name='' label='Y' />
+                <RHFTextField name='' label='Z' />
+              </Stack>
+            </Stack>
+
+            <Button fullWidth={false} color='secondary' variant='contained' sx={{ width: 'fit-content' }}>add Tab</Button>
           </Stack>
         </Card>
       </Grid>
@@ -420,6 +440,44 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
     </>
   );
 
+  const renderWatch = (
+    <>
+      {mdUp && (
+        <Grid md={4}>
+          <Typography variant="h6" sx={{ mb: 0.5 }}>
+            Clock
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Select Your Clock.
+          </Typography>
+        </Grid>
+      )}
+
+      <Grid xs={12} md={8}>
+        <Card>
+          {!mdUp && <CardHeader title="Clock" />}
+
+          <Stack spacing={3} sx={{ p: 3 }}>
+            <Box
+              component={'div'}
+              columnGap={2}
+              rowGap={3}
+              display="grid"
+              gridTemplateColumns={{
+                xs: 'repeat(1, 1fr)',
+                md: 'repeat(2, 1fr)',
+              }}
+            >
+              <WatchDemoViewer model_path={'/models/cubasd.glb'} />
+              <WatchDemoViewer model_path={'/models/shiny.glb'} />
+              <WatchDemoViewer model_path={'/models/test-watch-shine.glb'} />
+            </Box>
+          </Stack>
+        </Card>
+      </Grid>
+    </>
+  );
+
   const renderActions = (
     <>
       {mdUp && <Grid md={4} />}
@@ -441,6 +499,8 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
         {renderDetails}
+
+        {renderWatch}
 
         {renderProperties}
 

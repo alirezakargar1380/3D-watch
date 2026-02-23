@@ -13,7 +13,6 @@ import { Vector3 } from 'three';
 const TABS = [
     {
         value: 'one',
-        icon: <Iconify icon="solar:phone-bold" width={24} />,
         label: 'Background',
         key: 'Circle005',
         zoom: 4,
@@ -21,7 +20,6 @@ const TABS = [
     },
     {
         value: 'two',
-        icon: <Iconify icon="solar:heart-bold" width={24} />,
         label: 'Bezel',
         key: 'Circle005_1',
         zoom: 5,
@@ -29,7 +27,6 @@ const TABS = [
     },
     {
         value: 'three',
-        icon: <Iconify icon="eva:headphones-fill" width={24} />,
         label: 'Indices',
         key: 'Circle005_2',
         zoom: 20,
@@ -38,7 +35,6 @@ const TABS = [
     },
     {
         value: 'four',
-        icon: <Iconify icon="eva:headphones-fill" width={24} />,
         label: 'Hand hub',
         key: 'Circle005_3',
         zoom: 20,
@@ -46,7 +42,6 @@ const TABS = [
     },
     {
         value: 'five',
-        icon: <Iconify icon="eva:headphones-fill" width={24} />,
         label: 'Hands',
         key: 'Circle005_4',
         zoom: 18,
@@ -214,7 +209,15 @@ export default function Viewer({ dialog }: Props) {
                 </Box>
 
                 <Box component={'div'}>
-                    <Tabs value={scrollableTab} onChange={handleChangeScrollableTab}>
+                    <Tabs
+                        value={scrollableTab}
+                        sx={{
+                            '& .MuiTabs-flexContainer': {
+                                justifyContent: 'center'
+                            }
+                        }}
+                        onChange={handleChangeScrollableTab}
+                    >
                         {TABS.map((tab) => (
                             <Tab key={tab.value} label={tab.label} value={tab.value} />
                         ))}
