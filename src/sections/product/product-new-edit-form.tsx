@@ -46,6 +46,20 @@ import WatchDemoViewer from './watch-item';
 import { Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
+const clockPaths = [
+  {
+    path: '/models/cubasd.glb',
+
+  },
+  {
+    path: '/models/shiny.glb',
+  },
+  {
+    path: '/models/test-watch-shine.glb',
+    zoom: 1.5
+  },
+]
+// ----------------------------------------------------------------------
 
 type Props = {
   currentProduct?: IProductItem;
@@ -62,6 +76,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
 
   const NewProductSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
+    clock: Yup.string().required('Name is required'),
     images: Yup.array().min(1, 'Images is required'),
     tags: Yup.array().min(2, 'Must have at least 2 tags'),
     category: Yup.string().required('Category is required'),
@@ -85,6 +100,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
       description: currentProduct?.description || '',
       subDescription: currentProduct?.subDescription || '',
       images: currentProduct?.images || [],
+      clock: currentProduct?.clock || clockPaths[2].path,
       //
       code: currentProduct?.code || '',
       sku: currentProduct?.sku || '',
@@ -468,9 +484,12 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
                 md: 'repeat(2, 1fr)',
               }}
             >
-              <WatchDemoViewer model_path={'/models/cubasd.glb'} />
-              <WatchDemoViewer model_path={'/models/shiny.glb'} />
-              <WatchDemoViewer model_path={'/models/test-watch-shine.glb'} />
+              {clockPaths.map((clock: any) => (
+                <WatchDemoViewer
+                  model_path={clock.path} key={clock.path} zoom={clock?.zoom} selected={values.clock === clock.path}
+                  onGetColorKeys={(colorObj: any) => (values.clock === clock.path) && console.log("color obj", colorObj)}
+                />
+              ))}
             </Box>
           </Stack>
         </Card>

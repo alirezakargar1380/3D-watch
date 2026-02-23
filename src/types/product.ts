@@ -33,6 +33,7 @@ export type IProductReview = {
 
 export type IProductItem = {
   id: string;
+  clock: string;
   sku: string;
   name: string;
   code: string;
