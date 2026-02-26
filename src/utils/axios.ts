@@ -45,9 +45,15 @@ export const endpoints = {
     latest: '/api/post/latest',
     search: '/api/post/search',
   },
+  order: {
+    create: '/api/orders',
+    list: '/api/orders',
+  },
   product: {
     list: '/api/product/list',
-    details: '/api/product/details',
+    details: (id: string) => `/api/products/${id}`,
+    update: (id: string) => `/api/products/${id}`,
     search: '/api/product/search',
+    create: '/api/products',
   },
 };

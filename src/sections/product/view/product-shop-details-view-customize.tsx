@@ -64,7 +64,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
 
   const checkout = useCheckoutContext();
 
-  const dialog = useBoolean();
+  
 
   const [currentTab, setCurrentTab] = useState('description');
 
@@ -94,8 +94,8 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
     />
   );
 
-  // const renderProduct = product && (
-  const renderProduct = (
+  const renderProduct = product && (
+    // const renderProduct = (
     <>
       <CustomBreadcrumbs
         links={[
@@ -127,7 +127,6 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
             items={checkout.items}
             onAddCart={checkout.onAddToCart}
             onGotoStep={checkout.onGotoStep}
-            onCustomize={dialog.onTrue}
           />
         </Grid>
       </Grid>
@@ -195,7 +194,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
     </>
   );
 
-  return (
+  return product && (
     <Container
       maxWidth={settings.themeStretch ? false : 'lg'}
       sx={{
@@ -204,7 +203,6 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
       }}
     >
 
-      <Viewer dialog={dialog} />
 
       <CartIcon totalItems={checkout.totalItems} />
 

@@ -1,53 +1,14 @@
 "use client"
 
 import { Canvas, useThree } from '@react-three/fiber'
-import { OrbitControls, useGLTF } from '@react-three/drei'
+import { Environment, OrbitControls, useGLTF } from '@react-three/drei'
 import { useCallback, useEffect, useState } from 'react'
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Stack, Tab, Tabs } from '@mui/material'
+import { Box, Button, Dialog, DialogActions, DialogContent, IconButton, Stack, Tab, Tabs } from '@mui/material'
 import { ColorPicker, ColorPreview } from 'src/components/color-utils'
-import { MuiColorInput } from 'mui-color-input'
 import { ReturnType } from 'src/hooks/use-boolean'
 import Iconify from 'src/components/iconify'
-import { Vector3 } from 'three';
-
-const TABS = [
-    {
-        value: 'one',
-        label: 'Background',
-        key: 'Circle005',
-        zoom: 4,
-        position: [0, 10, 0]
-    },
-    {
-        value: 'two',
-        label: 'Bezel',
-        key: 'Circle005_1',
-        zoom: 5,
-        position: [0, 10, 0]
-    },
-    {
-        value: 'three',
-        label: 'Indices',
-        key: 'Circle005_2',
-        zoom: 20,
-        position: [10, 3, 6]
-
-    },
-    {
-        value: 'four',
-        label: 'Hand hub',
-        key: 'Circle005_3',
-        zoom: 20,
-        position: [0, 10, 10]
-    },
-    {
-        value: 'five',
-        label: 'Hands',
-        key: 'Circle005_4',
-        zoom: 18,
-        position: [4, 14, 16]
-    },
-];
+import * as THREE from 'three';
+import { IProductTabs } from 'src/types/product';
 
 function CameraController({ zoom, position }: { zoom: number, position: any }) {
     const { camera } = useThree();
@@ -62,57 +23,46 @@ function CameraController({ zoom, position }: { zoom: number, position: any }) {
 }
 
 
-function Watch({ bodyColor, bezelColor, strapColor, colorObject, onSendColor, }: any) {
-    const { materials, nodes }: any = useGLTF('/models/ff.glb')
-    const [ob, setOb] = useState<any>({});
-    //   const { materials, nodes }: any = useGLTF('/models/watch.glb')
+function Watch({ colorObject, model_path, onSendColor }: any) {
+    const { materials, nodes }: any = useGLTF(model_path)
 
     useEffect(() => {
-        const object: any = {};
-        for (let i = 0; i < nodes.background_of_watch.children.length; i++) {
-            const mesh: any = nodes.background_of_watch.children[i];
-            object[mesh.name] = mesh.material.color;
-        }
-        setOb(object)
-        onSendColor(object)
-    }, [nodes])
-
-    useEffect(() => { console.log(colorObject) }, [colorObject])
-
-
+        const newObjectColor = { ...colorObject }
+        Object.keys(nodes)?.map((key, index) => {
+            const child = nodes[key];
+            if (child.isMesh && colorObject[child.name]) {
+                child.material = child.material.clone()
+                newObjectColor[child.name] = colorObject[child.name];
+                child.material.color.set(colorObject[child.name])
+            }
+        })
+        onSendColor(newObjectColor)
+    }, [colorObject])
 
     return (
         <group>
-            {/* <mesh geometry={nodes.Cube.geometry}>
-        <meshStandardMaterial color={bodyColor} />
-      </mesh> */}
-            {nodes.background_of_watch.children.map((mesh: any) => {
-                // console.log(mesh.material.color)
-                return (
-                    <mesh geometry={mesh.geometry}>
-                        <meshStandardMaterial color={colorObject[mesh.name]} />
-                    </mesh>
-                )
+            {Object.keys(nodes)?.map((key, index) => {
+                const mesh = nodes[key];
+                if (mesh.type === 'Mesh') {
+                    return (
+                        <primitive object={mesh} key={index}></primitive>
+                    )
+                }
             })}
-
-            {/* <mesh geometry={nodes.Circle001.geometry}>
-        <meshStandardMaterial color={bezelColor} />
-      </mesh> */}
-
-            {/*
-      <mesh geometry={nodes.Strap.geometry}>
-        <meshStandardMaterial color={strapColor} />
-      </mesh> */}
         </group>
     )
 }
 
 interface Props {
-    dialog: ReturnType
+    dialog: ReturnType;
+    model_path: string;
+    tabs: IProductTabs[];
+    afterSubmit: (object: any) => void;
 }
 
-export default function Viewer({ dialog }: Props) {
-    const [ob, setOb] = useState<any>({});
+export default function Viewer({ dialog, model_path, tabs, afterSubmit }: Props) {
+    const [currentColorObject, setOb] = useState<any>({});
+    const [newColorObject, setnewOb] = useState<any>({});
     const [zoom, setZoom] = useState(4);
     const [isLocked, setIsLocked] = useState(false);
 
@@ -123,21 +73,20 @@ export default function Viewer({ dialog }: Props) {
         }));
     }
 
-    const [scrollableTab, setScrollableTab] = useState('one');
+    const [scrollableTab, setScrollableTab] = useState(tabs?.[0]?.key);
 
     const handleChangeScrollableTab = useCallback((event: React.SyntheticEvent, newValue: string) => {
         setScrollableTab(newValue);
-
-        const tabZoom = TABS.find((tb) => tb.value === newValue)?.zoom;
-        console.log('tabZoom', tabZoom)
-        if (tabZoom) {
-            setZoom(tabZoom)
-        }
     }, []);
 
     const handleSelectColors = (color: any, key: string) => {
+        console.log("keyyy", key)
         handleChange(key, color);
     }
+
+    const currentTab = tabs.find((tb) => tb.key === scrollableTab);
+
+    console.log('currentTab', currentTab)
 
     return (
 
@@ -156,7 +105,12 @@ export default function Viewer({ dialog }: Props) {
             </DialogTitle> */}
             <DialogContent sx={{ px: 0 }}>
                 <Box component={'div'} position={'absolute'} zIndex={10} top={20} right={20}>
-                    <Button color='secondary' variant='outlined' onClick={dialog.onFalse}>done</Button>
+                    <Button color='secondary' variant='outlined' onClick={() => {
+                        dialog.onFalse()
+                        afterSubmit(currentColorObject)
+                    }}>
+                        done
+                    </Button>
                 </Box>
                 <Box component={'div'} position={'absolute'} zIndex={10} top={20} left={20}>
                     <IconButton onClick={() => setIsLocked(!isLocked)}>
@@ -171,23 +125,34 @@ export default function Viewer({ dialog }: Props) {
                                 camera={{
                                     // position: [0, 10, 0],
                                     position: [0, 10, 10],
-                                    // zoom: TABS.find((tb) => tb.value === scrollableTab)?.zoom || 4,
+                                    // zoom: 0,
 
-                                }}>
+                                }}
+                                gl={{
+                                    toneMapping: THREE.ACESFilmicToneMapping,
+                                    outputColorSpace: THREE.SRGBColorSpace,
+                                    toneMappingExposure: 1.2,
+                                    antialias: true,
+                                    alpha: true,
+                                    preserveDrawingBuffer: true
+                                }}
+                                flat
+                                legacy={false}
+                            >
 
-                                <color attach="background" args={['#f4f4f2']} />
+                                {/* <color attach="background" args={['#f4f4f2']} /> */}
 
-                                <CameraController zoom={TABS.find((tb) => tb.value === scrollableTab)?.zoom || 8} position={TABS.find((tb) => tb.value === scrollableTab)?.position} />
+                                <CameraController zoom={currentTab?.zoom || 1} position={[currentTab?.x || 0, currentTab?.y || 10, currentTab?.z || 0]} />
 
-                                <ambientLight />
-                                <directionalLight position={[0, 10, 0]} />
+                                <color attach="background" args={['#eeeeee']} />
+                                {/* <Environment preset="forest" blur={10} /> */}
+
+                                <ambientLight intensity={0.05} />
 
                                 <Watch
-                                    bodyColor="silver"
-                                    bezelColor="black"
-                                    strapColor="brown"
-                                    colorObject={ob}
-                                    onSendColor={(obj: any) => setOb(obj)}
+                                    colorObject={currentColorObject}
+                                    model_path={model_path}
+                                    onSendColor={(obj: any) => setnewOb(obj)}
                                 />
 
                                 <OrbitControls enableDamping={isLocked} enablePan={isLocked} enableRotate={isLocked} enableZoom={isLocked} />
@@ -218,8 +183,8 @@ export default function Viewer({ dialog }: Props) {
                         }}
                         onChange={handleChangeScrollableTab}
                     >
-                        {TABS.map((tab) => (
-                            <Tab key={tab.value} label={tab.label} value={tab.value} />
+                        {tabs.map((tab: IProductTabs) => (
+                            <Tab key={tab.key} label={tab.tab_name} value={tab.key} />
                         ))}
                     </Tabs>
                 </Box>
@@ -229,7 +194,7 @@ export default function Viewer({ dialog }: Props) {
                         <ColorPicker
                             colors={['#979797', '#ffff00', '#fd0000', '#000', '#ff9900', '#0051ff']}
                             selected={''}
-                            onSelectColor={(color: any) => handleSelectColors(color, TABS.find((tb) => tb.value === scrollableTab)?.key || '')}
+                            onSelectColor={(color: any) => handleSelectColors(color, currentTab?.key || '')}
                         />
                     </Box>
 

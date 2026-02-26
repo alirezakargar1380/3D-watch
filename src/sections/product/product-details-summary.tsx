@@ -26,11 +26,13 @@ import { ICheckoutItem } from 'src/types/checkout';
 
 import IncrementerButton from './common/incrementer-button';
 import Viewer from './watch';
+import { useBoolean } from 'src/hooks/use-boolean';
+import axiosInstance, { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  product?: IProductItem;
+  product: IProductItem;
   items?: ICheckoutItem[];
   disabledActions?: boolean;
   onGotoStep?: (step: number) => void;
@@ -43,28 +45,27 @@ export default function ProductDetailsSummary({
   product,
   onAddCart,
   onGotoStep,
-  onCustomize,
   disabledActions,
   ...other
 }: Props) {
   const router = useRouter();
-
-  // const {
-  //   id,
-  //   name,
-  //   sizes,
-  //   price,
-  //   coverUrl,
-  //   colors,
-  //   newLabel,
-  //   available,
-  //   priceSale,
-  //   saleLabel,
-  //   totalRatings,
-  //   totalReviews,
-  //   inventoryType,
-  //   subDescription,
-  // } = product;
+  const dialog = useBoolean();
+  const {
+    id,
+    name,
+    // sizes,
+    // price,
+    // coverUrl,
+    // colors,
+    // newLabel,
+    // available,
+    // priceSale,
+    // saleLabel,
+    // totalRatings,
+    // totalReviews,
+    // inventoryType,
+    // subDescription,
+  } = product;
 
   const existProduct = !!items?.length && items.map((item) => item.id).includes(id);
 
@@ -78,6 +79,7 @@ export default function ProductDetailsSummary({
     // coverUrl,
     // available,
     // price,
+    clock: product.clock,
     colors: "#fff",
     size: 15,
     quantity: 6,
@@ -100,6 +102,8 @@ export default function ProductDetailsSummary({
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      console.log(data)
+      await axiosInstance.post(endpoints.order.create, data)
       // if (!existProduct) {
       //   onAddCart?.({
       //     ...data,
@@ -108,7 +112,7 @@ export default function ProductDetailsSummary({
       //   });
       // }
       // onGotoStep?.(0);
-      router.push(paths.product.checkout);
+      // router.push(paths.product.checkout);
     } catch (error) {
       console.error(error);
     }
@@ -283,7 +287,7 @@ export default function ProductDetailsSummary({
         fullWidth
         size="large"
         // type="submit" 
-        variant="contained" onClick={() => onCustomize?.()} disabled={disabledActions}>
+        variant="contained" onClick={dialog.onTrue} disabled={disabledActions}>
         Customize Clock
       </Button>
     </Stack>
@@ -340,7 +344,7 @@ export default function ProductDetailsSummary({
 
           {renderInventoryType}
 
-          <Typography variant="h5">Special Edition Clock</Typography>
+          <Typography variant="h5">{name}</Typography>
 
           {renderRating}
 
@@ -360,6 +364,18 @@ export default function ProductDetailsSummary({
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         {renderActions}
+
+
+        <Viewer
+          dialog={dialog}
+          model_path={product.clock}
+          tabs={product.tabs}
+          afterSubmit={(object: any) => {
+            setValue('colors', JSON.stringify(object))
+            onSubmit()
+            console.log('final colors', object)
+          }}
+        />
 
         {renderShare}
       </Stack>

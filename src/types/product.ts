@@ -31,6 +31,15 @@ export type IProductReview = {
   postedAt: Date;
 };
 
+export type IProductTabs = {
+  tab_name: string,
+    key: string,
+    zoom: number,
+    x: number,
+    y: number,
+    z: number
+}
+
 export type IProductItem = {
   id: string;
   clock: string;
@@ -45,7 +54,7 @@ export type IProductItem = {
   publish: string;
   coverUrl: string;
   images: string[];
-  colors: string[];
+  colors: string;
   quantity: number;
   category: string;
   available: number;
@@ -63,6 +72,7 @@ export type IProductItem = {
     starCount: number;
     reviewCount: number;
   }[];
+  tabs: IProductTabs[];
   saleLabel: {
     enabled: boolean;
     content: string;

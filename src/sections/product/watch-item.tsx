@@ -11,67 +11,6 @@ import Iconify from 'src/components/iconify'
 import { Vector3 } from 'three';
 import * as THREE from 'three';
 
-const TABS = [
-    {
-        value: 'one',
-        label: 'Background',
-        key: 'Circle005',
-        zoom: 4,
-        position: [0, 10, 0]
-    },
-    {
-        value: 'two',
-        label: 'Bezel',
-        key: 'Circle005_1',
-        zoom: 5,
-        position: [0, 10, 0]
-    },
-    {
-        value: 'three',
-        label: 'Indices',
-        key: 'Circle005_2',
-        zoom: 20,
-        position: [10, 3, 6]
-
-    },
-    {
-        value: 'four',
-        label: 'Hand hub',
-        key: 'Circle005_3',
-        zoom: 20,
-        position: [0, 10, 10]
-    },
-    {
-        value: 'five',
-        label: 'Hands',
-        key: 'Circle005_4',
-        zoom: 18,
-        position: [4, 14, 16]
-    },
-];
-
-function SceneBackground({ color }: { color: string }) {
-    const { scene } = useThree()
-
-    useEffect(() => {
-        scene.background = new THREE.Color(color)
-    }, [color, scene])
-
-    return null
-}
-
-// function CameraController({ zoom, position }: { zoom: number, position: any }) {
-//     const { camera } = useThree();
-
-//     useEffect(() => {
-//         camera.zoom = zoom;
-//         camera.position.set(position[0], position[1], position[2])
-//         camera.updateProjectionMatrix()
-//     }, [zoom, position, camera])
-
-//     return null
-// }
-
 
 function Watch({ colorObject, model_path, onSendColor, }: any) {
     const { materials, nodes }: any = useGLTF(model_path)
@@ -79,6 +18,8 @@ function Watch({ colorObject, model_path, onSendColor, }: any) {
     //   const { materials, nodes }: any = useGLTF('/models/watch.glb')
 
     useEffect(() => {
+        console.log('gen')
+        // generate color objects
         const keys = Object.keys(nodes);
         const object: any = {};
         for (let i = 0; i < keys.length; i++) {
@@ -87,20 +28,19 @@ function Watch({ colorObject, model_path, onSendColor, }: any) {
                 object[mesh.name] = "";
         }
 
-        console.log("object", object);
         onSendColor(object)
     }, [nodes])
 
     useEffect(() => {
-
+        console.log('color')
         Object.keys(nodes)?.map((key, index) => {
             const child = nodes[key];
-            if (child.isMesh) {
-                // child.material = child.material.clone()
-                // child.material.color.set('#ff0000')
+            if (child.isMesh && colorObject[child.name]) {
+                child.material = child.material.clone()
+                child.material.color.set(colorObject[child.name])
             }
         })
-    }, [nodes])
+    }, [colorObject])
 
     // console.log(nodes)
     // return (
@@ -191,19 +131,20 @@ function Watch({ colorObject, model_path, onSendColor, }: any) {
 
 interface Props {
     zoom?: number;
+    color?: any;
     selected?: boolean
     model_path: string;
-    onGetColorKeys: (colorObj: any) => void;
+    onGetColorKeys?: (colorObj: any) => void;
 }
 
-export default function WatchDemoViewer({ onGetColorKeys, zoom = 5, selected, model_path }: Props) {
-    const [ob, setOb] = useState<any>({});
+export default function WatchDemoViewer({ onGetColorKeys, color, zoom = 5, selected, model_path }: Props) {
+    const [ob, setOb] = useState<any>(color || {});
     // const [zoom, setZoom] = useState(4);
     const [isLocked, setIsLocked] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        onGetColorKeys(ob)
+        onGetColorKeys?.(ob)
     }, [ob])
 
     return (
@@ -232,9 +173,12 @@ export default function WatchDemoViewer({ onGetColorKeys, zoom = 5, selected, mo
             >
 
                 <color attach="background" args={['#ececec']} />
-                <Environment preset="forest" blur={10} />
+                {/* <Environment preset="forest" blur={10} /> */}
 
-                <ambientLight intensity={0.05} />
+                <ambientLight
+                    // intensity={0.05}
+                    intensity={10}
+                />
 
                 <Watch
                     colorObject={ob}

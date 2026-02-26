@@ -31,7 +31,7 @@ export const metadata = {
   keywords: 'react,material,kit,application,dashboard,admin,template',
   themeColor: '#000000',
   // manifest: '/manifest.json',
-  viewport: { width: 'device-width', initialScale: 1, maximumScale: 1 },
+  // viewport: { width: 'device-width', initialScale: 1, maximumScale: 1 },
   icons: [
     { rel: 'icon', url: '/favicon/favicon.ico' },
     { rel: 'icon', type: 'image/png', sizes: '16x16', url: '/favicon/favicon-16x16.png' },
@@ -39,6 +39,14 @@ export const metadata = {
     { rel: 'apple-touch-icon', sizes: '180x180', url: '/favicon/apple-touch-icon.png' },
   ],
 };
+
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: '#000000'
+}
 
 type Props = {
   children: React.ReactNode;
