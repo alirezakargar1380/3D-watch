@@ -43,8 +43,12 @@ import FormProvider, {
 
 import { IProductItem } from 'src/types/product';
 import WatchDemoViewer from './watch-item';
-import { Button, MenuItem } from '@mui/material';
+import { Button, IconButton, MenuItem } from '@mui/material';
 import axiosInstance, { endpoints } from 'src/utils/axios';
+import { MuiColorInput } from 'mui-color-input';
+import { ColorPicker } from 'src/components/color-utils';
+import { RoundedColorPicker } from 'src/components/color-utils/rounded-color-picker';
+import { TabItem } from './product-tab-item';
 
 // ----------------------------------------------------------------------
 const clockPaths = [
@@ -59,6 +63,10 @@ const clockPaths = [
     path: '/models/test-watch-shine.glb',
     zoom: 1.5
   },
+  {
+    path: '/models/golden-ring-clock-2.glb',
+    zoom: 3
+  },
 ]
 // ----------------------------------------------------------------------
 
@@ -72,7 +80,12 @@ const tabDefaultValue = {
   zoom: 7,
   x: 0,
   y: 10,
-  z: 0
+  z: 0,
+  colors: [
+    {
+      code: '#000'
+    }
+  ]
 }
 
 export default function ProductNewEditForm({ currentProduct }: Props) {
@@ -112,6 +125,11 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
         x: Yup.number(),
         y: Yup.number(),
         z: Yup.number(),
+        colors: Yup.array().of(
+          Yup.object().shape({
+            code: Yup.string().required()
+          })
+        ).required('')
       })
     )
   });
@@ -122,7 +140,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
       // description: currentProduct?.description || '',
       // subDescription: currentProduct?.subDescription || '',
       // images: currentProduct?.images || [],
-      clock: currentProduct?.clock || clockPaths[2].path,
+      clock: currentProduct?.clock || clockPaths[3].path,
       //
       // code: currentProduct?.code || '',
       // sku: currentProduct?.sku || '',
@@ -178,9 +196,9 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
       // reset();
       enqueueSnackbar(currentProduct ? 'Update success!' : 'Create success!');
       if (currentProduct) {
-        axiosInstance.patch(endpoints.product.update(currentProduct.id), data)
+        await axiosInstance.patch(endpoints.product.update(currentProduct.id), data)
       } else {
-        axiosInstance.post(endpoints.product.create, data)
+        await axiosInstance.post(endpoints.product.create, data)
       }
 
       // router.push(paths.dashboard.product.root);
@@ -387,27 +405,21 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
               />
             </Stack> */}
 
-            <Divider sx={{ borderStyle: 'dashed' }} />
+
 
             <Typography variant='subtitle2'>Customization Tabs</Typography>
 
-            {fields.map((field, index: number) => ((
-              <Stack spacing={2} key={index}>
-                <RHFTextField name={`tabs[${index}].tab_name`} label='Tab Name' />
-                <RHFTextField name={`tabs[${index}].key`} label='Key' select>
-                  {shape.map((shaneName: string) => (
-                    <MenuItem key={shaneName} value={shaneName}>{shaneName}</MenuItem>
-                  ))}
-                </RHFTextField>
-                <RHFTextField name={`tabs[${index}].zoom`} label='Zoom' />
-                <Stack direction={'row'} spacing={2}>
-                  <RHFTextField name={`tabs[${index}].x`} label='X' />
-                  <RHFTextField name={`tabs[${index}].y`} label='Y' />
-                  <RHFTextField name={`tabs[${index}].z`} label='Z' />
-                </Stack>
-              </Stack>
-            )))}
-
+            {fields.map((field, index) => (
+              <TabItem
+                key={index}
+                index={index}
+                shape={shape}
+                control={control}
+                setValue={setValue}
+                values={values}
+                removeTab={remove}
+              />
+            ))}
 
             <Button fullWidth={false} color='secondary' variant='contained' sx={{ width: 'fit-content' }} onClick={handleAddTab}>add Tab</Button>
           </Stack>
@@ -527,6 +539,13 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
             >
               {clockPaths.map((clock: any) => (
                 <WatchDemoViewer
+                  onClick={() => {
+                    if (currentProduct)
+                      return enqueueSnackbar('just in creating a prodcut can select a clock', {
+                        variant: 'error'
+                      })
+                    setValue('clock', clock.path)
+                  }}
                   model_path={clock.path} key={clock.path} zoom={clock?.zoom} selected={values.clock === clock.path}
                   onGetColorKeys={(colorObj: any) => (values.clock === clock.path) && setShapes(Object.keys(colorObj) as [])}
                 />

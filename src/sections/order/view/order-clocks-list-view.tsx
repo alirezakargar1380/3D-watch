@@ -100,10 +100,15 @@ export default function OrderClockListView() {
 
         <Stack spacing={6}>
           {orders.map((order) => (
-            <Card>
+            <Card key={order.id}>
               <CardContent>
                 <Box component={'div'} width={'50%'}>
-                  <WatchDemoViewer model_path={order.clock} zoom={1.5} color={JSON.parse(order.colors)}/>
+                  <WatchDemoViewer
+                    model_path={order.clock}
+                    zoom={1.5}
+                    color={JSON.parse(order.colors)}
+                    onGetColorKeys={() => {}}
+                  />
                 </Box>
 
               </CardContent>

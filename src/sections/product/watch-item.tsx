@@ -135,12 +135,13 @@ interface Props {
     selected?: boolean
     model_path: string;
     onGetColorKeys?: (colorObj: any) => void;
+    onClick?: () => void;
 }
 
-export default function WatchDemoViewer({ onGetColorKeys, color, zoom = 5, selected, model_path }: Props) {
+export default function WatchDemoViewer({ onGetColorKeys, onClick, color, zoom = 5, selected, model_path }: Props) {
     const [ob, setOb] = useState<any>(color || {});
     // const [zoom, setZoom] = useState(4);
-    const [isLocked, setIsLocked] = useState(true);
+    const [isLocked, setIsLocked] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -148,7 +149,7 @@ export default function WatchDemoViewer({ onGetColorKeys, color, zoom = 5, selec
     }, [ob])
 
     return (
-        <Box ref={containerRef} component={'div'} borderRadius={2} overflow={'hidden'} height={200} sx={{
+        <Box ref={containerRef} onClick={onClick} component={'div'} borderRadius={2} overflow={'hidden'} height={200} sx={{
             ...(selected && {
                 outline: '3px solid #000'
             })
@@ -173,12 +174,11 @@ export default function WatchDemoViewer({ onGetColorKeys, color, zoom = 5, selec
             >
 
                 <color attach="background" args={['#ececec']} />
-                {/* <Environment preset="forest" blur={10} /> */}
+                <Environment files='/forest.exr' blur={10} />
 
-                <ambientLight
-                    // intensity={0.05}
-                    intensity={10}
-                />
+                {/* <ambientLight
+                    intensity={0.05}
+                /> */}
 
                 <Watch
                     colorObject={ob}

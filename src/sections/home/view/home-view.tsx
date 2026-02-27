@@ -100,7 +100,41 @@ export default function HomeView() {
           <CarouselAnimation data={_carouselsExample.slice(0, 4)} />
 
           <Box component="div">
-            <ProductCarousel data={_carouselsExample.slice(1, 20)} />
+            <ProductCarousel
+              data={[
+                {
+                  coverUrl: '/assets/images/golden-ring-clock.jpg',
+                  description: '',
+                  title: '3D Clock',
+                  id: '234'
+                },
+                {
+                  coverUrl: '/assets/images/golden-ring-clock-2.jpg',
+                  description: '',
+                  title: '3D Clock',
+                  id: '234'
+                },
+                {
+                  coverUrl: '/assets/images/Untitled4.jpg',
+                  description: '',
+                  title: '3D Clock',
+                  id: '234'
+                },
+                {
+                  coverUrl: '/assets/images/Untitled2.jpg',
+                  description: '',
+                  title: '3D Clock',
+                  id: '234'
+                },
+                {
+                  coverUrl: '/assets/images/Untitled3.jpg',
+                  description: '',
+                  title: '3D Clock',
+                  id: '234'
+                },
+                ..._carouselsExample.slice(1, 20)
+              ]} 
+              />
           </Box>
 
 

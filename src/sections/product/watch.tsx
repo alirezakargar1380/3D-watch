@@ -57,14 +57,16 @@ interface Props {
     dialog: ReturnType;
     model_path: string;
     tabs: IProductTabs[];
+    colors: string[];
     afterSubmit: (object: any) => void;
 }
 
-export default function Viewer({ dialog, model_path, tabs, afterSubmit }: Props) {
+export default function Viewer({ dialog, model_path, tabs, colors, afterSubmit }: Props) {
     const [currentColorObject, setOb] = useState<any>({});
     const [newColorObject, setnewOb] = useState<any>({});
     const [zoom, setZoom] = useState(4);
     const [isLocked, setIsLocked] = useState(false);
+    const [scrollableTab, setScrollableTab] = useState(tabs?.[0]?.key);
 
     const handleChange = (key: string, newValue: any) => {
         setOb((prevState: any) => ({
@@ -72,8 +74,6 @@ export default function Viewer({ dialog, model_path, tabs, afterSubmit }: Props)
             [key]: newValue,
         }));
     }
-
-    const [scrollableTab, setScrollableTab] = useState(tabs?.[0]?.key);
 
     const handleChangeScrollableTab = useCallback((event: React.SyntheticEvent, newValue: string) => {
         setScrollableTab(newValue);
@@ -86,7 +86,7 @@ export default function Viewer({ dialog, model_path, tabs, afterSubmit }: Props)
 
     const currentTab = tabs.find((tb) => tb.key === scrollableTab);
 
-    console.log('currentTab', currentTab)
+    console.log('currentTab', currentColorObject[scrollableTab] || '')
 
     return (
 
@@ -145,7 +145,7 @@ export default function Viewer({ dialog, model_path, tabs, afterSubmit }: Props)
                                 <CameraController zoom={currentTab?.zoom || 1} position={[currentTab?.x || 0, currentTab?.y || 10, currentTab?.z || 0]} />
 
                                 <color attach="background" args={['#eeeeee']} />
-                                {/* <Environment preset="forest" blur={10} /> */}
+                                <Environment files='/city.exr' blur={60} />
 
                                 <ambientLight intensity={0.05} />
 
@@ -192,8 +192,8 @@ export default function Viewer({ dialog, model_path, tabs, afterSubmit }: Props)
                 <Stack direction={{ xs: 'column', md: 'row' }} sx={{ mx: 0, mt: 2 }} justifyContent={'center'} spacing={1}>
                     <Box component={'div'} textAlign={'center'}>
                         <ColorPicker
-                            colors={['#979797', '#ffff00', '#fd0000', '#000', '#ff9900', '#0051ff']}
-                            selected={''}
+                            colors={tabs.find((tab) => tab.key === scrollableTab)?.colors.map((color) => color.code) || ['#fff']}
+                            selected={currentColorObject[scrollableTab] || ''}
                             onSelectColor={(color: any) => handleSelectColors(color, currentTab?.key || '')}
                         />
                     </Box>

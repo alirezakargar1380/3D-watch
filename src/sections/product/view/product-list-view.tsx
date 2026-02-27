@@ -248,10 +248,10 @@ export default function ProductListView() {
                   ) : (
                     <>
                       {dataFiltered
-                        .slice(
-                          table.page * table.rowsPerPage,
-                          table.page * table.rowsPerPage + table.rowsPerPage
-                        )
+                        // .slice(
+                        //   table.page * table.rowsPerPage,
+                        //   table.page * table.rowsPerPage + table.rowsPerPage
+                        // )
                         .map((row) => (
                           <ProductTableRow
                             key={row.id}

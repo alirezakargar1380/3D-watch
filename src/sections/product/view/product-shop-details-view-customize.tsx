@@ -29,9 +29,6 @@ import { ProductDetailsSkeleton } from '../product-skeleton';
 import ProductDetailsSummary from '../product-details-summary';
 import ProductDetailsCarousel from '../product-details-carousel';
 import ProductDetailsDescription from '../product-details-description';
-import Viewer from '../watch';
-import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
-import { useBoolean } from 'src/hooks/use-boolean';
 
 // ----------------------------------------------------------------------
 

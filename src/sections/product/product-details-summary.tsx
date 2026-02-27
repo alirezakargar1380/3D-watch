@@ -369,6 +369,7 @@ export default function ProductDetailsSummary({
         <Viewer
           dialog={dialog}
           model_path={product.clock}
+          colors={product.tabs.map((tab) => tab.colors).map((color: any) => color.code)}
           tabs={product.tabs}
           afterSubmit={(object: any) => {
             setValue('colors', JSON.stringify(object))

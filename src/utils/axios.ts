@@ -50,7 +50,7 @@ export const endpoints = {
     list: '/api/orders',
   },
   product: {
-    list: '/api/product/list',
+    list: '/api/products',
     details: (id: string) => `/api/products/${id}`,
     update: (id: string) => `/api/products/${id}`,
     search: '/api/product/search',

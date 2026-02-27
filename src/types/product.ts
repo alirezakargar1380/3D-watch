@@ -38,6 +38,9 @@ export type IProductTabs = {
     x: number,
     y: number,
     z: number
+    colors: {
+      code: string
+    }[]
 }
 
 export type IProductItem = {
