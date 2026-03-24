@@ -38,6 +38,7 @@ export type IProductTabs = {
     x: number,
     y: number,
     z: number
+    default_color: string,
     colors: {
       code: string
     }[]

@@ -80,13 +80,19 @@ export default function Viewer({ dialog, model_path, tabs, colors, afterSubmit }
     }, []);
 
     const handleSelectColors = (color: any, key: string) => {
-        console.log("keyyy", key)
         handleChange(key, color);
     }
 
     const currentTab = tabs.find((tb) => tb.key === scrollableTab);
 
-    console.log('currentTab', currentColorObject[scrollableTab] || '')
+    // add the default colors
+    useEffect(() => {
+        for (let i = 0; i < tabs.length; i++) {
+            const tab = tabs[i];
+            if (tab.default_color)
+                handleSelectColors(tab.default_color, tab.key)
+        }
+    }, [])
 
     return (
 

@@ -1,5 +1,6 @@
 import { Box, Button, IconButton, MenuItem, Stack } from "@mui/material";
 import { useFieldArray } from "react-hook-form";
+import { ColorPicker } from "src/components/color-utils";
 import { RoundedColorPicker } from "src/components/color-utils/rounded-color-picker";
 import { RHFTextField } from "src/components/hook-form";
 
@@ -73,6 +74,19 @@ export const TabItem = ({
             </IconButton>
           </Stack>
         ))}
+
+        <ColorPicker
+          selected={values?.tabs?.[index]?.default_color || ''}
+          onSelectColor={(color) =>
+                setValue(
+                  `tabs.${index}.default_color`,
+                  color
+                )
+              }
+          colors={colorFields.map((color, colorIndex) => {
+            return values?.tabs?.[index]?.colors?.[colorIndex]?.code
+          })}
+        />
 
         <Button
           variant="outlined"

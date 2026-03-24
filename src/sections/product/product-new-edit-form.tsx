@@ -81,6 +81,7 @@ const tabDefaultValue = {
   x: 0,
   y: 10,
   z: 0,
+  default_color: '#000',
   colors: [
     {
       code: '#000'
@@ -125,6 +126,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
         x: Yup.number(),
         y: Yup.number(),
         z: Yup.number(),
+        default_color: Yup.string(),
         colors: Yup.array().of(
           Yup.object().shape({
             code: Yup.string().required()
