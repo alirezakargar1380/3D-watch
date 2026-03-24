@@ -79,7 +79,7 @@ export default function ProductDetailsSummary({
     // coverUrl,
     // available,
     // price,
-    clock: product.clock,
+    product: { id },
     colors: "#fff",
     size: 15,
     quantity: 6,
@@ -102,7 +102,7 @@ export default function ProductDetailsSummary({
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.log(data)
+      console.log('order data:', data)
       await axiosInstance.post(endpoints.order.create, data)
       // if (!existProduct) {
       //   onAddCart?.({

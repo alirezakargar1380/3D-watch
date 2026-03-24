@@ -27,6 +27,7 @@ import HeaderShadow from '../common/header-shadow';
 import SettingsButton from '../common/settings-button';
 import Iconify from 'src/components/iconify';
 import { IconButton } from '@mui/material';
+import UserAccountPopover from '../common/user-account-popover';
 
 // ----------------------------------------------------------------------
 
@@ -84,9 +85,11 @@ export default function Header() {
 
             {/* {mdUp && <LoginButton />} */}
 
-            <IconButton>
+            <Box component={'div'}>
               <Iconify icon={'mingcute:user-1-line'} />
-            </IconButton>
+              <UserAccountPopover />
+              user
+            </Box>
 
             <IconButton>
               <Iconify icon={'mdi:shopping-outline'} />
