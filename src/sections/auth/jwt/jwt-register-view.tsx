@@ -28,7 +28,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function JwtRegisterView() {
-  const { register } = useAuthContext();
+  const { customerRegister } = useAuthContext();
 
   const router = useRouter();
 
@@ -41,17 +41,21 @@ export default function JwtRegisterView() {
   const password = useBoolean();
 
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string().required('First name required'),
-    lastName: Yup.string().required('Last name required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string().required('Password is required'),
+    username: Yup.string().required('username required'),
+    first_name: Yup.string().required('First name required'),
+    last_name: Yup.string().required('Last name required'),
+    password: Yup.string().required('پسورد را وارد کنید'),
+    re_password: Yup.string()
+      .required('پسورد شما تطابق ندارند')
+    // .oneOf([Yup.ref('password')], 'پسورد شما تطابق ندارند'),
   });
 
   const defaultValues = {
-    firstName: '',
-    lastName: '',
-    email: '',
+    username: '',
+    first_name: '',
+    last_name: '',
     password: '',
+    re_password: '',
   };
 
   const methods = useForm({
@@ -67,12 +71,13 @@ export default function JwtRegisterView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await register?.(data.email, data.password, data.firstName, data.lastName);
+      delete data.re_password;
+      await customerRegister(data)
 
-      router.push(returnTo || PATH_AFTER_LOGIN);
+      router.push('/');
     } catch (error) {
       console.error(error);
-      reset();
+      // reset();
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
   });
@@ -118,16 +123,31 @@ export default function JwtRegisterView() {
       <Stack spacing={2.5}>
         {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-          <RHFTextField name="firstName" label="First name" />
-          <RHFTextField name="lastName" label="Last name" />
-        </Stack>
+        <RHFTextField name="username" label="username" />
 
-        <RHFTextField name="email" label="Email address" />
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <RHFTextField name="first_name" label="first name" />
+          <RHFTextField name="last_name" label="last name" />
+        </Stack>
 
         <RHFTextField
           name="password"
-          label="Password"
+          label="password"
+          type={password.value ? 'text' : 'password'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={password.onToggle} edge="end">
+                  <Iconify icon={password.value ? 'solar:eye-bold' : 'solar:eye-closed-bold'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+
+        <RHFTextField
+          name="re_password"
+          label="confirm password"
           type={password.value ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -148,12 +168,11 @@ export default function JwtRegisterView() {
           variant="contained"
           loading={isSubmitting}
         >
-          Create account
+          درخواست ساخت اکانت
         </LoadingButton>
       </Stack>
     </FormProvider>
   );
-
   return (
     <>
       {renderHead}

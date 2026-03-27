@@ -85,11 +85,7 @@ export default function Header() {
 
             {/* {mdUp && <LoginButton />} */}
 
-            <Box component={'div'}>
-              <Iconify icon={'mingcute:user-1-line'} />
-              <UserAccountPopover />
-              user
-            </Box>
+            <UserAccountPopover />
 
             <IconButton>
               <Iconify icon={'mdi:shopping-outline'} />

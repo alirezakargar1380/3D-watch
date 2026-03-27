@@ -4,27 +4,41 @@ import { HOST_API } from 'src/config-global';
 
 // ----------------------------------------------------------------------
 
-const axiosInstance = axios.create({ baseURL: HOST_API });
+const admin_axios = axios.create({ baseURL: HOST_API });
+const customerAxiosInstance = axios.create({ baseURL: HOST_API });
 
-axiosInstance.interceptors.response.use(
+admin_axios.interceptors.response.use(
   (res) => res,
   (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
 );
 
-export default axiosInstance;
+customerAxiosInstance.interceptors.response.use(
+  (res) => res,
+  (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
+);
+
+export const customer_axios = customerAxiosInstance;
+export default admin_axios;
 
 // ----------------------------------------------------------------------
 
 export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
   const [url, config] = Array.isArray(args) ? args : [args];
 
-  const res = await axiosInstance.get(url, { ...config });
+  const res = await admin_axios.get(url, { ...config });
+
+  return res.data;
+};
+
+export const customerFetcher = async (args: string | [string, AxiosRequestConfig]) => {
+  const [url, config] = Array.isArray(args) ? args : [args];
+
+  const res = await customer_axios.get(url, { ...config });
 
   return res.data;
 };
 
 // ----------------------------------------------------------------------
-
 export const endpoints = {
   chat: '/api/chat',
   kanban: '/api/kanban',
@@ -55,5 +69,19 @@ export const endpoints = {
     update: (id: string) => `/api/products/${id}`,
     search: '/api/product/search',
     create: '/api/products',
+  },
+  customer: {
+
+    create: '/api/customers',
+    list: '/api/customers',
+    one: (id: string) => `/api/customers/${id}`,
+    update: (id: string) => `/api/customers/${id}`,
+    delete: (id: string) => `/api/customers/${id}`,
+    auth: {
+      me: '/api/customers/auth/me',
+      login: '/api/customers/auth/login',
+      register: '/api/customers/register',
+      // register: '/api/auth/register',
+    },
   },
 };

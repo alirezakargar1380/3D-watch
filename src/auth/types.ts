@@ -1,16 +1,17 @@
 import { LogoutOptions, PopupLoginOptions, RedirectLoginOptions } from '@auth0/auth0-react';
+import { ICustomerItem } from 'src/types/customer';
 
 // ----------------------------------------------------------------------
 
 export type ActionMapType<M extends { [index: string]: any }> = {
   [Key in keyof M]: M[Key] extends undefined
-    ? {
-        type: Key;
-      }
-    : {
-        type: Key;
-        payload: M[Key];
-      };
+  ? {
+    type: Key;
+  }
+  : {
+    type: Key;
+    payload: M[Key];
+  };
 };
 
 export type AuthUserType = null | Record<string, any>;
@@ -18,7 +19,8 @@ export type AuthUserType = null | Record<string, any>;
 export type AuthStateType = {
   status?: string;
   loading: boolean;
-  user: AuthUserType;
+  customer: AuthUserType;
+  admin: AuthUserType;
 };
 
 // ----------------------------------------------------------------------
@@ -46,18 +48,21 @@ type CanRemove = {
 };
 
 export type JWTContextType = CanRemove & {
-  user: AuthUserType;
+  customer: AuthUserType;
   method: string;
   loading: boolean;
   authenticated: boolean;
+  adminAuthenticated: boolean;
   unauthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  adminLogin: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
+  customerRegister: (data: ICustomerItem) => Promise<void>;
+  customerLogin: (phone: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 };
 
 export type FirebaseContextType = CanRemove & {
-  user: AuthUserType;
+  customer: AuthUserType;
   method: string;
   loading: boolean;
   authenticated: boolean;
@@ -72,7 +77,7 @@ export type FirebaseContextType = CanRemove & {
 };
 
 export type AmplifyContextType = CanRemove & {
-  user: AuthUserType;
+  customer: AuthUserType;
   method: string;
   loading: boolean;
   authenticated: boolean;
@@ -94,9 +99,10 @@ export type AmplifyContextType = CanRemove & {
 // ----------------------------------------------------------------------
 
 export type Auth0ContextType = CanRemove & {
-  user: AuthUserType;
+  customer: AuthUserType;
   method: string;
   loading: boolean;
+  adminAuthenticated: boolean;
   authenticated: boolean;
   unauthenticated: boolean;
   loginWithPopup: (options?: PopupLoginOptions) => Promise<void>;

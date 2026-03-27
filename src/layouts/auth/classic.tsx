@@ -62,7 +62,7 @@ export default function AuthClassicLayout({ children, image, title }: Props) {
       sx={{
         zIndex: 9,
         position: 'absolute',
-        m: { xs: 2, md: 5 },
+        m: { xs: 2, md: 3 },
       }}
     />
   );
@@ -72,7 +72,7 @@ export default function AuthClassicLayout({ children, image, title }: Props) {
       sx={{
         width: 1,
         mx: 'auto',
-        maxWidth: 480,
+        maxWidth: 580,
         px: { xs: 2, md: 8 },
         pt: { xs: 15, md: 20 },
         pb: { xs: 15, md: 0 },
@@ -148,7 +148,7 @@ export default function AuthClassicLayout({ children, image, title }: Props) {
     >
       {renderLogo}
 
-      {mdUp && renderSection}
+      {/* {mdUp && renderSection} */}
 
       {renderContent}
     </Stack>

@@ -11,7 +11,7 @@ import { useAuthContext } from '../hooks';
 // ----------------------------------------------------------------------
 
 const loginPaths: Record<string, string> = {
-  jwt: paths.auth.jwt.login,
+  jwt: paths.auth.customerJwt.login,
   auth0: paths.auth.auth0.login,
   amplify: paths.auth.amplify.login,
   firebase: paths.auth.firebase.login,
@@ -23,7 +23,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default function AuthGuard({ children }: Props) {
+export default function CustomerAuthGuard({ children }: Props) {
   const { loading } = useAuthContext();
 
   return <>{loading ? <SplashScreen /> : <Container>{children}</Container>}</>;
@@ -34,12 +34,12 @@ export default function AuthGuard({ children }: Props) {
 function Container({ children }: Props) {
   const router = useRouter();
 
-  const { adminAuthenticated, method } = useAuthContext();
+  const { authenticated, method } = useAuthContext();
 
   const [checked, setChecked] = useState(false);
 
   const check = useCallback(() => {
-    if (!adminAuthenticated) {
+    if (!authenticated) {
       const searchParams = new URLSearchParams({
         returnTo: window.location.pathname,
       }).toString();
@@ -52,7 +52,7 @@ function Container({ children }: Props) {
     } else {
       setChecked(true);
     }
-  }, [adminAuthenticated, method, router]);
+  }, [authenticated, method, router]);
 
   useEffect(() => {
     check();

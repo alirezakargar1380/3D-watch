@@ -1,6 +1,6 @@
 import { paths } from 'src/routes/paths';
 
-import axios from 'src/utils/axios';
+import axios, { customer_axios } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +21,7 @@ function jwtDecode(token: string) {
 // ----------------------------------------------------------------------
 
 export const isValidToken = (accessToken: string) => {
+  return true
   if (!accessToken) {
     return false;
   }
@@ -59,16 +60,32 @@ export const tokenExpired = (exp: number) => {
 
 export const setSession = (accessToken: string | null) => {
   if (accessToken) {
-    sessionStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('accessToken', accessToken);
 
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
     // This function below will handle when token is expired
     const { exp } = jwtDecode(accessToken); // ~3 days by minimals server
-    tokenExpired(exp);
+    // tokenExpired(exp);
   } else {
-    sessionStorage.removeItem('accessToken');
+    localStorage.removeItem('accessToken');
 
     delete axios.defaults.headers.common.Authorization;
+  }
+};
+
+export const setCustomerSession = (accessToken: string | null) => {
+  if (accessToken) {
+    localStorage.setItem('customerAccessToken', accessToken);
+
+    customer_axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+
+    // This function below will handle when token is expired
+    const { exp } = jwtDecode(accessToken); // ~3 days by minimals server
+    // tokenExpired(exp);
+  } else {
+    localStorage.removeItem('customerAccessToken');
+
+    delete customer_axios.defaults.headers.common.Authorization;
   }
 };

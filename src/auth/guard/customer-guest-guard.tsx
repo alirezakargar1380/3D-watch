@@ -15,7 +15,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default function GuestGuard({ children }: Props) {
+export default function CustomerGuestGuard({ children }: Props) {
   const { loading } = useAuthContext();
 
   return <>{loading ? <SplashScreen /> : <Container>{children}</Container>}</>;
@@ -28,15 +28,15 @@ function Container({ children }: Props) {
 
   const searchParams = useSearchParams();
 
-  const returnTo = searchParams.get('returnTo') || paths.dashboard.root;
+  const returnTo = searchParams.get('returnTo') || paths.store.root;
 
-  const { adminAuthenticated } = useAuthContext();
+  const { authenticated } = useAuthContext();
 
   const check = useCallback(() => {
-    if (adminAuthenticated) {
+    if (authenticated) {
       router.replace(returnTo);
     }
-  }, [adminAuthenticated, returnTo, router]);
+  }, [authenticated, returnTo, router]);
 
   useEffect(() => {
     check();

@@ -2,17 +2,12 @@
 
 import { useMemo, useEffect, useReducer, useCallback } from 'react';
 
-import axios, { endpoints } from 'src/utils/axios';
+import axios, { customer_axios, endpoints } from 'src/utils/axios';
 
 import { AuthContext } from './auth-context';
-import { setSession, isValidToken } from './utils';
+import { setSession, isValidToken, setCustomerSession } from './utils';
 import { AuthUserType, ActionMapType, AuthStateType } from '../../types';
-
-// ----------------------------------------------------------------------
-
-// NOTE:
-// We only build demo at basic level.
-// Customer will need to do some extra handling yourself if you want to extend the logic and other features...
+import { ICustomerItem } from 'src/types/customer';
 
 // ----------------------------------------------------------------------
 
@@ -25,13 +20,16 @@ enum Types {
 
 type Payload = {
   [Types.INITIAL]: {
-    user: AuthUserType;
+    customer?: AuthUserType;
+    admin?: AuthUserType;
   };
   [Types.LOGIN]: {
-    user: AuthUserType;
+    customer?: AuthUserType;
+    admin?: AuthUserType;
   };
   [Types.REGISTER]: {
-    user: AuthUserType;
+    customer: AuthUserType;
+    admin?: AuthUserType;
   };
   [Types.LOGOUT]: undefined;
 };
@@ -41,7 +39,8 @@ type ActionsType = ActionMapType<Payload>[keyof ActionMapType<Payload>];
 // ----------------------------------------------------------------------
 
 const initialState: AuthStateType = {
-  user: null,
+  admin: null,
+  customer: null,
   loading: true,
 };
 
@@ -49,25 +48,29 @@ const reducer = (state: AuthStateType, action: ActionsType) => {
   if (action.type === Types.INITIAL) {
     return {
       loading: false,
-      user: action.payload.user,
+      customer: action?.payload?.customer ? action.payload.customer : state.customer,
+      admin: action?.payload?.admin ? action.payload.admin : state.admin,
     };
   }
   if (action.type === Types.LOGIN) {
     return {
       ...state,
-      user: action.payload.user,
+      customer: action?.payload?.customer ? action.payload.customer : null,
+      admin: action?.payload?.admin ? action.payload.admin : null,
     };
   }
   if (action.type === Types.REGISTER) {
     return {
       ...state,
-      user: action.payload.user,
+      customer: action.payload.customer,
+      admin: action?.payload?.admin ? action.payload.admin : null,
     };
   }
   if (action.type === Types.LOGOUT) {
     return {
       ...state,
-      user: null,
+      customer: null,
+      admin: null,
     };
   }
   return state;
@@ -76,6 +79,7 @@ const reducer = (state: AuthStateType, action: ActionsType) => {
 // ----------------------------------------------------------------------
 
 const STORAGE_KEY = 'accessToken';
+const CUSTOMER_STORAGE_KEY = 'customerAccessToken';
 
 type Props = {
   children: React.ReactNode;
@@ -86,19 +90,19 @@ export function AuthProvider({ children }: Props) {
 
   const initialize = useCallback(async () => {
     try {
-      const accessToken = sessionStorage.getItem(STORAGE_KEY);
+      const accessToken = localStorage.getItem(STORAGE_KEY);
 
-      if (accessToken && isValidToken(accessToken)) {
+      if (accessToken) {
         setSession(accessToken);
 
-        const res = await axios.get(endpoints.auth.me);
+        const res = await axios.get(endpoints.admin.auth.me);
 
         const { user } = res.data;
 
         dispatch({
           type: Types.INITIAL,
           payload: {
-            user: {
+            admin: {
               ...user,
               accessToken,
             },
@@ -108,7 +112,8 @@ export function AuthProvider({ children }: Props) {
         dispatch({
           type: Types.INITIAL,
           payload: {
-            user: null,
+            customer: null,
+            admin: null
           },
         });
       }
@@ -117,7 +122,8 @@ export function AuthProvider({ children }: Props) {
       dispatch({
         type: Types.INITIAL,
         payload: {
-          user: null,
+          customer: null,
+          admin: null
         },
       });
     }
@@ -127,14 +133,57 @@ export function AuthProvider({ children }: Props) {
     initialize();
   }, [initialize]);
 
-  // LOGIN
-  const login = useCallback(async (email: string, password: string) => {
+  const customerInitialize = useCallback(async () => {
+    try {
+      const accessToken = localStorage.getItem(CUSTOMER_STORAGE_KEY);
+
+      if (accessToken) {
+        setCustomerSession(accessToken);
+
+        const res = await customer_axios.get(endpoints.customer.auth.me);
+
+        const { user } = res.data;
+
+        dispatch({
+          type: Types.INITIAL,
+          payload: {
+            customer: {
+              ...user,
+            },
+          },
+        });
+      } else {
+        dispatch({
+          type: Types.INITIAL,
+          payload: {
+            customer: null
+          },
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      dispatch({
+        type: Types.INITIAL,
+        payload: {
+          customer: null,
+          admin: null
+        },
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    customerInitialize();
+  }, [customerInitialize]);
+
+  // Admin LOGIN
+  const adminLogin = useCallback(async (username: string, password: string) => {
     const data = {
-      email,
+      username,
       password,
     };
 
-    const res = await axios.post(endpoints.auth.login, data);
+    const res = await axios.post(endpoints.admin.auth.login, data);
 
     const { accessToken, user } = res.data;
 
@@ -143,7 +192,31 @@ export function AuthProvider({ children }: Props) {
     dispatch({
       type: Types.LOGIN,
       payload: {
-        user: {
+        admin: {
+          ...user,
+          accessToken,
+        },
+      },
+    });
+  }, []);
+
+  // Customer LOGIN
+  const customerLogin = useCallback(async (phone_number: string, password: string) => {
+    const data = {
+      phone_number,
+      password,
+    };
+
+    const res = await customer_axios.post(endpoints.customer.auth.login, data);
+
+    const { accessToken, user } = res.data;
+
+    setCustomerSession(accessToken);
+
+    dispatch({
+      type: Types.LOGIN,
+      payload: {
+        customer: {
           ...user,
           accessToken,
         },
@@ -167,10 +240,33 @@ export function AuthProvider({ children }: Props) {
 
       sessionStorage.setItem(STORAGE_KEY, accessToken);
 
+      // dispatch({
+      //   type: Types.REGISTER,
+      //   payload: {
+      //     customer: {
+      //       ...user,
+      //       accessToken,
+      //     },
+      //   },
+      // });
+    },
+    []
+  );
+
+  // CUSTOMER REGISTER
+  const customerRegister = useCallback(
+    async (data: ICustomerItem) => {
+      
+      const res = await axios.post(endpoints.customer.auth.register, data);
+
+      const { accessToken, user } = res.data;
+
+      setCustomerSession(accessToken);
+
       dispatch({
         type: Types.REGISTER,
         payload: {
-          user: {
+          customer: {
             ...user,
             accessToken,
           },
@@ -183,6 +279,7 @@ export function AuthProvider({ children }: Props) {
   // LOGOUT
   const logout = useCallback(async () => {
     setSession(null);
+    setCustomerSession(null)
     dispatch({
       type: Types.LOGOUT,
     });
@@ -190,23 +287,29 @@ export function AuthProvider({ children }: Props) {
 
   // ----------------------------------------------------------------------
 
-  const checkAuthenticated = state.user ? 'authenticated' : 'unauthenticated';
+  const checkAuthenticated = state.customer ? 'authenticated' : 'unauthenticated';
+  const adminCheckAuthenticated = state.admin ? 'authenticated' : 'unauthenticated';
 
   const status = state.loading ? 'loading' : checkAuthenticated;
+  const admin_status = state.loading ? 'loading' : adminCheckAuthenticated;
 
   const memoizedValue = useMemo(
     () => ({
-      user: state.user,
+      customer: state.customer,
       method: 'jwt',
       loading: status === 'loading',
       authenticated: status === 'authenticated',
       unauthenticated: status === 'unauthenticated',
+
+      adminAuthenticated: admin_status === 'authenticated',
       //
-      login,
+      customerRegister,
+      adminLogin,
+      customerLogin,
       register,
       logout,
     }),
-    [login, logout, register, state.user, status]
+    [adminLogin, customerLogin, logout, register, state.customer, state.admin, status, admin_status]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

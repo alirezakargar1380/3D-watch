@@ -10,6 +10,7 @@ const MOCK_TITLE = _postTitles[2];
 
 const ROOTS = {
   AUTH: '/auth',
+  USER_AUTH: '/user-auth',
   AUTH_DEMO: '/auth-demo',
   DASHBOARD: '/dashboard',
 };
@@ -72,6 +73,10 @@ export const paths = {
     auth0: {
       login: `${ROOTS.AUTH}/auth0/login`,
     },
+  },
+  user_auth: {
+    login: `${ROOTS.USER_AUTH}/login`,
+    register: `${ROOTS.USER_AUTH}/register`,
   },
   authDemo: {
     classic: {
