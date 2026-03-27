@@ -27,7 +27,7 @@ import { ICheckoutItem } from 'src/types/checkout';
 import IncrementerButton from './common/incrementer-button';
 import Viewer from './watch';
 import { useBoolean } from 'src/hooks/use-boolean';
-import axiosInstance, { endpoints } from 'src/utils/axios';
+import axiosInstance, { customer_axios, endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -79,6 +79,7 @@ export default function ProductDetailsSummary({
     // coverUrl,
     // available,
     // price,
+    clock: product.clock,
     product: { id },
     colors: "#fff",
     size: 15,
@@ -103,7 +104,7 @@ export default function ProductDetailsSummary({
   const onSubmit = handleSubmit(async (data) => {
     try {
       console.log('order data:', data)
-      await axiosInstance.post(endpoints.order.create, data)
+      await customer_axios.post(endpoints.order.create, data)
       // if (!existProduct) {
       //   onAddCart?.({
       //     ...data,
