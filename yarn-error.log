@@ -1,0 +1,143 @@
+Arguments: 
+  /opt/homebrew/Cellar/node@18/18.17.1/bin/node /opt/homebrew/Cellar/yarn/1.22.19/libexec/bin/yarn.js install
+
+PATH: 
+  /opt/homebrew/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.17.1
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: ENOENT: no such file or directory, open '/Users/trinh/Library/Caches/Yarn/v6/npm-@fullcalendar-core-6.1.9-ea735b0dd0a0a487969ebbb6c99b0967e07568c0-integrity/node_modules/@fullcalendar/core/.yarn-tarball.tgz'
+
+npm manifest: 
+  {
+    "name": "@minimal-kit/next-ts",
+    "author": "Minimals",
+    "version": "5.6.0",
+    "description": "Next & TypeScript",
+    "private": true,
+    "scripts": {
+      "dev": "next dev -p 8082",
+      "dev:ts": "yarn dev & yarn ts:watch",
+      "ts": "tsc --noEmit --incremental",
+      "ts:watch": "yarn ts --watch",
+      "start": "next start -p 8082",
+      "build": "next build",
+      "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
+      "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
+      "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
+      "clear-all": "rm -rf node_modules .next out dist build",
+      "re-start": "rm -rf node_modules .next out dist build && yarn install && yarn dev",
+      "re-build": "rm -rf node_modules .next out dist build && yarn install && yarn build",
+      "re-build-test": "rm -rf node_modules .next out dist build && npm install && npm run build"
+    },
+    "dependencies": {
+      "@auth0/auth0-react": "^2.2.1",
+      "@aws-amplify/auth": "^5.6.5",
+      "@emotion/cache": "^11.10.5",
+      "@emotion/react": "^11.11.1",
+      "@emotion/styled": "^11.11.0",
+      "@fullcalendar/core": "^6.1.9",
+      "@fullcalendar/daygrid": "^6.1.9",
+      "@fullcalendar/interaction": "^6.1.9",
+      "@fullcalendar/list": "^6.1.9",
+      "@fullcalendar/react": "^6.1.9",
+      "@fullcalendar/timegrid": "^6.1.9",
+      "@fullcalendar/timeline": "^6.1.9",
+      "@hello-pangea/dnd": "^16.3.0",
+      "@hookform/resolvers": "^3.3.1",
+      "@iconify/react": "^4.1.1",
+      "@mui/lab": "^5.0.0-alpha.147",
+      "@mui/material": "^5.14.12",
+      "@mui/system": "^5.14.12",
+      "@mui/x-data-grid": "^6.16.1",
+      "@mui/x-date-pickers": "^6.16.1",
+      "@react-pdf/renderer": "^3.1.12",
+      "apexcharts": "^3.43.0",
+      "autosuggest-highlight": "^3.3.4",
+      "axios": "^1.5.1",
+      "date-fns": "^2.30.0",
+      "encoding": "^0.1.13",
+      "firebase": "^10.4.0",
+      "framer-motion": "^10.16.4",
+      "highlight.js": "^11.8.0",
+      "i18next": "^23.5.1",
+      "i18next-browser-languagedetector": "^7.1.0",
+      "lodash": "^4.17.21",
+      "mapbox-gl": "^2.15.0",
+      "mui-one-time-password-input": "^2.0.0",
+      "next": "^13.5.4",
+      "notistack": "^3.0.1",
+      "nprogress": "^0.2.0",
+      "numeral": "^2.0.6",
+      "react": "^18.2.0",
+      "react-apexcharts": "^1.4.1",
+      "react-dom": "^18.2.0",
+      "react-dropzone": "^14.2.3",
+      "react-hook-form": "^7.47.0",
+      "react-i18next": "^13.2.2",
+      "react-lazy-load-image-component": "^1.6.0",
+      "react-map-gl": "^7.1.6",
+      "react-markdown": "^9.0.0",
+      "react-organizational-chart": "^2.2.1",
+      "react-quill": "^2.0.0",
+      "react-slick": "^0.29.0",
+      "rehype-highlight": "^7.0.0",
+      "rehype-raw": "^7.0.0",
+      "remark-gfm": "^4.0.0",
+      "simplebar-react": "^3.2.4",
+      "slick-carousel": "^1.8.1",
+      "stylis": "^4.3.0",
+      "stylis-plugin-rtl": "^2.1.1",
+      "swr": "^2.2.4",
+      "yet-another-react-lightbox": "^3.12.3",
+      "yup": "^1.3.2"
+    },
+    "devDependencies": {
+      "@babel/core": "^7.23.0",
+      "@babel/plugin-syntax-flow": "^7.22.5",
+      "@babel/plugin-transform-react-jsx": "^7.22.15",
+      "@svgr/webpack": "^8.1.0",
+      "@types/autosuggest-highlight": "^3.2.0",
+      "@types/lodash": "^4.14.199",
+      "@types/mapbox-gl": "^2.7.15",
+      "@types/node": "^20.8.2",
+      "@types/nprogress": "^0.2.1",
+      "@types/numeral": "^2.0.3",
+      "@types/react": "^18.2.25",
+      "@types/react-lazy-load-image-component": "^1.6.1",
+      "@types/react-slick": "^0.23.10",
+      "@types/stylis": "^4.2.1",
+      "@typescript-eslint/eslint-plugin": "^6.7.4",
+      "@typescript-eslint/parser": "^6.7.4",
+      "eslint": "^8.50.0",
+      "eslint-config-airbnb": "^19.0.4",
+      "eslint-config-airbnb-typescript": "^17.1.0",
+      "eslint-config-prettier": "^9.0.0",
+      "eslint-config-react-app": "^7.0.1",
+      "eslint-import-resolver-typescript": "^3.6.1",
+      "eslint-plugin-flowtype": "^8.0.3",
+      "eslint-plugin-import": "^2.28.1",
+      "eslint-plugin-jsx-a11y": "^6.7.1",
+      "eslint-plugin-perfectionist": "^2.1.0",
+      "eslint-plugin-prettier": "^5.0.0",
+      "eslint-plugin-react": "^7.33.2",
+      "eslint-plugin-react-hooks": "^4.6.0",
+      "eslint-plugin-unused-imports": "^3.0.0",
+      "prettier": "^3.0.3",
+      "typescript": "^5.2.2"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
