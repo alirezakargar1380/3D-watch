@@ -44,8 +44,15 @@ export type IProductTabs = {
     }[]
 }
 
+export type IImage = {
+  id: number;
+  name: string;
+  main: boolean;
+  hover: boolean;
+};
+
 export type IProductItem = {
-  id: string;
+  id: number;
   clock: string;
   sku: string;
   name: string;
@@ -57,7 +64,6 @@ export type IProductItem = {
   sizes: string[];
   publish: string;
   coverUrl: string;
-  images: string[];
   colors: string;
   quantity: number;
   category: string;
@@ -71,6 +77,7 @@ export type IProductItem = {
   priceSale: number | null;
   reviews: IProductReview[];
   createdAt: Date;
+  images: IImage[];
   ratings: {
     name: string;
     starCount: number;

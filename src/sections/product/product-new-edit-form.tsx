@@ -41,7 +41,7 @@ import FormProvider, {
   RHFMultiCheckbox,
 } from 'src/components/hook-form';
 
-import { IProductItem } from 'src/types/product';
+import { IImage, IProductItem } from 'src/types/product';
 import WatchDemoViewer from './watch-item';
 import { Button, IconButton, MenuItem } from '@mui/material';
 import axiosInstance, { endpoints } from 'src/utils/axios';
@@ -49,6 +49,7 @@ import { MuiColorInput } from 'mui-color-input';
 import { ColorPicker } from 'src/components/color-utils';
 import { RoundedColorPicker } from 'src/components/color-utils/rounded-color-picker';
 import { TabItem } from './product-tab-item';
+import { MultiFilePreview } from 'src/components/upload';
 
 // ----------------------------------------------------------------------
 const clockPaths = [
@@ -91,6 +92,9 @@ const tabDefaultValue = {
 
 export default function ProductNewEditForm({ currentProduct }: Props) {
   const [shape, setShapes] = useState([]);
+  const [mainImage, setMainImage] = useState<number>(0);
+  const [images, setImages] = useState<any>([]);
+  const [currentImages, setCurrentImages] = useState<any>([]);
 
   const router = useRouter();
 
@@ -199,8 +203,10 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
       enqueueSnackbar(currentProduct ? 'Update success!' : 'Create success!');
       if (currentProduct) {
         await axiosInstance.patch(endpoints.product.update(currentProduct.id), data)
+        await uploadMainImage(currentProduct.id)
       } else {
-        await axiosInstance.post(endpoints.product.create, data)
+        const res = await axiosInstance.post(endpoints.product.create, data).then((res) => res.data)
+        await uploadMainImage(res.id)
       }
 
       // router.push(paths.dashboard.product.root);
@@ -210,6 +216,32 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
     }
   });
 
+  // IMAGE
+  useEffect(() => {
+    const images = currentProduct?.images?.map((img: IImage | string, index: number) => {
+      if (typeof img === "string") return ""
+      if (img.main) setMainImage(index);
+      return endpoints.images.get(img.name);
+    })
+
+    setCurrentImages(images)
+  }, [currentProduct?.images])
+
+  const uploadMainImage = (product_id: number) => {
+    if (!images.length) return
+
+    const form = new FormData()
+
+    for (let i = 0; i < images.length; i++) {
+      const element = images[i];
+      form.append("file", element);
+    }
+
+    form.append("product_id", product_id.toString());
+    form.append("main_image", mainImage.toString());
+
+    return axiosInstance.put(endpoints.images.upload_single, form)
+  }
   // const handleDrop = useCallback(
   //   (acceptedFiles: File[]) => {
   //     const files = values.images || [];
@@ -224,6 +256,25 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
   //   },
   //   [setValue, values.images]
   // );
+
+  const handleSelectMainImage = useCallback(
+    async (inputFile: number, selected: boolean) => {
+      setMainImage(inputFile);
+
+      if (selected) return
+
+      if (!images.length && currentProduct?.images?.length) {
+        await axiosInstance.put(endpoints.images.update_main_image, {
+          product_id: currentProduct.id,
+          file_id: currentProduct.images[inputFile].id
+        })
+        enqueueSnackbar("main image was updated")
+      } else {
+        console.log("condition was false", images, currentProduct)
+      }
+    },
+    [setMainImage, currentProduct]
+  );
 
   const handleAddTab = () => {
     append(tabDefaultValue)
@@ -244,6 +295,22 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
   const handleChangeIncludeTaxes = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setIncludeTaxes(event.target.checked);
   }, []);
+
+  const handleDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      setMainImage(0)
+      const customImages = acceptedFiles.map((file) =>
+        Object.assign(file, {
+          preview: URL.createObjectURL(file),
+        })
+      );
+
+      setImages(customImages);
+      setMainImage(0);
+      // setValue('images', [...files, ...newFiles], { shouldValidate: true });
+    },
+    [setValue, setImages, images]
+  );
 
   const renderDetails = (
     <>
@@ -272,19 +339,46 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
               <RHFEditor simple name="description" />
             </Stack>
 
-            {/* <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Images</Typography>
-              <RHFUpload
-                multiple
-                thumbnail
-                name="images"
-                maxSize={3145728}
-                onDrop={handleDrop}
-                onRemove={handleRemoveFile}
-                onRemoveAll={handleRemoveAllFiles}
-                onUpload={() => console.info('ON UPLOAD')}
-              />
-            </Stack> */}
+            <RHFUpload
+              multiple
+              onClick={() => { }}
+              // thumbnail
+              name=""
+              maxSize={3145728}
+              onDrop={handleDrop}
+              // onRemove={handleRemoveFile}
+              // onRemoveAll={handleRemoveAllFiles}
+              onUpload={() => console.info('ON UPLOAD')}
+              helperText="photo with green border is the main image"
+            />
+
+            {(images.length > 0) && (
+              <Box sx={{ mb: 3 }} component={'div'}>
+                <MultiFilePreview
+                  files={images.length ? images : []}
+                  thumbnail={true}
+                  // onRemove={handleSelectHoverImage}
+                  mainImage={mainImage}
+                  onClick={handleSelectMainImage}
+                />
+              </Box>
+            )}
+
+            {(images.length === 0) && (
+                <>
+                  <Typography>Current Product Image's</Typography>
+                  <Box component={'div'}>
+                    <MultiFilePreview
+                      files={currentImages}
+                      thumbnail={true}
+                      mainImage={mainImage}
+                      onClick={handleSelectMainImage}
+                      // onRemove={handleSelectHoverImage}
+                    />
+                  </Box>
+                </>
+              )}
+
           </Stack>
         </Card>
       </Grid>

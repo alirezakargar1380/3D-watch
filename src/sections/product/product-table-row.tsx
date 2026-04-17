@@ -22,6 +22,7 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import { IProductItem } from 'src/types/product';
+import { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +46,7 @@ export default function ProductTableRow({
   const {
     name,
     price,
+    images,
     publish,
     coverUrl,
     category,
@@ -68,7 +70,7 @@ export default function ProductTableRow({
         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
           <Avatar
             alt={name}
-            src={coverUrl}
+            src={endpoints.images.get(images?.find((img) => img.main === true)?.name || '')}
             variant="rounded"
             sx={{ width: 64, height: 64, mr: 2 }}
           />

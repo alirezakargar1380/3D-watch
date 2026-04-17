@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, MenuItem, Stack } from "@mui/material";
+import { Box, Button, Divider, IconButton, MenuItem, Stack, Typography } from "@mui/material";
 import { useFieldArray } from "react-hook-form";
 import { ColorPicker } from "src/components/color-utils";
 import { RoundedColorPicker } from "src/components/color-utils/rounded-color-picker";
@@ -32,74 +32,80 @@ export const TabItem = ({
   });
 
   return (
-    <Box my={6} component={'div'}>
-      <Stack spacing={2}>
+    <>
+      <Box my={6} component={'div'}>
+        <Stack spacing={2}>
 
-        <RHFTextField name={`tabs.${index}.tab_name`} label="Tab Name" />
+          <RHFTextField name={`tabs.${index}.tab_name`} label="Tab Name" />
 
-        <RHFTextField name={`tabs[${index}].key`} label='Key' select>
-          {shape.map((shaneName: string) => (
-            <MenuItem key={shaneName} value={shaneName}>{shaneName}</MenuItem>
+          <RHFTextField name={`tabs[${index}].key`} label='Key' select>
+            {shape.map((shaneName: string) => (
+              <MenuItem key={shaneName} value={shaneName}>{shaneName}</MenuItem>
+            ))}
+          </RHFTextField>
+
+          <RHFTextField name={`tabs.${index}.zoom`} label="Zoom" />
+
+          <Stack direction="row" spacing={2}>
+            <RHFTextField name={`tabs.${index}.x`} label="X" />
+            <RHFTextField name={`tabs.${index}.y`} label="Y" />
+            <RHFTextField name={`tabs.${index}.z`} label="Z" />
+          </Stack>
+
+          {colorFields.map((color, colorIndex) => (
+            <Stack
+              key={color.id}
+              direction="row"
+              justifyContent="space-between"
+            >
+              <RoundedColorPicker
+                value={
+                  values?.tabs?.[index]?.colors?.[colorIndex]?.code || "#000"
+                }
+                onChange={(color) =>
+                  setValue(
+                    `tabs.${index}.colors.${colorIndex}.code`,
+                    color
+                  )
+                }
+              />
+
+              <IconButton onClick={() => removeColor(colorIndex)}>
+                ❌
+              </IconButton>
+            </Stack>
           ))}
-        </RHFTextField>
 
-        <RHFTextField name={`tabs.${index}.zoom`} label="Zoom" />
+          <Typography>Default Color :</Typography>
+          <ColorPicker
+            selected={values?.tabs?.[index]?.default_color || ''}
+            onSelectColor={(color) =>
+              setValue(
+                `tabs.${index}.default_color`,
+                color
+              )
+            }
+            colors={colorFields.map((color, colorIndex) => {
+              return values?.tabs?.[index]?.colors?.[colorIndex]?.code
+            })}
+          />
 
-        <Stack direction="row" spacing={2}>
-          <RHFTextField name={`tabs.${index}.x`} label="X" />
-          <RHFTextField name={`tabs.${index}.y`} label="Y" />
-          <RHFTextField name={`tabs.${index}.z`} label="Z" />
+          <Button
+            variant="outlined"
+            onClick={() => appendColor({ code: "#000000" })}
+          >
+            Add Color
+          </Button>
+
+          <Button color="error" onClick={() => removeTab(index)}>
+            Delete Tab
+          </Button>
+
         </Stack>
 
-        {colorFields.map((color, colorIndex) => (
-          <Stack
-            key={color.id}
-            direction="row"
-            justifyContent="space-between"
-          >
-            <RoundedColorPicker
-              value={
-                values?.tabs?.[index]?.colors?.[colorIndex]?.code || "#000"
-              }
-              onChange={(color) =>
-                setValue(
-                  `tabs.${index}.colors.${colorIndex}.code`,
-                  color
-                )
-              }
-            />
 
-            <IconButton onClick={() => removeColor(colorIndex)}>
-              delete
-            </IconButton>
-          </Stack>
-        ))}
-
-        <ColorPicker
-          selected={values?.tabs?.[index]?.default_color || ''}
-          onSelectColor={(color) =>
-                setValue(
-                  `tabs.${index}.default_color`,
-                  color
-                )
-              }
-          colors={colorFields.map((color, colorIndex) => {
-            return values?.tabs?.[index]?.colors?.[colorIndex]?.code
-          })}
-        />
-
-        <Button
-          variant="outlined"
-          onClick={() => appendColor({ code: "#000000" })}
-        >
-          Add Color
-        </Button>
-
-        <Button color="error" onClick={() => removeTab(index)}>
-          Delete Tab
-        </Button>
-
-      </Stack>
-    </Box>
+      </Box>
+      <Divider />
+    </>
   );
 };

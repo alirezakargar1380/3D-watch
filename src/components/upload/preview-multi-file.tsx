@@ -11,23 +11,29 @@ import Iconify from '../iconify';
 import { varFade } from '../animate';
 import { UploadProps } from './types';
 import FileThumbnail, { fileData } from '../file-thumbnail';
+import { Box } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-export default function MultiFilePreview({ thumbnail, files, onRemove, sx }: UploadProps) {
+export default function MultiFilePreview({ thumbnail, files, mainImage, onRemove, onClick, sx }: UploadProps) {
   return (
     <AnimatePresence initial={false}>
-      {files?.map((file) => {
-        const { key, name = '', size = 0 } = fileData(file);
+      {files?.map((file, index: number) => {
 
+        const { key, name = '', size = 0 } = fileData(file);
         const isNotFormatFile = typeof file === 'string';
 
         if (thumbnail) {
           return (
             <Stack
-              key={key}
+              key={index}
+              // onClick={() => onClick(index, (index == mainImage))}
               component={m.div}
-              {...varFade().inUp}
+              /**
+               *    TODO:
+               *       - fix animation
+               */
+              // {...varFade().inUp}
               alignItems="center"
               display="inline-flex"
               justifyContent="center"
@@ -38,35 +44,48 @@ export default function MultiFilePreview({ thumbnail, files, onRemove, sx }: Upl
                 borderRadius: 1.25,
                 overflow: 'hidden',
                 position: 'relative',
-                border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.16)}`,
+                outline: (index == mainImage) ? `solid 3px #18cb18` : ``,
+                // border: (theme) => `solid 1px ${alpha(theme.palette.grey[500], 0.16)}`,
                 ...sx,
               }}
             >
-              <FileThumbnail
-                tooltip
-                imageView
-                file={file}
-                sx={{ position: 'absolute' }}
-                imgSx={{ position: 'absolute' }}
-              />
+              <Box onClick={() => onClick(index, (index == mainImage))} component={'div'}>
+                <FileThumbnail
+                  tooltip
+                  imageView
+                  file={file}
+                  sx={{ position: 'absolute' }}
+                  imgSx={{
+                    position: 'absolute',
+                    outline: (index == mainImage) ? `solid 3px #18cb18` : ``,
+                    borderRadius: 1.25
+                  }}
+                />
+              </Box>
 
               {onRemove && (
                 <IconButton
                   size="small"
-                  onClick={() => onRemove(file)}
+                  onClick={() => onRemove(index, (index == mainImage))}
                   sx={{
                     p: 0.5,
                     top: 4,
                     right: 4,
                     position: 'absolute',
                     color: 'common.white',
-                    bgcolor: (theme) => alpha(theme.palette.grey[900], 0.48),
-                    '&:hover': {
-                      bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72),
-                    },
+                    // bgcolor: (theme) => alpha(theme.palette.grey[900], 0.48),
+                    // ...(hoverImage === index) && ({
+                    //   bgcolor: "#1bc424a9"
+                    // }),
+                    // '&:hover': {
+                    //   bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72),
+                    //   ...(hoverImage === index) && ({
+                    //     bgcolor: "#1bc424a9"
+                    //   }),
+                    // },
                   }}
                 >
-                  <Iconify icon="mingcute:close-line" width={14} />
+                  <Iconify icon="iconamoon:cursor-fill" width={14} />
                 </IconButton>
               )}
             </Stack>
@@ -102,13 +121,13 @@ export default function MultiFilePreview({ thumbnail, files, onRemove, sx }: Upl
             />
 
             {onRemove && (
-              <IconButton size="small" onClick={() => onRemove(file)}>
+              <IconButton size="small" onClick={() => onRemove(index, (index == mainImage))}>
                 <Iconify icon="mingcute:close-line" width={16} />
               </IconButton>
             )}
           </Stack>
         );
       })}
-    </AnimatePresence>
+    </AnimatePresence >
   );
 }

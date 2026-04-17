@@ -59,19 +59,24 @@ export const endpoints = {
     latest: '/api/post/latest',
     search: '/api/post/search',
   },
+  images: {
+    upload_single: '/api/images/upload',
+    update_main_image: '/api/images/main_image',
+    update_hover_image: '/api/images/hover_image',
+    get: (name: string) => `${HOST_API}/api/images/${name}`
+  },
   order: {
     create: '/api/orders',
     list: '/api/orders',
   },
   product: {
     list: '/api/products',
-    details: (id: string) => `/api/products/${id}`,
-    update: (id: string) => `/api/products/${id}`,
+    details: (id: any) => `/api/products/${id}`,
+    update: (id: any) => `/api/products/${id}`,
     search: '/api/product/search',
     create: '/api/products',
   },
   customer: {
-
     create: '/api/customers',
     list: '/api/customers',
     one: (id: string) => `/api/customers/${id}`,
