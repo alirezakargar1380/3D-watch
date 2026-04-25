@@ -40,7 +40,7 @@ export const paths = {
   product: {
     root: `/product`,
     checkout: `/product/checkout`,
-    details: (id: string) => `/product/${id}`,
+    details: (id: any) => `/product/${id}`,
     demo: {
       details: `/product/${MOCK_ID}`,
     },

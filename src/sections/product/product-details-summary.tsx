@@ -104,7 +104,7 @@ export default function ProductDetailsSummary({
   const onSubmit = handleSubmit(async (data) => {
     try {
       console.log('order data:', data)
-      await customer_axios.post(endpoints.order.create, data)
+      await customer_axios.post(endpoints.cart.create, data)
       // if (!existProduct) {
       //   onAddCart?.({
       //     ...data,
@@ -374,8 +374,7 @@ export default function ProductDetailsSummary({
           tabs={product.tabs}
           afterSubmit={(object: any) => {
             setValue('colors', JSON.stringify(object))
-            onSubmit()
-            console.log('final colors', object)
+            onSubmit();
           }}
         />
 

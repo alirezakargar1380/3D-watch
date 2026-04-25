@@ -10,7 +10,7 @@ import { paths } from 'src/routes/paths';
 
 type Props = {
     data: {
-        id: string;
+        id: number;
         title: string;
         coverUrl: string;
         description: string;
@@ -50,7 +50,7 @@ export default function ProductCarousel({ data }: Props) {
     return (
         <Box component={'div'}>
             <Typography mb={2} pl={1} variant='h4'><span style={{ color: '#ff3d51' }}>The Latest.</span> All new and Lovable</Typography>
-            <Box  component={'div'}
+            <Box component={'div'}
                 sx={{
                     position: 'relative',
                     background: 'none',
@@ -75,25 +75,26 @@ export default function ProductCarousel({ data }: Props) {
 // ----------------------------------------------------------------------
 
 type CarouselItemProps = {
+    id: number;
     title: string;
     description: string;
     coverUrl: string;
 };
 
 function CarouselItem({ item }: { item: CarouselItemProps }) {
-    const { coverUrl, title } = item;
+    const { id, coverUrl, title } = item;
 
     return (
-        <Link href={paths.product.details('234')}>
-            <Box position={'relative'} mr={2}  component={'div'}>
-                <Box position={'absolute'} pl={'30px'} pt={'30px'} zIndex={10}  component={'div'}>
+        <Link href={paths.product.details(id)}>
+            <Box position={'relative'} mr={2} component={'div'}>
+                <Box position={'absolute'} pl={'30px'} pt={'30px'} zIndex={10} component={'div'}>
                     <Typography color={'white'} variant={'h3'} pt={'24px'} fontSize={'28px!important'}>{title}</Typography>
-                    <Box pt={'10px'}  component={'div'}>
+                    <Box pt={'10px'} component={'div'}>
                         <Typography color={'white'} variant={'body1'}>Pro Clock for Wall and Room</Typography>
                         <Typography color={'white'} variant={'caption'}>low price & high quality</Typography>
                     </Box>
                 </Box>
-                <Box width={400} height={500} borderRadius={'18px'} overflow={'hidden'}  component={'div'}>
+                <Box width={400} height={500} borderRadius={'18px'} overflow={'hidden'} component={'div'}>
                     <Image src={coverUrl} height={1} width={1} />
                 </Box>
             </Box>

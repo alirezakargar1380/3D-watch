@@ -106,12 +106,11 @@ export default function HomeView() {
           <Box component="div">
             <ProductCarousel
               data={products.map((product) => {
-                console.log(product);
                 return {
                   coverUrl: endpoints.images.get(product.images?.find((img) => img.main === true)?.name || ''),
                   description: '',
                   title: product.name,
-                  id: '234'
+                  id: product.id
                 }
               })}
             />

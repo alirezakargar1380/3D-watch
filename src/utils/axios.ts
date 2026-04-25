@@ -69,6 +69,9 @@ export const endpoints = {
     create: '/api/orders',
     list: '/api/orders',
   },
+  cart: {
+    create: '/api/cart',
+  },
   product: {
     list: '/api/products',
     details: (id: any) => `/api/products/${id}`,
