@@ -10,6 +10,7 @@ const MOCK_TITLE = _postTitles[2];
 
 const ROOTS = {
   AUTH: '/auth',
+  CUSTOMER_AUTH: '/user-auth',
   USER_AUTH: '/user-auth',
   AUTH_DEMO: '/auth-demo',
   DASHBOARD: '/dashboard',
@@ -64,6 +65,10 @@ export const paths = {
       login: `${ROOTS.AUTH}/jwt/login`,
       register: `${ROOTS.AUTH}/jwt/register`,
     },
+    customer_jwt: {
+      login: `${ROOTS.CUSTOMER_AUTH}/login`,
+      register: `${ROOTS.CUSTOMER_AUTH}/register`,
+    },
     firebase: {
       login: `${ROOTS.AUTH}/firebase/login`,
       verify: `${ROOTS.AUTH}/firebase/verify`,
@@ -73,10 +78,6 @@ export const paths = {
     auth0: {
       login: `${ROOTS.AUTH}/auth0/login`,
     },
-  },
-  user_auth: {
-    login: `${ROOTS.USER_AUTH}/login`,
-    register: `${ROOTS.USER_AUTH}/register`,
   },
   authDemo: {
     classic: {

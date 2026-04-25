@@ -32,6 +32,8 @@ import Iconify from 'src/components/iconify';
 import { useState } from 'react';
 import ItemsCarousel from 'src/sections/_examples/extra/carousel-view/items-carousel';
 import CarouselAnimation from 'src/sections/_examples/extra/carousel-view/carousel-animation';
+import { useGetProducts } from 'src/api/product';
+import { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -82,6 +84,8 @@ const _accordions = [...Array(3)].map((_, index) => ({
 export default function HomeView() {
   const { scrollYProgress } = useScroll();
 
+  const { products } = useGetProducts();
+
   const [controlled, setControlled] = useState<string | false>(false);
 
   const handleChangeControlled =
@@ -101,40 +105,16 @@ export default function HomeView() {
 
           <Box component="div">
             <ProductCarousel
-              data={[
-                {
-                  coverUrl: '/assets/images/golden-ring-clock.jpg',
+              data={products.map((product) => {
+                console.log(product);
+                return {
+                  coverUrl: endpoints.images.get(product.images?.find((img) => img.main === true)?.name || ''),
                   description: '',
-                  title: '3D Clock',
+                  title: product.name,
                   id: '234'
-                },
-                {
-                  coverUrl: '/assets/images/golden-ring-clock-2.jpg',
-                  description: '',
-                  title: '3D Clock',
-                  id: '234'
-                },
-                {
-                  coverUrl: '/assets/images/Untitled4.jpg',
-                  description: '',
-                  title: '3D Clock',
-                  id: '234'
-                },
-                {
-                  coverUrl: '/assets/images/Untitled2.jpg',
-                  description: '',
-                  title: '3D Clock',
-                  id: '234'
-                },
-                {
-                  coverUrl: '/assets/images/Untitled3.jpg',
-                  description: '',
-                  title: '3D Clock',
-                  id: '234'
-                },
-                ..._carouselsExample.slice(1, 20)
-              ]} 
-              />
+                }
+              })}
+            />
           </Box>
 
 

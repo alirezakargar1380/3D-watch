@@ -201,9 +201,9 @@ export function AuthProvider({ children }: Props) {
   }, []);
 
   // Customer LOGIN
-  const customerLogin = useCallback(async (phone_number: string, password: string) => {
+  const customerLogin = useCallback(async (username: string, password: string) => {
     const data = {
-      phone_number,
+      username,
       password,
     };
 
@@ -223,6 +223,29 @@ export function AuthProvider({ children }: Props) {
       },
     });
   }, []);
+
+  // CUSTOMER REGISTER
+  const customerRegister = useCallback(
+    async (data: ICustomerItem) => {
+      
+      const res = await axios.post(endpoints.customer.auth.register, data);
+
+      const { accessToken, user } = res.data;
+
+      setCustomerSession(accessToken);
+
+      dispatch({
+        type: Types.REGISTER,
+        payload: {
+          customer: {
+            ...user,
+            accessToken,
+          },
+        },
+      });
+    },
+    []
+  );
 
   // REGISTER
   const register = useCallback(
@@ -253,28 +276,6 @@ export function AuthProvider({ children }: Props) {
     []
   );
 
-  // CUSTOMER REGISTER
-  const customerRegister = useCallback(
-    async (data: ICustomerItem) => {
-      
-      const res = await axios.post(endpoints.customer.auth.register, data);
-
-      const { accessToken, user } = res.data;
-
-      setCustomerSession(accessToken);
-
-      dispatch({
-        type: Types.REGISTER,
-        payload: {
-          customer: {
-            ...user,
-            accessToken,
-          },
-        },
-      });
-    },
-    []
-  );
 
   // LOGOUT
   const logout = useCallback(async () => {

@@ -43,7 +43,7 @@ export default function AuthModernCompactLayout({ children }: Props) {
           sx={{
             py: 5,
             px: 3,
-            maxWidth: 420,
+            minWidth: 420,
           }}
         >
           {children}

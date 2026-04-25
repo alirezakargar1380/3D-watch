@@ -81,15 +81,15 @@ export default function Header() {
 
           {mdUp && <NavDesktop data={navConfig} />}
 
-          <Stack alignItems="center" direction={{ xs: 'row', md: 'row-reverse' }}>
+          <Stack alignItems="center" spacing={1} direction={{ xs: 'row', md: 'row-reverse' }}>
 
             {/* {mdUp && <LoginButton />} */}
 
-            <UserAccountPopover />
 
             <IconButton>
               <Iconify icon={'mdi:shopping-outline'} />
             </IconButton>
+            <UserAccountPopover />
 
             {!mdUp && <NavMobile data={navConfig} />}
           </Stack>

@@ -66,10 +66,9 @@ export default function UserAccountPopover() {
 
   if (!authenticated)
     return (
-      <Button href={paths.user_auth.register}>
+      <IconButton href={paths.auth.customer_jwt.login}>
         <Iconify icon={'mingcute:user-1-line'} />
-        user
-      </Button>
+      </IconButton>
     )
 
   return (
@@ -104,7 +103,7 @@ export default function UserAccountPopover() {
       </IconButton>
 
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 200, p: 0 }}>
-        <Box sx={{ p: 2, pb: 1.5 }}>
+        <Box sx={{ p: 2, pb: 1.5 }} component={'div'}>
           <Typography variant="subtitle2" noWrap>
             {customer?.first_name + ' ' + customer?.last_name}
           </Typography>

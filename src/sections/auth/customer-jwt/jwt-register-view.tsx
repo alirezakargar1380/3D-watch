@@ -27,7 +27,7 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function JwtRegisterView() {
+export default function CustomerJwtRegisterView() {
   const { customerRegister } = useAuthContext();
 
   const router = useRouter();
@@ -84,7 +84,7 @@ export default function JwtRegisterView() {
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-      <Typography variant="h4">Get started absolutely free</Typography>
+      <Typography variant="h4">Get Started Into Clocks World!</Typography>
 
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2"> Already have an account? </Typography>
@@ -168,7 +168,7 @@ export default function JwtRegisterView() {
           variant="contained"
           loading={isSubmitting}
         >
-          درخواست ساخت اکانت
+          Create Account
         </LoadingButton>
       </Stack>
     </FormProvider>

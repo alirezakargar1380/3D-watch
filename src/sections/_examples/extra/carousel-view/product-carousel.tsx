@@ -87,7 +87,7 @@ function CarouselItem({ item }: { item: CarouselItemProps }) {
         <Link href={paths.product.details('234')}>
             <Box position={'relative'} mr={2}  component={'div'}>
                 <Box position={'absolute'} pl={'30px'} pt={'30px'} zIndex={10}  component={'div'}>
-                    <Typography color={'white'} variant={'h3'} pt={'24px'} fontSize={'28px!important'}>Clock 3D</Typography>
+                    <Typography color={'white'} variant={'h3'} pt={'24px'} fontSize={'28px!important'}>{title}</Typography>
                     <Box pt={'10px'}  component={'div'}>
                         <Typography color={'white'} variant={'body1'}>Pro Clock for Wall and Room</Typography>
                         <Typography color={'white'} variant={'caption'}>low price & high quality</Typography>

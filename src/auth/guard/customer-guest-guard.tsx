@@ -28,7 +28,7 @@ function Container({ children }: Props) {
 
   const searchParams = useSearchParams();
 
-  const returnTo = searchParams.get('returnTo') || paths.store.root;
+  const returnTo = searchParams.get('returnTo') || '/';
 
   const { authenticated } = useAuthContext();
 
