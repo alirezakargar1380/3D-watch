@@ -1,5 +1,5 @@
-import CustomerJwtLoginView from 'src/sections/auth/customer-jwt/jwt-login-view';
-import { JwtLoginView } from 'src/sections/auth/jwt';
+// import CustomerJwtLoginView from 'src/sections/auth/customer-jwt/jwt-login-view';
+// import { JwtLoginView } from 'src/sections/auth/jwt';
 
 // ----------------------------------------------------------------------
 
@@ -8,5 +8,6 @@ export const metadata = {
 };
 
 export default function LoginPage() {
-  return <CustomerJwtLoginView />;
+  return <>as</>
+  // return <CustomerJwtLoginView />;
 }
