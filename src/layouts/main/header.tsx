@@ -28,6 +28,7 @@ import SettingsButton from '../common/settings-button';
 import Iconify from 'src/components/iconify';
 import { IconButton } from '@mui/material';
 import UserAccountPopover from '../common/user-account-popover';
+import ShoppingCartButton from '../common/shopping-cart-button';
 
 // ----------------------------------------------------------------------
 
@@ -86,9 +87,8 @@ export default function Header() {
             {/* {mdUp && <LoginButton />} */}
 
 
-            <IconButton>
-              <Iconify icon={'mdi:shopping-outline'} />
-            </IconButton>
+            
+            <ShoppingCartButton />
             <UserAccountPopover />
 
             {!mdUp && <NavMobile data={navConfig} />}

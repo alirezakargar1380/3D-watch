@@ -71,6 +71,7 @@ export const endpoints = {
   },
   cart: {
     create: '/api/cart',
+    list: '/api/cart',
   },
   product: {
     list: '/api/products',

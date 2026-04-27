@@ -143,19 +143,18 @@ export default function WatchDemoViewer({ onGetColorKeys, onClick, color, zoom =
     // const [zoom, setZoom] = useState(4);
     const [isLocked, setIsLocked] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
-
+    
     useEffect(() => {
         onGetColorKeys?.(ob)
     }, [ob])
 
     return (
-        <Box ref={containerRef} onClick={onClick} component={'div'} borderRadius={2} overflow={'hidden'} height={200} sx={{
+        <Box ref={containerRef} key={model_path} onClick={onClick} component={'div'} borderRadius={2} overflow={'hidden'} height={200} sx={{
             ...(selected && {
                 outline: '3px solid #000'
             })
         }}>
             <Canvas
-                key={model_path}
                 eventSource={containerRef.current || undefined}
                 camera={{
                     position: [0, 10, 0],
