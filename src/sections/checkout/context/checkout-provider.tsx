@@ -14,6 +14,7 @@ import { IAddressItem } from 'src/types/address';
 import { ICheckoutItem } from 'src/types/checkout';
 
 import { CheckoutContext } from './checkout-context';
+import { useGetCart } from 'src/api/cart';
 
 // ----------------------------------------------------------------------
 
@@ -37,6 +38,7 @@ type Props = {
 export function CheckoutProvider({ children }: Props) {
   const router = useRouter();
 
+  const { cart, cartEmpty, cartLoading } = useGetCart();
   const { state, update, reset } = useLocalStorage(STORAGE_KEY, initialState);
 
   const onGetCart = useCallback(() => {
@@ -50,6 +52,7 @@ export function CheckoutProvider({ children }: Props) {
       0
     );
 
+    update('items', cart);
     update('subTotal', subTotal);
     update('totalItems', totalItems);
     update('billing', state.activeStep === 1 ? null : state.billing);
@@ -58,6 +61,7 @@ export function CheckoutProvider({ children }: Props) {
     update('total', state.subTotal - state.discount + state.shipping);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    cart,
     state.items,
     state.activeStep,
     state.billing,
@@ -67,12 +71,10 @@ export function CheckoutProvider({ children }: Props) {
   ]);
 
   useEffect(() => {
-    const restored = getStorage(STORAGE_KEY);
-
-    if (restored) {
+    if (!cartLoading) {
       onGetCart();
     }
-  }, [onGetCart]);
+  }, [cartLoading])
 
   const onAddToCart = useCallback(
     (newItem: ICheckoutItem) => {
@@ -80,7 +82,6 @@ export function CheckoutProvider({ children }: Props) {
         if (item.id === newItem.id) {
           return {
             ...item,
-            colors: uniq([...item.colors, ...newItem.colors]),
             quantity: item.quantity + 1,
           };
         }

@@ -20,6 +20,7 @@ import CheckoutSummary from './checkout-summary';
 import CheckoutDelivery from './checkout-delivery';
 import CheckoutBillingInfo from './checkout-billing-info';
 import CheckoutPaymentMethods from './checkout-payment-methods';
+import { customer_axios, endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -44,18 +45,8 @@ const DELIVERY_OPTIONS: ICheckoutDeliveryOption[] = [
 const PAYMENT_OPTIONS: ICheckoutPaymentOption[] = [
   {
     value: 'paypal',
-    label: 'Pay with Paypal',
+    label: 'Stripe',
     description: 'You will be redirected to PayPal website to complete your purchase securely.',
-  },
-  {
-    value: 'credit',
-    label: 'Credit / Debit Card',
-    description: 'We support Mastercard, Visa, Discover and Stripe.',
-  },
-  {
-    value: 'cash',
-    label: 'Cash',
-    description: 'Pay with cash when your order is delivered.',
   },
 ];
 
@@ -73,6 +64,7 @@ export default function CheckoutPayment() {
   });
 
   const defaultValues = {
+    address: checkout.billing,
     delivery: checkout.shipping,
     payment: '',
   };
@@ -89,8 +81,9 @@ export default function CheckoutPayment() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      checkout.onNextStep();
-      checkout.onReset();
+      await customer_axios.post(endpoints.order.create, data)
+      // checkout.onNextStep();
+      // checkout.onReset();
       console.info('DATA', data);
     } catch (error) {
       console.error(error);

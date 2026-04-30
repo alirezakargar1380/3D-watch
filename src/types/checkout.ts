@@ -1,14 +1,19 @@
 import { IAddressItem } from './address';
+import { IProductItem } from './product';
+import { IUserItem } from './user';
 
 // ----------------------------------------------------------------------
 
 export type ICheckoutItem = {
-  id: string;
+  id: number
+  clock: string
+  colors: string
+  product: IProductItem
+  owner: IUserItem
   name: string;
   coverUrl: string;
   available: number;
   price: number;
-  colors: string[];
   size: string;
   quantity: number;
   subTotal: number;

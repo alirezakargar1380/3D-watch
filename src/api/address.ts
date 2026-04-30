@@ -1,17 +1,18 @@
 import useSWR, { mutate } from 'swr';
 import { useMemo } from 'react';
 
-import { fetcher, endpoints } from 'src/utils/axios';
+import { fetcher, endpoints, customerFetcher } from 'src/utils/axios';
 
-import { IProductItem } from 'src/types/product';
+import { IPostItem } from 'src/types/blog';
 import { ICartItem } from 'src/types/cart';
+import { IAddressItem } from 'src/types/address';
 
 // ----------------------------------------------------------------------
 
-export function useGetCart() {
-  const URL = endpoints.cart.list;
+export function useGetAddress() {
+  const URL = endpoints.address.list;
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  const { data, isLoading, error, isValidating } = useSWR(URL, customerFetcher);
 
   const refresh = () => {
     mutate(URL);
@@ -19,12 +20,12 @@ export function useGetCart() {
 
   const memoizedValue = useMemo(
     () => ({
-      cart: (data as ICartItem[]) || [],
-      refresh,
+      address: (data as IAddressItem[]) || [],
       cartLoading: isLoading,
       cartError: error,
-      productsValidating: isValidating,
+      cartValidating: isValidating,
       cartEmpty: !isLoading && !data?.length,
+      refresh
     }),
     [data, error, isLoading, isValidating]
   );

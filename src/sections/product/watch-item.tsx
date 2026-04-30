@@ -12,13 +12,12 @@ import { Vector3 } from 'three';
 import * as THREE from 'three';
 
 
-function Watch({ colorObject, model_path, onSendColor, }: any) {
+function Watch({ colorObject, model_path, onSendColor, selected }: any) {
     const { materials, nodes }: any = useGLTF(model_path)
     const [ob, setOb] = useState<any>({});
     //   const { materials, nodes }: any = useGLTF('/models/watch.glb')
 
     useEffect(() => {
-        console.log('gen')
         // generate color objects
         const keys = Object.keys(nodes);
         const object: any = {};
@@ -28,11 +27,11 @@ function Watch({ colorObject, model_path, onSendColor, }: any) {
                 object[mesh.name] = "";
         }
 
-        onSendColor(object)
-    }, [nodes])
+        if (selected)
+            onSendColor(object)
+    }, [nodes, selected])
 
     useEffect(() => {
-        console.log('color')
         Object.keys(nodes)?.map((key, index) => {
             const child = nodes[key];
             if (child.isMesh && colorObject[child.name]) {
@@ -143,8 +142,9 @@ export default function WatchDemoViewer({ onGetColorKeys, onClick, color, zoom =
     // const [zoom, setZoom] = useState(4);
     const [isLocked, setIsLocked] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
-    
+
     useEffect(() => {
+        console.log('cal afadn ')
         onGetColorKeys?.(ob)
     }, [ob])
 
@@ -183,6 +183,7 @@ export default function WatchDemoViewer({ onGetColorKeys, onClick, color, zoom =
                     colorObject={ob}
                     model_path={model_path}
                     onSendColor={(obj: any) => setOb(obj)}
+                    selected={selected}
                 />
 
                 <OrbitControls enableDamping={isLocked} enablePan={isLocked} enableRotate={isLocked} enableZoom={isLocked} />

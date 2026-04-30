@@ -22,21 +22,21 @@ export default function CheckoutBillingInfo({ billing, onBackStep }: Props) {
         title="Address"
         action={
           <Button size="small" startIcon={<Iconify icon="solar:pen-bold" />} onClick={onBackStep}>
-            Edit
+            ویرایش
           </Button>
         }
       />
       <Stack spacing={1} sx={{ p: 3 }}>
         <Box sx={{ typography: 'subtitle2' }}>
           {`${billing?.name} `}
-          <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
+          {/* <Box component="span" sx={{ color: 'text.secondary', typography: 'body2' }}>
             ({billing?.addressType})
-          </Box>
+          </Box> */}
         </Box>
 
-        <Box sx={{ color: 'text.secondary', typography: 'body2' }}>{billing?.fullAddress}</Box>
+        <Box sx={{ color: 'text.secondary', typography: 'body2' }}>{billing?.address}</Box>
 
-        <Box sx={{ color: 'text.secondary', typography: 'body2' }}>{billing?.phoneNumber}</Box>
+        <Box sx={{ color: 'text.secondary', typography: 'body2' }}>{billing?.phone}</Box>
       </Stack>
     </Card>
   );

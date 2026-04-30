@@ -70,8 +70,7 @@ export default function ProductDetailsSummary({
   const existProduct = !!items?.length && items.map((item) => item.id).includes(id);
 
   const isMaxQuantity =
-    !!items?.length &&
-    items.filter((item) => item.id === id).map((item) => item.quantity)[0] >= available;
+    !!items?.length
 
   const defaultValues = {
     // id,

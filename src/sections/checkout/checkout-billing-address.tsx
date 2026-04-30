@@ -11,35 +11,52 @@ import Iconify from 'src/components/iconify';
 import { useCheckoutContext } from './context';
 import CheckoutSummary from './checkout-summary';
 import { AddressItem, AddressNewForm } from '../address';
+import { useGetAddress } from 'src/api/address';
+import { IAddressItem } from 'src/types/address';
+import { customer_axios, endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
 export default function CheckoutBillingAddress() {
+
+  const { address, refresh } = useGetAddress();
+
   const checkout = useCheckoutContext();
 
   const addressForm = useBoolean();
+
+  const handleDeliver = async (add_id: number) => {
+    await customer_axios.patch(endpoints.address.primary(add_id))
+    refresh();
+  }
+
+  const onCreateAddres = () => refresh();
 
   return (
     <>
       <Grid container spacing={3}>
         <Grid xs={12} md={8}>
-          {_addressBooks.slice(0, 4).map((address) => (
+          {address?.map((address: IAddressItem) => (
             <AddressItem
               key={address.id}
-              address={address}
+              addressItem={address}
               action={
                 <Stack flexDirection="row" flexWrap="wrap" flexShrink={0}>
-                  {!address.primary && (
+                  {/* {!address.primary && (
                     <Button size="small" color="error" sx={{ mr: 1 }}>
                       Delete
                     </Button>
-                  )}
+                  )} */}
                   <Button
                     variant="outlined"
                     size="small"
-                    onClick={() => checkout.onCreateBilling(address)}
+                    // onClick={() => checkout.onCreateBilling(address)}
+                    onClick={() => {
+                      handleDeliver(address.id)
+                      checkout.onCreateBilling(address)
+                    }}
                   >
-                    Deliver to this Address
+                    به این آدرس ارسال شود
                   </Button>
                 </Stack>
               }
@@ -59,7 +76,7 @@ export default function CheckoutBillingAddress() {
               onClick={checkout.onBackStep}
               startIcon={<Iconify icon="eva:arrow-ios-back-fill" />}
             >
-              Back
+              back
             </Button>
 
             <Button
@@ -68,7 +85,7 @@ export default function CheckoutBillingAddress() {
               onClick={addressForm.onTrue}
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New Address
+              new address
             </Button>
           </Stack>
         </Grid>
@@ -85,7 +102,10 @@ export default function CheckoutBillingAddress() {
       <AddressNewForm
         open={addressForm.value}
         onClose={addressForm.onFalse}
-        onCreate={checkout.onCreateBilling}
+        onCreate={(data) => {
+          onCreateAddres()
+          checkout.onCreateBilling(data)
+        }}
       />
     </>
   );

@@ -27,7 +27,7 @@ type Props = {
 };
 
 export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncrease }: Props) {
-  const { name, size, price, colors, coverUrl, quantity, available } = row;
+  const { name, size, price, product, colors, coverUrl, quantity, available } = row;
 
   return (
     <TableRow>
@@ -36,7 +36,7 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
 
         <Stack spacing={0.5}>
           <Typography noWrap variant="subtitle2" sx={{ maxWidth: 240 }}>
-            {name}
+            {product.name}
           </Typography>
 
           <Stack
@@ -45,8 +45,8 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
             sx={{ typography: 'body2', color: 'text.secondary' }}
           >
             size: <Label sx={{ ml: 0.5 }}> {size} </Label>
-            <Divider orientation="vertical" sx={{ mx: 1, height: 16 }} />
-            <ColorPreview colors={colors} />
+            {/* <Divider orientation="vertical" sx={{ mx: 1, height: 16 }} /> */}
+            {/* <ColorPreview colors={colors} /> */}
           </Stack>
         </Stack>
       </TableCell>
@@ -63,9 +63,9 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
             disabledIncrease={quantity >= available}
           />
 
-          <Typography variant="caption" component="div" sx={{ color: 'text.secondary', mt: 1 }}>
+          {/* <Typography variant="caption" component="div" sx={{ color: 'text.secondary', mt: 1 }}>
             available: {available}
-          </Typography>
+          </Typography> */}
         </Box>
       </TableCell>
 

@@ -48,6 +48,11 @@ export const endpoints = {
     login: '/api/auth/login',
     register: '/api/auth/register',
   },
+  address: {
+    create: '/api/address',
+    list: '/api/address',
+    primary: (id: number) => `/api/address/${id}/primary`,
+  },
   mail: {
     list: '/api/mail/list',
     details: '/api/mail/details',
@@ -72,6 +77,7 @@ export const endpoints = {
   cart: {
     create: '/api/cart',
     list: '/api/cart',
+    delete: (id: any) => `/api/cart/${id}`,
   },
   product: {
     list: '/api/products',

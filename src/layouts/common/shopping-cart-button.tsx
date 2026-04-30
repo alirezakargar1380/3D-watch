@@ -16,7 +16,7 @@ import Iconify from 'src/components/iconify';
 import { useGetCart } from 'src/api/cart';
 import WatchDemoViewer from 'src/sections/product/watch-item';
 import Image from 'src/components/image';
-import { endpoints } from 'src/utils/axios';
+import { customer_axios, endpoints } from 'src/utils/axios';
 import Scrollbar from 'src/components/scrollbar';
 
 // ----------------------------------------------------------------------
@@ -30,7 +30,12 @@ export default function ShoppingCartButton({ sx }: Props) {
 
     const popover = usePopover();
 
-    const { cart } = useGetCart();
+    const { cart, refresh } = useGetCart();
+
+    const handleRemoveItem = async (id: number) => {
+        await customer_axios.delete(endpoints.cart.delete(id));
+        refresh();
+    }
 
     return (
         <>
@@ -99,7 +104,9 @@ export default function ShoppingCartButton({ sx }: Props) {
                                 zoom={1.5}
                             /> */}
                                 </Stack>
-                                <Iconify icon="solar:trash-bin-trash-bold" color={'#8b0b0b'} />
+                                <IconButton>
+                                    <Iconify onClick={() => handleRemoveItem(item.id)} icon="solar:trash-bin-trash-bold" color={'#8b0b0b'} />
+                                </IconButton>
                             </Box>
                         ))}
                     </Box>

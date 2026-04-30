@@ -1,11 +1,14 @@
 // ----------------------------------------------------------------------
 
 export type IAddressItem = {
-  id?: string;
+  id: number;
   name: string;
-  company?: string;
+  // company?: string;
   primary?: boolean;
-  fullAddress: string;
-  phoneNumber?: string;
-  addressType?: string;
+  address: string;
+  phone?: string;
+  city?: string;
+  state?: string;
+  post_code?: string;
+  // addressType?: string;
 };

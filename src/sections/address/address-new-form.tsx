@@ -22,6 +22,7 @@ import FormProvider, {
 } from 'src/components/hook-form';
 
 import { IAddressItem } from 'src/types/address';
+import { customer_axios, endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -34,15 +35,15 @@ type Props = {
 export default function AddressNewForm({ open, onClose, onCreate }: Props) {
   const NewAddressSchema = Yup.object().shape({
     name: Yup.string().required('Fullname is required'),
-    phoneNumber: Yup.string().required('Phone number is required'),
+    phone: Yup.string().required('Phone number is required'),
     address: Yup.string().required('Address is required'),
     city: Yup.string().required('City is required'),
     state: Yup.string().required('State is required'),
-    country: Yup.string().required('Country is required'),
-    zipCode: Yup.string().required('Zip code is required'),
+    // country: Yup.string().required('Country is required'),
+    post_code: Yup.string().required('Zip code is required'),
     // not required
-    addressType: Yup.string(),
-    primary: Yup.boolean(),
+    // addressType: Yup.string(),
+    // primary: Yup.boolean(),
   });
 
   const defaultValues = {
@@ -50,11 +51,11 @@ export default function AddressNewForm({ open, onClose, onCreate }: Props) {
     city: '',
     state: '',
     address: '',
-    zipCode: '',
-    primary: true,
-    phoneNumber: '',
-    addressType: 'Home',
-    country: '',
+    post_code: '',
+    // primary: true,
+    phone: '',
+    // addressType: 'Home',
+    // country: '',
   };
 
   const methods = useForm({
@@ -69,12 +70,16 @@ export default function AddressNewForm({ open, onClose, onCreate }: Props) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      const address = await customer_axios.post(endpoints.address.create, data).then(({ data }) => data)
+      console.log(address)
       onCreate({
+        id: address.id,
         name: data.name,
-        phoneNumber: data.phoneNumber,
-        fullAddress: `${data.address}, ${data.city}, ${data.state}, ${data.country}, ${data.zipCode}`,
-        addressType: data.addressType,
-        primary: data.primary,
+        phone: data.phone,
+        address: `${data.address}, ${data.city}, ${data.state}, ${data.post_code}`,
+        city: data.city,
+        state: data.state,
+        primary: false,
       });
       onClose();
     } catch (error) {
@@ -85,20 +90,21 @@ export default function AddressNewForm({ open, onClose, onCreate }: Props) {
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogTitle>New address</DialogTitle>
+        <DialogTitle>آدرس جدید</DialogTitle>
 
         <DialogContent dividers>
           <Stack spacing={3}>
-            <RHFRadioGroup
+            {/* <RHFRadioGroup
               row
               name="addressType"
               options={[
                 { label: 'Home', value: 'Home' },
                 { label: 'Office', value: 'Office' },
               ]}
-            />
+            /> */}
 
             <Box
+              component={'div'}
               rowGap={3}
               columnGap={2}
               display="grid"
@@ -107,14 +113,15 @@ export default function AddressNewForm({ open, onClose, onCreate }: Props) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name" label="Full Name" />
+              <RHFTextField name="name" label="نام کامل تحویل گیرنده" />
 
-              <RHFTextField name="phoneNumber" label="Phone Number" />
+              <RHFTextField name="phone" label="شماره تماس تحویل گیرنده" />
             </Box>
 
-            <RHFTextField name="address" label="Address" />
+            <RHFTextField name="address" label="آدرس" />
 
             <Box
+              component={'div'}
               rowGap={3}
               columnGap={2}
               display="grid"
@@ -123,14 +130,14 @@ export default function AddressNewForm({ open, onClose, onCreate }: Props) {
                 sm: 'repeat(3, 1fr)',
               }}
             >
-              <RHFTextField name="city" label="Town / City" />
+              <RHFTextField name="state" label="استان" />
+              <RHFTextField name="city" label="شهر" />
 
-              <RHFTextField name="state" label="State" />
 
-              <RHFTextField name="zipCode" label="Zip/Code" />
+              <RHFTextField name="post_code" label="کد پستی" />
             </Box>
 
-            <RHFAutocomplete
+            {/* <RHFAutocomplete
               name="country"
               label="Country"
               options={countries.map((country) => country.label)}
@@ -156,9 +163,9 @@ export default function AddressNewForm({ open, onClose, onCreate }: Props) {
                   </li>
                 );
               }}
-            />
+            /> */}
 
-            <RHFCheckbox name="primary" label="Use this address as default." />
+            {/* <RHFCheckbox name="primary" label="Use this address as default." /> */}
           </Stack>
         </DialogContent>
 

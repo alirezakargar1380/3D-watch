@@ -68,6 +68,10 @@ const clockPaths = [
     path: '/models/golden-ring-clock-2.glb',
     zoom: 3
   },
+  {
+    path: '/models/mile-watch.glb',
+    zoom: 2
+  },
 ]
 // ----------------------------------------------------------------------
 
@@ -365,19 +369,19 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
             )}
 
             {(images.length === 0) && (
-                <>
-                  <Typography>Current Product Image's</Typography>
-                  <Box component={'div'}>
-                    <MultiFilePreview
-                      files={currentImages}
-                      thumbnail={true}
-                      mainImage={mainImage}
-                      onClick={handleSelectMainImage}
-                      // onRemove={handleSelectHoverImage}
-                    />
-                  </Box>
-                </>
-              )}
+              <>
+                <Typography>Current Product Image's</Typography>
+                <Box component={'div'}>
+                  <MultiFilePreview
+                    files={currentImages}
+                    thumbnail={true}
+                    mainImage={mainImage}
+                    onClick={handleSelectMainImage}
+                  // onRemove={handleSelectHoverImage}
+                  />
+                </Box>
+              </>
+            )}
 
           </Stack>
         </Card>
@@ -633,19 +637,29 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
                 md: 'repeat(2, 1fr)',
               }}
             >
-              {clockPaths.map((clock: any) => (
-                <WatchDemoViewer
-                  onClick={() => {
-                    if (currentProduct)
-                      return enqueueSnackbar('just in creating a prodcut can select a clock', {
-                        variant: 'error'
-                      })
-                    setValue('clock', clock.path)
-                  }}
-                  model_path={clock.path} key={clock.path} zoom={clock?.zoom} selected={values.clock === clock.path}
-                  onGetColorKeys={(colorObj: any) => (values.clock === clock.path) && setShapes(Object.keys(colorObj) as [])}
-                />
-              ))}
+              {clockPaths.map((clock: any) => {
+                console.log(values.clock === clock.path)
+                return (
+                  <WatchDemoViewer
+                    onClick={() => {
+                      if (currentProduct)
+                        return enqueueSnackbar('just in creating a prodcut can select a clock', {
+                          variant: 'error'
+                        })
+                      setValue('clock', clock.path)
+                    }}
+                    model_path={clock.path}
+                    key={clock.path}
+                    zoom={clock?.zoom}
+                    selected={values.clock === clock.path}
+                    onGetColorKeys={(colorObj: any) => {
+                      console.log(values.clock === clock.path);
+                      (values.clock === clock.path) && setShapes(Object.keys(colorObj) as [])
+
+                    }}
+                  />
+                )
+              })}
             </Box>
           </Stack>
         </Card>
