@@ -1,8 +1,8 @@
 "use client"
 
-import { Canvas, useThree } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Environment, OrbitControls, useGLTF } from '@react-three/drei'
-import { useCallback, useEffect, useState } from 'react'
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Button, Dialog, DialogActions, DialogContent, IconButton, Stack, Tab, Tabs } from '@mui/material'
 import { ColorPicker, ColorPreview } from 'src/components/color-utils'
 import { ReturnType } from 'src/hooks/use-boolean'
@@ -66,6 +66,130 @@ function Watch({ colorObject, model_path, onSendColor }: any) {
     )
 }
 
+// interface CameraProps {
+//     camPos: [number, number, number];    // Where the camera should go
+//     targetPos: [number, number, number]; // Where the camera should look
+//     zoomLevel: number;                   // For Orthographic zoom or FOV adjustment
+// }
+interface CameraProps {
+    camPos: [number, number, number];    // Where the camera is
+    targetPos: [number, number, number]; // What the camera looks at
+    zoomLevel: number;
+}
+
+// function ManualCameraController({ camPos, targetPos, zoomLevel }: CameraProps) {
+//     const vCam = new THREE.Vector3();
+//     const vTar = new THREE.Vector3();
+
+//     useFrame((state) => {
+//         state.camera.position.lerp(vCam.set(...camPos), 0.1);
+
+//         const currentTarget =
+//             state.camera.userData.target || new THREE.Vector3(0, 0, 0);
+//         currentTarget.lerp(vTar.set(...targetPos), 0.1);
+//         state.camera.userData.target = currentTarget;
+
+//         // Avoid the singularity by using a fallback up vector
+//         const forward = new THREE.Vector3()
+//             .subVectors(currentTarget, state.camera.position)
+//             .normalize();
+//         const defaultUp = new THREE.Vector3(0, 1, 0);
+//         if (Math.abs(forward.dot(defaultUp)) > 0.999) {
+//             console.log("up")
+//             state.camera.up.set(0, 1, -1);  // or (1,0,0) – whichever gives the desired orientation
+//         } else {
+//             console.log("down")
+//             state.camera.up.set(0, 1, 0);
+//         }
+//         state.camera.lookAt(currentTarget);
+
+//         state.camera.zoom = THREE.MathUtils.lerp(state.camera.zoom, zoomLevel, 0.1);
+//         state.camera.updateProjectionMatrix();
+//     });
+
+//     return null;
+// }
+
+function ManualCameraController({ camPos, targetPos, zoomLevel }: CameraProps) {
+    const vCam = useRef(new THREE.Vector3());
+    const vTar = useRef(new THREE.Vector3());
+    const defaultUp = new THREE.Vector3(0, 1, 0);
+    const fallbackUp = new THREE.Vector3(0, 1, -1);   // consistent “north” when looking straight down
+
+    useFrame((state) => {
+        // 1. Smooth camera position
+        state.camera.position.lerp(vCam.current.set(...camPos), 0.05);
+
+        // 2. Smooth lookAt target
+        const currentTarget = state.camera.userData.target || new THREE.Vector3();
+        currentTarget.lerp(vTar.current.set(...targetPos), 0.05);
+        state.camera.userData.target = currentTarget;
+
+        // 3. Determine desired up vector (avoid singularity)
+        const forward = new THREE.Vector3()
+            .subVectors(currentTarget, state.camera.position)
+            .normalize();
+
+        // If camera is almost directly above/below the target, switch to fallback up
+        const desiredUp = Math.abs(forward.dot(defaultUp)) > 0.999
+            ? fallbackUp
+            : defaultUp;
+
+        // 4. Smoothly animate the up vector
+        state.camera.up.lerp(desiredUp, 0.05).normalize();
+
+        // 5. Apply lookAt using the (animated) up vector
+        state.camera.lookAt(currentTarget);
+
+        // 6. Smooth zoom
+        state.camera.zoom = THREE.MathUtils.lerp(state.camera.zoom, zoomLevel, 0.1);
+        state.camera.updateProjectionMatrix();
+    });
+
+    return null;
+}
+
+function SmoothCameraController({ camPos, targetPos, zoomLevel }: CameraProps) {
+    const vCam = new THREE.Vector3();
+    const vTar = new THREE.Vector3();
+    console.log(camPos)
+
+    useFrame((state) => {
+        // 1. Smoothly interpolate Position
+
+        state.camera.position.lerp(vCam.set(...camPos), 0.01);
+
+
+        // 2. Smoothly interpolate Target
+        if (state.controls) {
+            // @ts-ignore
+            state.controls.target.lerp(vTar.set(...targetPos), 0.1);
+        }
+
+        // 3. Handle Zoom 
+        // If OrthographicCamera:
+        if (state.camera instanceof THREE.OrthographicCamera) {
+            state.camera.zoom = THREE.MathUtils.lerp(state.camera.zoom, zoomLevel, 0.01);
+            state.camera.updateProjectionMatrix();
+        }
+        // If PerspectiveCamera (adjusting FOV for 'zoom' effect):
+        else if (state.camera instanceof THREE.PerspectiveCamera) {
+            // Alternatively, you can just let the user zoom via OrbitControls scroll
+            // but if you want to force a specific zoom level programmatically:
+            state.camera.zoom = THREE.MathUtils.lerp(state.camera.zoom, zoomLevel, 0.01);
+            state.camera.updateProjectionMatrix();
+        }
+
+        // 4. Update controls to reflect changes
+        if (state.controls) {
+            // @ts-ignore
+            state.controls.update();
+        }
+    });
+
+    return null;
+}
+
 interface Props {
     dialog: ReturnType;
     model_path: string;
@@ -80,6 +204,8 @@ export default function Viewer({ dialog, model_path, tabs, colors, afterSubmit }
     const [zoom, setZoom] = useState(4);
     const [isLocked, setIsLocked] = useState(false);
     const [scrollableTab, setScrollableTab] = useState(tabs?.[0]?.key);
+    const targetXYZ: [number, number, number] = [0, 0, 0];
+    const cameraXYZ: [number, number, number] = [2, 0, 10];
 
     const handleChange = (key: string, newValue: any) => {
         setOb((prevState: any) => ({
@@ -139,42 +265,41 @@ export default function Viewer({ dialog, model_path, tabs, colors, afterSubmit }
                 <Box height={1} component={'div'}>
                     <Box component={'div'} sx={{ height: 1 }}>
                         <Box component={'div'} sx={{ height: 1 }}>
-                            <Canvas
+                            <Canvas shadows>
+                                {/* <Suspense> */}
+                                <Watch
+                                    colorObject={currentColorObject}
+                                    model_path={model_path}
+                                    onSendColor={(obj: any) => setnewOb(obj)}
+                                />
+                                {(!isLocked) && (
+                                    <ManualCameraController
+                                        zoomLevel={currentTab?.zoom || 1}
+                                        camPos={[Number(currentTab?.x) || 0, Number(currentTab?.y) || 10, Number(currentTab?.z) || 0]}
+                                        targetPos={targetXYZ}
+                                    />
+                                )}
+                                {(isLocked) && (
+                                    <OrbitControls onChange={() => {
+                                        console.log('clicked')
+                                    }} />
+                                )}
 
-                                camera={{
-                                    // position: [0, 10, 0],
-                                    position: [0, 10, 10],
-                                    // zoom: 0,
 
-                                }}
-                                gl={{
-                                    toneMapping: THREE.ACESFilmicToneMapping,
-                                    outputColorSpace: THREE.SRGBColorSpace,
-                                    toneMappingExposure: 1.2,
-                                    antialias: true,
-                                    alpha: true,
-                                    preserveDrawingBuffer: true
-                                }}
-                                flat
-                                legacy={false}
-                            >
+                                {/* </Suspense> */}
 
                                 {/* <color attach="background" args={['#f4f4f2']} /> */}
 
-                                <CameraController zoom={currentTab?.zoom || 1} position={[currentTab?.x || 0, currentTab?.y || 10, currentTab?.z || 0]} />
+                                {/* <CameraController zoom={currentTab?.zoom || 1} position={[currentTab?.x || 0, currentTab?.y || 10, currentTab?.z || 0]} /> */}
 
                                 <color attach="background" args={['#eeeeee']} />
                                 <Environment files='/city.exr' blur={60} />
 
                                 <ambientLight intensity={0.05} />
 
-                                <Watch
-                                    colorObject={currentColorObject}
-                                    model_path={model_path}
-                                    onSendColor={(obj: any) => setnewOb(obj)}
-                                />
 
-                                <OrbitControls enableDamping={isLocked} enablePan={isLocked} enableRotate={isLocked} enableZoom={isLocked} />
+
+
                             </Canvas>
                         </Box>
 
