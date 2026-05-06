@@ -30,12 +30,25 @@ function Watch({ colorObject, model_path, onSendColor }: any) {
         const newObjectColor = { ...colorObject }
         Object.keys(nodes)?.map((key, index) => {
             const child = nodes[key];
-            if (child.isMesh && colorObject[child.name]) {
-                child.material = child.material.clone()
-                newObjectColor[child.name] = colorObject[child.name];
-                child.material.color.set(colorObject[child.name])
+            console.log('mat name: ', child?.material?.name)
+            if (colorObject[child?.material?.name]) {
+                child.material = child.material.clone();
+                child.material.color.set(colorObject[child?.material?.name]);
+
+                const name = child?.material?.name;
+                newObjectColor[name] = colorObject[name];
+                //     materials[key] = newmat;
+                //     console.log()
             }
         })
+        // Object.keys(nodes)?.map((key, index) => {
+        //     const child = nodes[key];
+        //     if (child.isMesh && colorObject[child.name]) {
+        //         child.material = child.material.clone()
+        //         newObjectColor[child.name] = colorObject[child.name];
+        //         child.material.color.set(colorObject[child.name])
+        //     }
+        // })
         onSendColor(newObjectColor)
     }, [colorObject])
 

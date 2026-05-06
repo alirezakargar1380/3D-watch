@@ -23,8 +23,18 @@ function Watch({ colorObject, model_path, onSendColor, selected }: any) {
         const object: any = {};
         for (let i = 0; i < keys.length; i++) {
             const mesh: any = nodes[keys[i]];
-            if (mesh.isMesh)
-                object[mesh.name] = "";
+            
+            if (selected && mesh.material?.name)
+                object[mesh.material?.name] = '';
+
+            // unuse
+            // if (mesh.material?.name === "black")
+            //     mesh.material.color.set("#ff0000")
+
+
+            // old code for getting names
+            // if (mesh.isMesh)
+            //     object[mesh.name] = "";
         }
 
         if (selected)
@@ -140,7 +150,7 @@ interface Props {
 export default function WatchDemoViewer({ onGetColorKeys, onClick, color, zoom = 5, selected, model_path }: Props) {
     const [ob, setOb] = useState<any>(color || {});
     // const [zoom, setZoom] = useState(4);
-    const [isLocked, setIsLocked] = useState(false);
+    const [isLocked, setIsLocked] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
