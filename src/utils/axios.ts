@@ -83,6 +83,7 @@ export const endpoints = {
     list: '/api/products',
     details: (id: any) => `/api/products/${id}`,
     update: (id: any) => `/api/products/${id}`,
+    delete: (id: any) => `/api/products/${id}`,
     search: '/api/product/search',
     create: '/api/products',
   },

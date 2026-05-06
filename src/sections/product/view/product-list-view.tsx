@@ -43,6 +43,7 @@ import { IProductItem, IProductTableFilters, IProductTableFilterValue } from 'sr
 import ProductTableRow from '../product-table-row';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
+import admin_axios, { endpoints } from 'src/utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -118,7 +119,8 @@ export default function ProductListView() {
   );
 
   const handleDeleteRow = useCallback(
-    (id: string) => {
+    async (id: number) => {
+      await admin_axios.delete(endpoints.product.delete(id))
       const deleteRow = tableData.filter((row) => row.id !== id);
       setTableData(deleteRow);
 

@@ -89,11 +89,11 @@ export default function ShoppingCartButton({ sx }: Props) {
                         </IconButton>
                     </Stack>
                     <Box sx={{ pb: '16px', borderBottom: '1px solid #D1D1D1', py: 2 }} component={'div'}>
-                        {cart.map((item, index) => (
+                        {cart?.map((item, index) => (
                             <Box component={'div'} key={index} mb={2} display={'flex'} justifyContent={'space-between'} alignItems={'end'}>
                                 <Stack direction={'row'}>
                                     <Box component={'div'}>
-                                        <Image borderRadius={1.2} src={endpoints.images.get(item.product.images?.find((img) => img.main === true)?.name || '')} width={60} />
+                                        <Image borderRadius={1.2} src={endpoints.images?.get(item.product?.images?.find((img) => img.main === true)?.name || '')} width={60} />
                                     </Box>
                                     <Typography ml={1}>{item.product.name}</Typography>
                                     {/* <WatchDemoViewer

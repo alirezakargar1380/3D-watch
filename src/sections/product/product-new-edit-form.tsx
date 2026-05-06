@@ -54,23 +54,44 @@ import { MultiFilePreview } from 'src/components/upload';
 // ----------------------------------------------------------------------
 const clockPaths = [
   {
-    path: '/models/cubasd.glb',
-
-  },
-  {
-    path: '/models/shiny.glb',
-  },
-  {
-    path: '/models/test-watch-shine.glb',
-    zoom: 1.5
-  },
-  {
-    path: '/models/golden-ring-clock-2.glb',
+    path: '/models/golden-ring-clock.glb',
     zoom: 3
   },
   {
     path: '/models/mile-watch.glb',
     zoom: 2
+  },
+  {
+    path: '/models/salib-clock.glb',
+    zoom: 5
+  },
+  {
+    path: '/models/wood clock.glb',
+    zoom: 1
+  },
+  {
+    path: '/models/ring steel clock.glb',
+    zoom: 2
+  },
+  {
+    path: '/models/black-without-glass.glb',
+    zoom: 1
+  },
+  {
+    path: '/models/steel clock.glb',
+    zoom: 3
+  },
+  {
+    path: '/models/wall clock without frame.glb',
+    zoom: 3
+  },
+  {
+    path: '/models/sozani.glb',
+    zoom: 3
+  },
+  {
+    path: '/models/clock.glb',
+    zoom: 3
   },
 ]
 // ----------------------------------------------------------------------
@@ -82,7 +103,7 @@ type Props = {
 const tabDefaultValue = {
   tab_name: '',
   key: '',
-  zoom: 7,
+  zoom: 2,
   x: 0,
   y: 10,
   z: 0,
@@ -150,7 +171,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
       // description: currentProduct?.description || '',
       // subDescription: currentProduct?.subDescription || '',
       // images: currentProduct?.images || [],
-      clock: currentProduct?.clock || clockPaths[3].path,
+      clock: currentProduct?.clock || '',
       //
       // code: currentProduct?.code || '',
       // sku: currentProduct?.sku || '',
@@ -642,10 +663,10 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
                 return (
                   <WatchDemoViewer
                     onClick={() => {
-                      if (currentProduct)
-                        return enqueueSnackbar('just in creating a prodcut can select a clock', {
-                          variant: 'error'
-                        })
+                      // if (currentProduct)
+                      //   return enqueueSnackbar('just in creating a prodcut can select a clock', {
+                      //     variant: 'error'
+                      //   })
                       setValue('clock', clock.path)
                     }}
                     model_path={clock.path}
@@ -653,9 +674,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
                     zoom={clock?.zoom}
                     selected={values.clock === clock.path}
                     onGetColorKeys={(colorObj: any) => {
-                      console.log(values.clock === clock.path);
                       (values.clock === clock.path) && setShapes(Object.keys(colorObj) as [])
-
                     }}
                   />
                 )
