@@ -25,7 +25,7 @@ import CarouselBasic1 from 'src/sections/_examples/extra/carousel-view/carousel-
 import CarouselBasic2 from 'src/sections/_examples/extra/carousel-view/carousel-basic-2';
 import CarouselBasic3 from 'src/sections/_examples/extra/carousel-view/carousel-basic-3';
 import CarouselBasic4 from 'src/sections/_examples/extra/carousel-view/carousel-basic-4';
-import { _mock } from 'src/_mock';
+import { _mock, SAMPLE_PRODUCTS } from 'src/_mock';
 import ProductCarousel from 'src/sections/_examples/extra/carousel-view/product-carousel';
 import AccordionView from 'src/sections/_examples/mui/accordion-view';
 import Iconify from 'src/components/iconify';
@@ -105,9 +105,10 @@ export default function HomeView() {
 
           <Box component="div">
             <ProductCarousel
-              data={products.map((product) => {
+              data={SAMPLE_PRODUCTS.map((product) => {
                 return {
-                  coverUrl: endpoints.images.get(product.images?.find((img) => img.main === true)?.name || ''),
+                  // coverUrl: endpoints.images.get(product.images?.find((img) => img.main === true)?.name || ''),
+                  coverUrl: product.images?.find((img) => img.main === true)?.name || '',
                   description: '',
                   title: product.name,
                   id: product.id

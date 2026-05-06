@@ -252,7 +252,7 @@ export default function Viewer({ dialog, model_path, tabs, colors, afterSubmit }
                 <Box component={'div'} position={'absolute'} zIndex={10} top={20} right={20}>
                     <Button color='secondary' variant='outlined' onClick={() => {
                         dialog.onFalse()
-                        afterSubmit(currentColorObject)
+                        // afterSubmit(currentColorObject)
                     }}>
                         done
                     </Button>

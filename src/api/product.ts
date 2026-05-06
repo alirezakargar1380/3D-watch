@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { fetcher, endpoints } from 'src/utils/axios';
 
 import { IProductItem } from 'src/types/product';
+import { SAMPLE_PRODUCTS } from 'src/_mock';
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +36,8 @@ export function useGetProduct(productId: string) {
 
   const memoizedValue = useMemo(
     () => ({
-      product: data as IProductItem,
+      // product: data as IProductItem,
+      product: SAMPLE_PRODUCTS.find((p) => p.id === +productId),
       productLoading: isLoading,
       productError: error,
       productValidating: isValidating,
