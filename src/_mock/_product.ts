@@ -203,7 +203,7 @@ export const SAMPLE_PRODUCTS = [
         "tab_name": "Color",
         "default_color": "#5d5d5d",
         "key": "steel",
-        "zoom": 5,
+        "zoom": 3,
         "x": 0,
         "y": 10,
         "z": 0,
