@@ -23,23 +23,51 @@ function CameraController({ zoom, position }: { zoom: number, position: any }) {
 }
 
 
-function Watch({ colorObject, model_path, onSendColor }: any) {
+function Watch({ key, color, colorObject, model_path, colors, onSendColor }: any) {
     const { materials, nodes }: any = useGLTF(model_path)
 
     useEffect(() => {
+        const colorObject = colors?.find((c: any) => c.code === color);
+        console.log('color', colorObject);
+        console.log('materials', materials);
+
         const newObjectColor = { ...colorObject }
         Object.keys(nodes)?.map((key, index) => {
             const child = nodes[key];
-            console.log('mat name: ', child?.material?.name)
-            if (colorObject[child?.material?.name]) {
-                child.material = child.material.clone();
-                child.material.color.set(colorObject[child?.material?.name]);
 
-                const name = child?.material?.name;
-                newObjectColor[name] = colorObject[name];
-                //     materials[key] = newmat;
-                //     console.log()
+            // if (colorObject[child?.material?.name]) {
+            //     console.log(child.material.name, colorObject[child?.material?.name])
+            //     const color = colors?.find((c: any) => c.material_name === child?.material?.name && c.code === colorObject[child?.material?.name])
+
+
+            //     child.material = materials[child?.material?.name].clone();
+            //     child.material.color.set(colorObject[child?.material?.name]);
+
+            //     if (color?.roughness)
+            //         child.material.roughness = +color.roughness;
+            //     const name = child?.material?.name;
+            //     newObjectColor[name] = colorObject[name];
+            // }
+
+            // console.log(child)
+
+            // if (colorObject?.material_name && child?.material?.name) {
+
+            if (colorObject.all) {
+                child.material = materials[colorObject.material_name].clone();
+                child.material.color.set(colorObject.code);
+                if (colorObject?.roughness)
+                    child.material.roughness = +colorObject.roughness;
+            } else {
+                if (colorObject.objects.includes(child.name)) {
+                    child.material = materials[colorObject.material_name].clone();
+                    child.material.color.set(colorObject.code);
+                    // child.material.roughness = 0.4;
+                    if (colorObject?.roughness)
+                        child.material.roughness = +colorObject.roughness;
+                }
             }
+
         })
         // Object.keys(nodes)?.map((key, index) => {
         //     const child = nodes[key];
@@ -149,63 +177,23 @@ function ManualCameraController({ camPos, targetPos, zoomLevel }: CameraProps) {
     return null;
 }
 
-function SmoothCameraController({ camPos, targetPos, zoomLevel }: CameraProps) {
-    const vCam = new THREE.Vector3();
-    const vTar = new THREE.Vector3();
-    console.log(camPos)
-
-    useFrame((state) => {
-        // 1. Smoothly interpolate Position
-
-        state.camera.position.lerp(vCam.set(...camPos), 0.01);
-
-
-        // 2. Smoothly interpolate Target
-        if (state.controls) {
-            // @ts-ignore
-            state.controls.target.lerp(vTar.set(...targetPos), 0.1);
-        }
-
-        // 3. Handle Zoom 
-        // If OrthographicCamera:
-        if (state.camera instanceof THREE.OrthographicCamera) {
-            state.camera.zoom = THREE.MathUtils.lerp(state.camera.zoom, zoomLevel, 0.01);
-            state.camera.updateProjectionMatrix();
-        }
-        // If PerspectiveCamera (adjusting FOV for 'zoom' effect):
-        else if (state.camera instanceof THREE.PerspectiveCamera) {
-            // Alternatively, you can just let the user zoom via OrbitControls scroll
-            // but if you want to force a specific zoom level programmatically:
-            state.camera.zoom = THREE.MathUtils.lerp(state.camera.zoom, zoomLevel, 0.01);
-            state.camera.updateProjectionMatrix();
-        }
-
-        // 4. Update controls to reflect changes
-        if (state.controls) {
-            // @ts-ignore
-            state.controls.update();
-        }
-    });
-
-    return null;
-}
-
 interface Props {
     dialog: ReturnType;
     model_path: string;
     tabs: IProductTabs[];
-    colors: string[];
+    colors: any[];
     afterSubmit: (object: any) => void;
 }
 
 export default function Viewer({ dialog, model_path, tabs, colors, afterSubmit }: Props) {
     const [currentColorObject, setOb] = useState<any>({});
+    const [color, setColor] = useState('');
+    const [key, setKey] = useState('');
     const [newColorObject, setnewOb] = useState<any>({});
     const [zoom, setZoom] = useState(4);
-    const [isLocked, setIsLocked] = useState(false);
+    const [isLocked, setIsLocked] = useState(true);
     const [scrollableTab, setScrollableTab] = useState(tabs?.[0]?.key);
     const targetXYZ: [number, number, number] = [0, 0, 0];
-    const cameraXYZ: [number, number, number] = [2, 0, 10];
 
     const handleChange = (key: string, newValue: any) => {
         setOb((prevState: any) => ({
@@ -219,6 +207,8 @@ export default function Viewer({ dialog, model_path, tabs, colors, afterSubmit }
     }, []);
 
     const handleSelectColors = (color: any, key: string) => {
+        setColor(color)
+        setKey(key)
         handleChange(key, color);
     }
 
@@ -268,6 +258,9 @@ export default function Viewer({ dialog, model_path, tabs, colors, afterSubmit }
                             <Canvas shadows>
                                 {/* <Suspense> */}
                                 <Watch
+                                    key={key}
+                                    color={color}
+                                    colors={colors}
                                     colorObject={currentColorObject}
                                     model_path={model_path}
                                     onSendColor={(obj: any) => setnewOb(obj)}
@@ -280,9 +273,7 @@ export default function Viewer({ dialog, model_path, tabs, colors, afterSubmit }
                                     />
                                 )}
                                 {(isLocked) && (
-                                    <OrbitControls onChange={() => {
-                                        console.log('clicked')
-                                    }} />
+                                    <OrbitControls />
                                 )}
 
 

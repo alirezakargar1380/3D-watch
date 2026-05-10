@@ -78,7 +78,7 @@ const clockPaths = [
     zoom: 1
   },
   {
-    path: '/models/steel clock.glb',
+    path: '/models/steel-clock-2.glb',
     zoom: 3
   },
   {
@@ -110,7 +110,10 @@ const tabDefaultValue = {
   default_color: '#000',
   colors: [
     {
-      code: '#000'
+      code: '#000',
+      material_name: '',
+      roughness: '0',
+      objects: ['']
     }
   ]
 }
@@ -120,6 +123,8 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
   const [mainImage, setMainImage] = useState<number>(0);
   const [images, setImages] = useState<any>([]);
   const [currentImages, setCurrentImages] = useState<any>([]);
+  const [materials, setMaterials] = useState<any>([]);
+  const [objects, setObjects] = useState<string[]>([]);
 
   const router = useRouter();
 
@@ -187,9 +192,14 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
       // newLabel: currentProduct?.newLabel || { enabled: false, content: '' },
       // saleLabel: currentProduct?.saleLabel || { enabled: false, content: '' },
 
-      tabs: currentProduct?.tabs || [
-        tabDefaultValue
-      ]
+      tabs: currentProduct?.tabs.map((tab) => {
+        return {
+          ...tab,
+          objects: []
+        }
+      }) || [
+          tabDefaultValue
+        ]
     }),
     [currentProduct]
   );
@@ -535,6 +545,8 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
                 key={index}
                 index={index}
                 shape={shape}
+                objects={objects}
+                materials={materials}
                 control={control}
                 setValue={setValue}
                 values={values}
@@ -659,7 +671,6 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
               }}
             >
               {clockPaths.map((clock: any) => {
-                console.log(values.clock === clock.path)
                 return (
                   <WatchDemoViewer
                     onClick={() => {
@@ -673,6 +684,12 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
                     key={clock.path}
                     zoom={clock?.zoom}
                     selected={values.clock === clock.path}
+                    onSendObjects={(objects) => {
+                      (values.clock === clock.path) && setObjects(objects)
+                    }}
+                    onSendMaterials={(material) => {
+                      (values.clock === clock.path) && setMaterials(material)
+                    }}
                     onGetColorKeys={(colorObj: any) => {
                       (values.clock === clock.path) && setShapes(Object.keys(colorObj) as [])
                     }}

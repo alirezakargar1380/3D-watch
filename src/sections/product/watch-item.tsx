@@ -10,9 +10,10 @@ import { ReturnType } from 'src/hooks/use-boolean'
 import Iconify from 'src/components/iconify'
 import { Vector3 } from 'three';
 import * as THREE from 'three';
+import { node } from 'stylis'
 
 
-function Watch({ colorObject, model_path, onSendColor, selected }: any) {
+function Watch({ colorObject, model_path, onSendColor, onSendObjects, onSendMaterials, selected }: any) {
     const { materials, nodes }: any = useGLTF(model_path)
     const [ob, setOb] = useState<any>({});
     //   const { materials, nodes }: any = useGLTF('/models/watch.glb')
@@ -20,25 +21,38 @@ function Watch({ colorObject, model_path, onSendColor, selected }: any) {
     useEffect(() => {
         // generate color objects
         const keys = Object.keys(nodes);
+        const materialsKeys = Object.keys(materials);
         const object: any = {};
+        const object_materials: THREE.Material[] = [];
         for (let i = 0; i < keys.length; i++) {
             const mesh: any = nodes[keys[i]];
-            
-            if (selected && mesh.material?.name)
+
+            if (selected && mesh.material?.name) {
+                // console.log(mesh.material)
+                console.log(materials)
+
+                // set material
+                // mesh.material = materials["brushed metal"];
+
+                // if (!object_materials.find((m) => m?.name === mesh.material?.name))
+                //     object_materials.push(mesh.material)
+
+                // set material color on object
                 object[mesh.material?.name] = '';
-
-            // unuse
-            // if (mesh.material?.name === "black")
-            //     mesh.material.color.set("#ff0000")
-
-
-            // old code for getting names
-            // if (mesh.isMesh)
-            //     object[mesh.name] = "";
+            }
         }
 
-        if (selected)
+        for (let i = 0; i < materialsKeys.length; i++) {
+            const element = materials[materialsKeys[i]];
+            if (element)
+                object_materials.push(element)
+        }
+
+        if (selected) {
             onSendColor(object)
+        }
+        onSendMaterials(object_materials)
+        onSendObjects(keys)
     }, [nodes, selected])
 
     useEffect(() => {
@@ -144,17 +158,18 @@ interface Props {
     selected?: boolean
     model_path: string;
     onGetColorKeys?: (colorObj: any) => void;
+    onSendObjects?: (objects: string[]) => void;
+    onSendMaterials?: (materials: THREE.Material[]) => void;
     onClick?: () => void;
 }
 
-export default function WatchDemoViewer({ onGetColorKeys, onClick, color, zoom = 5, selected, model_path }: Props) {
+export default function WatchDemoViewer({ onGetColorKeys, onSendObjects, onSendMaterials, onClick, color, zoom = 5, selected, model_path }: Props) {
     const [ob, setOb] = useState<any>(color || {});
     // const [zoom, setZoom] = useState(4);
     const [isLocked, setIsLocked] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        console.log('cal afadn ')
         onGetColorKeys?.(ob)
     }, [ob])
 
@@ -193,6 +208,8 @@ export default function WatchDemoViewer({ onGetColorKeys, onClick, color, zoom =
                     colorObject={ob}
                     model_path={model_path}
                     onSendColor={(obj: any) => setOb(obj)}
+                    onSendObjects={(objects: string[]) => onSendObjects?.(objects)}
+                    onSendMaterials={(materials: THREE.Material[]) => onSendMaterials?.(materials)}
                     selected={selected}
                 />
 
