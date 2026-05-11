@@ -23,11 +23,12 @@ function CameraController({ zoom, position }: { zoom: number, position: any }) {
 }
 
 
-function Watch({ key, color, colorObject, model_path, colors, onSendColor }: any) {
+function Watch({ tab_name, color, colorObject, model_path, colors, onSendColor }: any) {
     const { materials, nodes }: any = useGLTF(model_path)
 
     useEffect(() => {
         const selectedColorObject = colors?.find((c: any) => c.code === color);
+        console.log('tab_name', tab_name);
         console.log('colors', colors);
         console.log('color', colorObject);
         console.log('selectedColorObject', selectedColorObject);
@@ -58,6 +59,7 @@ function Watch({ key, color, colorObject, model_path, colors, onSendColor }: any
             // if (colorObject?.material_name && child?.material?.name) {
 
             if (selectedColorObject?.all) {
+                console.log('selectedColorObject', selectedColorObject)
                 child.material = materials[selectedColorObject.material_name].clone();
                 child.material.color.set(selectedColorObject.code);
                 if (selectedColorObject?.roughness)
@@ -189,7 +191,7 @@ interface Props {
 export default function Viewer({ dialog, model_path, tabs }: Props) {
     const [currentColorObject, setOb] = useState<any>({});
     const [color, setColor] = useState('');
-    const [tab_name, setTabName] = useState('');
+    const [tab_name, setTabName] = useState(tabs?.[0]?.tab_name);
     const [newColorObject, setnewOb] = useState<any>({});
     const [zoom, setZoom] = useState(4);
     const [isLocked, setIsLocked] = useState(false);
@@ -219,10 +221,12 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
     useEffect(() => {
         for (let i = 0; i < tabs.length; i++) {
             const tab = tabs[i];
-            if (tab.default_color)
+            if (tab.tab_name === tab_name) {
+                console.log('tab def', tab)
                 handleSelectColors(tab.default_color, tab.tab_name)
+            }
         }
-    }, [])
+    }, [scrollableTab])
 
     return (
 

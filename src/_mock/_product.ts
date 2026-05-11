@@ -117,7 +117,7 @@ export const SAMPLE_PRODUCTS = [
             "id": 55,
             "code": "#4b4b4b",
             "material_name": "Matte Golden",
-            "roughness": "",
+            "roughness": "1.0",
             "objects": "",
             "all": true,
             "createdAt": "2026-05-06T19:35:10.633Z",
