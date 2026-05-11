@@ -189,17 +189,17 @@ interface Props {
 export default function Viewer({ dialog, model_path, tabs }: Props) {
     const [currentColorObject, setOb] = useState<any>({});
     const [color, setColor] = useState('');
-    const [key, setKey] = useState('');
+    const [tab_name, setTabName] = useState('');
     const [newColorObject, setnewOb] = useState<any>({});
     const [zoom, setZoom] = useState(4);
-    const [isLocked, setIsLocked] = useState(true);
-    const [scrollableTab, setScrollableTab] = useState(tabs?.[0]?.key);
+    const [isLocked, setIsLocked] = useState(false);
+    const [scrollableTab, setScrollableTab] = useState(tabs?.[0]?.tab_name);
     const targetXYZ: [number, number, number] = [0, 0, 0];
 
-    const handleChange = (key: string, newValue: any) => {
+    const handleChange = (tab_name: string, newValue: any) => {
         setOb((prevState: any) => ({
             ...prevState,
-            [key]: newValue,
+            [tab_name]: newValue,
         }));
     }
 
@@ -207,20 +207,20 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
         setScrollableTab(newValue);
     }, []);
 
-    const handleSelectColors = (color: any, key: string) => {
+    const handleSelectColors = (color: any, tab_name: string) => {
         setColor(color)
-        setKey(key)
-        handleChange(key, color);
+        setTabName(tab_name)
+        handleChange(tab_name, color);
     }
 
-    const currentTab = tabs.find((tb) => tb.key === scrollableTab);
+    const currentTab = tabs.find((tb) => tb.tab_name === scrollableTab);
 
     // add the default colors
     useEffect(() => {
         for (let i = 0; i < tabs.length; i++) {
             const tab = tabs[i];
             if (tab.default_color)
-                handleSelectColors(tab.default_color, tab.key)
+                handleSelectColors(tab.default_color, tab.tab_name)
         }
     }, [])
 
@@ -259,9 +259,9 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
                             <Canvas shadows>
                                 {/* <Suspense> */}
                                 <Watch
-                                    key={key}
+                                    tab_name={tab_name}
                                     color={color}
-                                    colors={tabs.find((t) => t.key === key)?.colors}
+                                    colors={tabs.find((t) => t.tab_name === tab_name)?.colors}
                                     colorObject={currentColorObject}
                                     model_path={model_path}
                                     onSendColor={(obj: any) => setnewOb(obj)}
@@ -320,7 +320,7 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
                         onChange={handleChangeScrollableTab}
                     >
                         {tabs.map((tab: IProductTabs) => (
-                            <Tab key={tab.key} label={tab.tab_name} value={tab.key} />
+                            <Tab key={tab.tab_name} label={tab.tab_name} value={tab.tab_name} />
                         ))}
                     </Tabs>
                 </Box>
@@ -328,9 +328,9 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
                 <Stack direction={{ xs: 'column', md: 'row' }} sx={{ mx: 0, mt: 2 }} justifyContent={'center'} spacing={1}>
                     <Box component={'div'} textAlign={'center'}>
                         <ColorPicker
-                            colors={tabs.find((tab) => tab.key === scrollableTab)?.colors.map((color) => color.code) || ['#fff']}
+                            colors={tabs.find((tab) => tab.tab_name === scrollableTab)?.colors.map((color) => color.code) || ['#fff']}
                             selected={currentColorObject[scrollableTab] || ''}
-                            onSelectColor={(color: any) => handleSelectColors(color, currentTab?.key || '')}
+                            onSelectColor={(color: any) => handleSelectColors(color, currentTab?.tab_name || '')}
                         />
                     </Box>
 
