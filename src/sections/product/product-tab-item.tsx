@@ -97,12 +97,12 @@ export const TabItem = ({
                 <RHFMultiSelect
                   size="small"
                   name={`tabs.${index}.colors.${colorIndex}.objects`}
-                  options={objects.map((ob) => {
+                  options={objects.length > 0 ? objects.map((ob) => {
                     return {
                       label: ob,
                       value: ob
                     }
-                  })}
+                  }) : []}
                 />
               </Box>
 
@@ -131,7 +131,13 @@ export const TabItem = ({
 
           <Button
             variant="outlined"
-            onClick={() => appendColor({ code: "#000000" })}
+            onClick={() => appendColor({
+              code: '#000',
+              material_name: '',
+              roughness: '',
+              all: false,
+              objects: []
+            })}
           >
             Add Color
           </Button>

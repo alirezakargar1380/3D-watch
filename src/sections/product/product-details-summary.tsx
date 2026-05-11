@@ -49,7 +49,7 @@ export default function ProductDetailsSummary({
   ...other
 }: Props) {
   const router = useRouter();
-  const dialog = useBoolean();
+  const dialog = useBoolean(true);
   const {
     id,
     name,
@@ -369,12 +369,11 @@ export default function ProductDetailsSummary({
         <Viewer
           dialog={dialog}
           model_path={product.clock}
-          colors={product.tabs.map((tab) => tab.colors).map((color: any) => color)[0]}
           tabs={product.tabs}
-          afterSubmit={(object: any) => {
-            setValue('colors', JSON.stringify(object))
-            onSubmit();
-          }}
+          // afterSubmit={(object: any) => {
+          //   setValue('colors', JSON.stringify(object))
+          //   onSubmit();
+          // }}
         />
 
         {renderShare}

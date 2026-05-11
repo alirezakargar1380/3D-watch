@@ -27,13 +27,17 @@ function Watch({ key, color, colorObject, model_path, colors, onSendColor }: any
     const { materials, nodes }: any = useGLTF(model_path)
 
     useEffect(() => {
-        const colorObject = colors?.find((c: any) => c.code === color);
+        const selectedColorObject = colors?.find((c: any) => c.code === color);
+        console.log('colors', colors);
         console.log('color', colorObject);
+        console.log('selectedColorObject', selectedColorObject);
         console.log('materials', materials);
 
         const newObjectColor = { ...colorObject }
         Object.keys(nodes)?.map((key, index) => {
             const child = nodes[key];
+
+            if (!selectedColorObject) return console.log('cant find color object')
 
             // if (colorObject[child?.material?.name]) {
             //     console.log(child.material.name, colorObject[child?.material?.name])
@@ -53,17 +57,16 @@ function Watch({ key, color, colorObject, model_path, colors, onSendColor }: any
 
             // if (colorObject?.material_name && child?.material?.name) {
 
-            if (colorObject.all) {
-                child.material = materials[colorObject.material_name].clone();
-                child.material.color.set(colorObject.code);
-                if (colorObject?.roughness)
-                    child.material.roughness = +colorObject.roughness;
+            if (selectedColorObject?.all) {
+                child.material = materials[selectedColorObject.material_name].clone();
+                child.material.color.set(selectedColorObject.code);
+                if (selectedColorObject?.roughness)
+                    child.material.roughness = +selectedColorObject.roughness;
             } else {
-                if (colorObject.objects.includes(child.name)) {
-                    child.material = materials[colorObject.material_name].clone();
-                    child.material.color.set(colorObject.code);
-                    // child.material.roughness = 0.4;
-                    if (colorObject?.roughness)
+                if (selectedColorObject.objects.includes(child.name)) {
+                    child.material = materials[selectedColorObject.material_name].clone();
+                    child.material.color.set(selectedColorObject.code);
+                    if (selectedColorObject?.roughness)
                         child.material.roughness = +colorObject.roughness;
                 }
             }
@@ -181,11 +184,9 @@ interface Props {
     dialog: ReturnType;
     model_path: string;
     tabs: IProductTabs[];
-    colors: any[];
-    afterSubmit: (object: any) => void;
 }
 
-export default function Viewer({ dialog, model_path, tabs, colors, afterSubmit }: Props) {
+export default function Viewer({ dialog, model_path, tabs }: Props) {
     const [currentColorObject, setOb] = useState<any>({});
     const [color, setColor] = useState('');
     const [key, setKey] = useState('');
@@ -260,7 +261,7 @@ export default function Viewer({ dialog, model_path, tabs, colors, afterSubmit }
                                 <Watch
                                     key={key}
                                     color={color}
-                                    colors={colors}
+                                    colors={tabs.find((t) => t.key === key)?.colors}
                                     colorObject={currentColorObject}
                                     model_path={model_path}
                                     onSendColor={(obj: any) => setnewOb(obj)}

@@ -112,8 +112,9 @@ const tabDefaultValue = {
     {
       code: '#000',
       material_name: '',
-      roughness: '0',
-      objects: ['']
+      roughness: '',
+      all: false,
+      objects: []
     }
   ]
 }
