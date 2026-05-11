@@ -9,25 +9,10 @@ import MainLayout from 'src/layouts/main';
 
 import ScrollProgress from 'src/components/scroll-progress';
 
-import HomeHero from '../home-hero';
-import HomeMinimal from '../home-minimal';
-import HomePricing from '../home-pricing';
-import HomeDarkMode from '../home-dark-mode';
-import HomeLookingFor from '../home-looking-for';
-import HomeForDesigner from '../home-for-designer';
-import HomeColorPresets from '../home-color-presets';
-import HomeAdvertisement from '../home-advertisement';
-import HomeCleanInterfaces from '../home-clean-interfaces';
-import HomeHugePackElements from '../home-hugepack-elements';
 import Image from 'src/components/image';
 import { Accordion, AccordionDetails, AccordionSummary, Button, Container, Stack, Typography } from '@mui/material';
-import CarouselBasic1 from 'src/sections/_examples/extra/carousel-view/carousel-basic-1';
-import CarouselBasic2 from 'src/sections/_examples/extra/carousel-view/carousel-basic-2';
-import CarouselBasic3 from 'src/sections/_examples/extra/carousel-view/carousel-basic-3';
-import CarouselBasic4 from 'src/sections/_examples/extra/carousel-view/carousel-basic-4';
 import { _mock, SAMPLE_PRODUCTS } from 'src/_mock';
 import ProductCarousel from 'src/sections/_examples/extra/carousel-view/product-carousel';
-import AccordionView from 'src/sections/_examples/mui/accordion-view';
 import Iconify from 'src/components/iconify';
 import { useState } from 'react';
 import ItemsCarousel from 'src/sections/_examples/extra/carousel-view/items-carousel';
@@ -105,6 +90,7 @@ export default function HomeView() {
 
           <Box component="div">
             <ProductCarousel
+              // data={products.map((product) => {
               data={SAMPLE_PRODUCTS.map((product) => {
                 return {
                   // coverUrl: endpoints.images.get(product.images?.find((img) => img.main === true)?.name || ''),
