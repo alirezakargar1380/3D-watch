@@ -196,7 +196,7 @@ export const SAMPLE_PRODUCTS = [
           }
         ],
         "tab_name": "Hand",
-        "default_color": "#000",
+        "default_color": "#616161",
         "key": "Matte Golden",
         "zoom": 3,
         "x": 0,

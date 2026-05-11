@@ -191,7 +191,6 @@ interface Props {
 export default function Viewer({ dialog, model_path, tabs }: Props) {
     const [currentColorObject, setOb] = useState<any>({});
     const [color, setColor] = useState('');
-    const [tab_name, setTabName] = useState(tabs?.[0]?.tab_name);
     const [newColorObject, setnewOb] = useState<any>({});
     const [zoom, setZoom] = useState(4);
     const [isLocked, setIsLocked] = useState(false);
@@ -211,7 +210,7 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
 
     const handleSelectColors = (color: any, tab_name: string) => {
         setColor(color)
-        setTabName(tab_name)
+        // setTabName(tab_name)
         handleChange(tab_name, color);
     }
 
@@ -221,7 +220,7 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
     useEffect(() => {
         for (let i = 0; i < tabs.length; i++) {
             const tab = tabs[i];
-            if (tab.tab_name === tab_name) {
+            if (tab.tab_name === scrollableTab) {
                 console.log('tab def', tab)
                 handleSelectColors(tab.default_color, tab.tab_name)
             }
@@ -263,9 +262,9 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
                             <Canvas shadows>
                                 {/* <Suspense> */}
                                 <Watch
-                                    tab_name={tab_name}
+                                    tab_name={scrollableTab}
                                     color={color}
-                                    colors={tabs.find((t) => t.tab_name === tab_name)?.colors}
+                                    colors={tabs.find((t) => t.tab_name === scrollableTab)?.colors}
                                     colorObject={currentColorObject}
                                     model_path={model_path}
                                     onSendColor={(obj: any) => setnewOb(obj)}
