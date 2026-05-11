@@ -58,7 +58,7 @@ const clockPaths = [
     zoom: 3
   },
   {
-    path: '/models/mile-watch-2.glb',
+    path: '/models/mile-watch.glb',
     zoom: 2
   },
   {
