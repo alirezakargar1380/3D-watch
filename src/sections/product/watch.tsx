@@ -1,7 +1,7 @@
 "use client"
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Environment, OrbitControls, useGLTF } from '@react-three/drei'
+import { Environment, OrbitControls, Text, Center, Text3D, useGLTF } from '@react-three/drei'
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Button, Dialog, DialogActions, DialogContent, IconButton, Stack, Tab, Tabs } from '@mui/material'
 import { ColorPicker, ColorPreview } from 'src/components/color-utils'
@@ -23,11 +23,12 @@ function CameraController({ zoom, position }: { zoom: number, position: any }) {
 }
 
 
-function Watch({ tab_name, color, colorObject, model_path, colors, onSendColor }: any) {
+function Watch({ text, tab_name, color, colorObject, model_path, colors, onSendColor }: any) {
     const { materials, nodes }: any = useGLTF(model_path)
 
     useEffect(() => {
         const selectedColorObject = colors?.find((c: any) => c.code === color);
+        // console.log('nodes', nodes['Cylinder'].position);
         console.log('tab_name', tab_name);
         console.log('colors', colors);
         console.log('color', colorObject);
@@ -86,16 +87,41 @@ function Watch({ tab_name, color, colorObject, model_path, colors, onSendColor }
     }, [colorObject])
 
     return (
-        <group>
-            {Object.keys(nodes)?.map((key, index) => {
-                const mesh = nodes[key];
-                if (mesh.type === 'Mesh') {
-                    return (
-                        <primitive object={mesh} key={index}></primitive>
-                    )
-                }
-            })}
-        </group>
+        <>
+            <group position={[0, 0, 0.5]}>
+                <Center key={text}>
+                    <Text3D          // x, y, z relative to scene
+                        size={0.05}
+                        font="/fonts/Roboto_Regular.json"  // optional custom font
+                        // bevelEnabled
+                        bevelThickness={0.002}
+                        bevelSize={0.005}
+                        height={0.002}
+                        position={[0, 0, 0]}
+                        rotation={[-Math.PI / 2, 0, 0]}      // 90 deg around X axis
+                    // anchorX="center"                    // center text horizontally at position.x
+                    // anchorY="middle"  
+                    >
+                        {text}
+                        <primitive object={materials['salib'].clone()} />
+                    </Text3D>
+                </Center>
+            </group>
+
+
+            <group>
+
+                {Object.keys(nodes)?.map((key, index) => {
+                    const mesh = nodes[key];
+                    if (mesh.type === 'Mesh') {
+                        return (
+                            <primitive object={mesh} key={index}></primitive>
+                        )
+                    }
+                })}
+            </group>
+        </>
+
     )
 }
 
@@ -193,6 +219,7 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
     const [color, setColor] = useState('');
     const [newColorObject, setnewOb] = useState<any>({});
     const [zoom, setZoom] = useState(4);
+    const [text, setText] = useState('');
     const [isLocked, setIsLocked] = useState(false);
     const [scrollableTab, setScrollableTab] = useState(tabs?.[0]?.tab_name);
     const targetXYZ: [number, number, number] = [0, 0, 0];
@@ -260,9 +287,9 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
                     <Box component={'div'} sx={{ height: 1 }}>
                         <Box component={'div'} sx={{ height: 1 }}>
                             <Canvas shadows>
-                                {/* <Suspense> */}
                                 <Watch
                                     tab_name={scrollableTab}
+                                    text={text}
                                     color={color}
                                     colors={tabs.find((t) => t.tab_name === scrollableTab)?.colors}
                                     colorObject={currentColorObject}
@@ -280,8 +307,6 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
                                     <OrbitControls />
                                 )}
 
-
-                                {/* </Suspense> */}
 
                                 {/* <color attach="background" args={['#f4f4f2']} /> */}
 
@@ -325,11 +350,17 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
                         {tabs.map((tab: IProductTabs) => (
                             <Tab key={tab.tab_name} label={tab.tab_name} value={tab.tab_name} />
                         ))}
+                        {(model_path === '/models/salib-clock.glb') && (
+                            <Tab label={'Text'} value={'text'} />
+                        )}
                     </Tabs>
                 </Box>
 
                 <Stack direction={{ xs: 'column', md: 'row' }} sx={{ mx: 0, mt: 2 }} justifyContent={'center'} spacing={1}>
                     <Box component={'div'} textAlign={'center'}>
+                        {(model_path === '/models/salib-clock.glb') && (
+                            <input onChange={(e) => setText(e.target.value)} />
+                        )}
                         <ColorPicker
                             colors={tabs.find((tab) => tab.tab_name === scrollableTab)?.colors.map((color) => color.code) || ['#fff']}
                             selected={currentColorObject[scrollableTab] || ''}
