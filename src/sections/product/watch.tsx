@@ -103,7 +103,9 @@ function Watch({ text, tab_name, color, colorObject, model_path, colors, onSendC
                     // anchorY="middle"  
                     >
                         {text}
-                        <primitive object={materials['salib'].clone()} />
+                        {(model_path === '/models/salib-clock.glb') && (
+                            <primitive object={materials['salib']?.clone()} />
+                        )}
                     </Text3D>
                 </Center>
             </group>
