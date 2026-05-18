@@ -27,7 +27,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     const logo = (
       <Box
         component="img"
-        src="/logo/bbb.png"
+        src="/logo/Black Elegant Modern Name Initials Monogram Logo.png"
         sx={{ width: 50, height: 50, cursor: 'pointer', ...sx }}
       />
     );
