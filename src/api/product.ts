@@ -32,17 +32,18 @@ export function useGetProducts() {
 export function useGetProduct(productId: string) {
   const URL = productId ? endpoints.product.details(productId) : '';
 
-  const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
+  // const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
   const memoizedValue = useMemo(
     () => ({
       // product: data as IProductItem,
       product: SAMPLE_PRODUCTS.find((p) => p.id === +productId),
-      productLoading: isLoading,
-      productError: error,
-      productValidating: isValidating,
+      productLoading: false,
+      productError: false,
+      productValidating: false,
     }),
-    [data, error, isLoading, isValidating]
+    []
+    // [data, error, isLoading, isValidating]
   );
 
   return memoizedValue;
