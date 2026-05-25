@@ -24,8 +24,8 @@ function CameraController({ zoom, position }: { zoom: number, position: any }) {
 }
 
 const store = createXRStore({
-  hitTest: true,
-  planeDetection: true,
+    hitTest: true,
+    // planeDetection: true,
 });
 
 function ARPlacement({ children }: any) {
@@ -52,6 +52,7 @@ function ARPlacement({ children }: any) {
 
     return (
         <group
+            rotation={[0, 0, -Math.PI / 2]}
             ref={ref}
             onClick={() => setPlaced(true)}
         >
