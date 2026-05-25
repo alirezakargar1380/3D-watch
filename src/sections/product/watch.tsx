@@ -9,6 +9,7 @@ import { ReturnType } from 'src/hooks/use-boolean'
 import Iconify from 'src/components/iconify'
 import * as THREE from 'three';
 import { IProductTabs } from 'src/types/product';
+import { XR, createXRStore, useXRHitTest } from "@react-three/xr";
 
 function CameraController({ zoom, position }: { zoom: number, position: any }) {
     const { camera } = useThree();
@@ -22,6 +23,39 @@ function CameraController({ zoom, position }: { zoom: number, position: any }) {
     return null
 }
 
+const store = createXRStore();
+
+function ARPlacement({ children }: any) {
+    const [placed, setPlaced] = useState(false);
+    const ref = useRef<THREE.Group>(null);
+
+    useXRHitTest((results, getWorldMatrix) => {
+        if (placed || !ref.current) return;
+
+        const hit = results[0];
+
+        if (!hit) return;
+
+        const matrix = new THREE.Matrix4();
+
+        getWorldMatrix(matrix, hit);
+
+        matrix.decompose(
+            ref.current.position,
+            ref.current.quaternion,
+            ref.current.scale
+        );
+    }, "viewer", "plane");
+
+    return (
+        <group
+            ref={ref}
+            onClick={() => setPlaced(true)}
+        >
+            {children}
+        </group>
+    );
+}
 
 function Watch({ text, tab_name, color, colorObject, model_path, colors, onSendColor }: any) {
     const { materials, nodes }: any = useGLTF(model_path)
@@ -284,44 +318,45 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
                     <IconButton onClick={() => setIsLocked(!isLocked)}>
                         <Iconify color={'black'} icon={!isLocked ? "ic:twotone-lock" : "eva:unlock-outline"} width={36} />
                     </IconButton>
+                    <Button onClick={() => store.enterAR()}>Enter AR</Button>
                 </Box>
                 <Box height={1} component={'div'}>
                     <Box component={'div'} sx={{ height: 1 }}>
                         <Box component={'div'} sx={{ height: 1 }}>
                             <Canvas shadows>
-                                <Watch
-                                    tab_name={scrollableTab}
-                                    text={text}
-                                    color={color}
-                                    colors={tabs.find((t) => t.tab_name === scrollableTab)?.colors}
-                                    colorObject={currentColorObject}
-                                    model_path={model_path}
-                                    onSendColor={(obj: any) => setnewOb(obj)}
-                                />
-                                {(!isLocked) && (
-                                    <ManualCameraController
-                                        zoomLevel={currentTab?.zoom || 1}
-                                        camPos={[Number(currentTab?.x) || 0, Number(currentTab?.y) || 10, Number(currentTab?.z) || 0]}
-                                        targetPos={targetXYZ}
-                                    />
-                                )}
-                                {(isLocked) && (
-                                    <OrbitControls />
-                                )}
+                                <XR store={store}>
+                                    <ARPlacement>
+                                        <Watch
+                                            tab_name={scrollableTab}
+                                            text={text}
+                                            color={color}
+                                            colors={tabs.find((t) => t.tab_name === scrollableTab)?.colors}
+                                            colorObject={currentColorObject}
+                                            model_path={model_path}
+                                            onSendColor={(obj: any) => setnewOb(obj)}
+                                        />
+                                        {(!isLocked) && (
+                                            <ManualCameraController
+                                                zoomLevel={currentTab?.zoom || 1}
+                                                camPos={[Number(currentTab?.x) || 0, Number(currentTab?.y) || 10, Number(currentTab?.z) || 0]}
+                                                targetPos={targetXYZ}
+                                            />
+                                        )}
+                                        {(isLocked) && (
+                                            <OrbitControls />
+                                        )}
 
 
-                                {/* <color attach="background" args={['#f4f4f2']} /> */}
+                                        {/* <color attach="background" args={['#f4f4f2']} /> */}
 
-                                {/* <CameraController zoom={currentTab?.zoom || 1} position={[currentTab?.x || 0, currentTab?.y || 10, currentTab?.z || 0]} /> */}
+                                        {/* <CameraController zoom={currentTab?.zoom || 1} position={[currentTab?.x || 0, currentTab?.y || 10, currentTab?.z || 0]} /> */}
 
-                                <color attach="background" args={['#eeeeee']} />
-                                <Environment files='/city.exr' blur={60} />
+                                        <color attach="background" args={['#eeeeee']} />
+                                        <Environment files='/city.exr' blur={60} />
 
-                                <ambientLight intensity={0.05} />
-
-
-
-
+                                        <ambientLight intensity={0.05} />
+                                    </ARPlacement>
+                                </XR>
                             </Canvas>
                         </Box>
 
