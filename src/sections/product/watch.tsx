@@ -23,7 +23,10 @@ function CameraController({ zoom, position }: { zoom: number, position: any }) {
     return null
 }
 
-const store = createXRStore();
+const store = createXRStore({
+  hitTest: true,
+  planeDetection: true,
+});
 
 function ARPlacement({ children }: any) {
     const [placed, setPlaced] = useState(false);
