@@ -9,6 +9,7 @@ import { ReturnType } from 'src/hooks/use-boolean'
 import Iconify from 'src/components/iconify'
 import * as THREE from 'three';
 import { IProductTabs } from 'src/types/product';
+import CustomColorPicker from './color-picker'
 
 function CameraController({ zoom, position }: { zoom: number, position: any }) {
     const { camera } = useThree();
@@ -368,6 +369,7 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
                             selected={currentColorObject[scrollableTab] || ''}
                             onSelectColor={(color: any) => handleSelectColors(color, currentTab?.tab_name || '')}
                         />
+                        <CustomColorPicker />
                     </Box>
 
 
