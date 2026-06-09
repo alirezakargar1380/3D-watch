@@ -105,8 +105,8 @@ export default function CustomColorPicker({ onChange }: ColorPickerProps) {
 
     // Sync state upward when color updates
     useEffect(() => {
-        if (onChange) onChange(rgbaString);
-    }, [rgbaString, onChange]);
+        if (onChange) onChange(rgbToHex(r, g, b));
+    }, [rgbaString]);
 
     // Sync internal HEX string input when sliders move
     useEffect(() => {
@@ -173,11 +173,15 @@ export default function CustomColorPicker({ onChange }: ColorPickerProps) {
     return (
         <Paper
             elevation={4}
+            style={{
+                background: 'transparent',
+                boxShadow: 'none'
+            }}
             sx={{
                 width: 280,
                 borderRadius: "16px",
                 overflow: "hidden",
-                backgroundColor: "#fff",
+                backgroundColor: "transparent",
                 display: "flex",
                 flexDirection: "column",
                 gap: 1,
@@ -233,7 +237,7 @@ export default function CustomColorPicker({ onChange }: ColorPickerProps) {
             />
 
             {/* 3. Alpha / Transparency Slider */}
-            <BaseSlider
+            {/* <BaseSlider
                 min={0}
                 max={1}
                 step={0.01}
@@ -251,7 +255,7 @@ export default function CustomColorPicker({ onChange }: ColorPickerProps) {
                         backgroundPosition: "0 0, 0 0, 6px 6px",
                     },
                 }}
-            />
+            /> */}
 
             {/* 4. HEX Input Section */}
             <Box component={'div'} sx={{ p: 2, display: "flex", justifyContent: "center", borderTop: "1px solid #f0f0f0" }}>

@@ -10,6 +10,7 @@ import Iconify from 'src/components/iconify'
 import * as THREE from 'three';
 import { IProductTabs } from 'src/types/product';
 import CustomColorPicker from './color-picker'
+import CustomPopover, { usePopover } from 'src/components/custom-popover'
 
 function CameraController({ zoom, position }: { zoom: number, position: any }) {
     const { camera } = useThree();
@@ -24,23 +25,21 @@ function CameraController({ zoom, position }: { zoom: number, position: any }) {
 }
 
 
-function Watch({ text, tab_name, color, colorObject, model_path, colors, onSendColor }: any) {
+function Watch({ text, tab_name, color, colorObject, model_path, tab_details, onSendColor }: any) {
     const { materials, nodes }: any = useGLTF(model_path)
 
     useEffect(() => {
-        const selectedColorObject = colors?.find((c: any) => c.code === color);
-        // console.log('nodes', nodes['Cylinder'].position);
-        console.log('tab_name', tab_name);
-        console.log('colors', colors);
-        console.log('color', colorObject);
-        console.log('selectedColorObject', selectedColorObject);
-        console.log('materials', materials);
+        // const selectedColorObject = colors?.find((c: any) => c. === color);
+        // return console.log('watch effect', colorObject, tab_name, tab_details)
+        const selectedColorObject = tab_details?.colors.find((c: any) => c.code === color);
+
+        // return console.log(selectedColorObject, tab_details)
 
         const newObjectColor = { ...colorObject }
         Object.keys(nodes)?.map((key, index) => {
             const child = nodes[key];
 
-            if (!selectedColorObject) return console.log('cant find color object')
+            // if (!selectedColorObject) return console.log('cant find color object')
 
             // if (colorObject[child?.material?.name]) {
             //     console.log(child.material.name, colorObject[child?.material?.name])
@@ -67,12 +66,18 @@ function Watch({ text, tab_name, color, colorObject, model_path, colors, onSendC
                 if (selectedColorObject?.roughness)
                     child.material.roughness = +selectedColorObject.roughness;
             } else {
-                if (selectedColorObject.objects.includes(child.name)) {
+                if (selectedColorObject?.objects.includes(child.name)) {
                     child.material = materials[selectedColorObject.material_name].clone();
                     child.material.color.set(selectedColorObject.code);
                     if (selectedColorObject?.roughness)
                         child.material.roughness = +colorObject.roughness;
                 }
+            }
+
+            if (!selectedColorObject) {
+                child.material = materials[tab_details.key].clone();
+                child.material.color.set(color);
+                console.log('cant find color object', tab_details, colorObject, color)
             }
 
         })
@@ -128,49 +133,11 @@ function Watch({ text, tab_name, color, colorObject, model_path, colors, onSendC
     )
 }
 
-// interface CameraProps {
-//     camPos: [number, number, number];    // Where the camera should go
-//     targetPos: [number, number, number]; // Where the camera should look
-//     zoomLevel: number;                   // For Orthographic zoom or FOV adjustment
-// }
 interface CameraProps {
     camPos: [number, number, number];    // Where the camera is
     targetPos: [number, number, number]; // What the camera looks at
     zoomLevel: number;
 }
-
-// function ManualCameraController({ camPos, targetPos, zoomLevel }: CameraProps) {
-//     const vCam = new THREE.Vector3();
-//     const vTar = new THREE.Vector3();
-
-//     useFrame((state) => {
-//         state.camera.position.lerp(vCam.set(...camPos), 0.1);
-
-//         const currentTarget =
-//             state.camera.userData.target || new THREE.Vector3(0, 0, 0);
-//         currentTarget.lerp(vTar.set(...targetPos), 0.1);
-//         state.camera.userData.target = currentTarget;
-
-//         // Avoid the singularity by using a fallback up vector
-//         const forward = new THREE.Vector3()
-//             .subVectors(currentTarget, state.camera.position)
-//             .normalize();
-//         const defaultUp = new THREE.Vector3(0, 1, 0);
-//         if (Math.abs(forward.dot(defaultUp)) > 0.999) {
-//             console.log("up")
-//             state.camera.up.set(0, 1, -1);  // or (1,0,0) – whichever gives the desired orientation
-//         } else {
-//             console.log("down")
-//             state.camera.up.set(0, 1, 0);
-//         }
-//         state.camera.lookAt(currentTarget);
-
-//         state.camera.zoom = THREE.MathUtils.lerp(state.camera.zoom, zoomLevel, 0.1);
-//         state.camera.updateProjectionMatrix();
-//     });
-
-//     return null;
-// }
 
 function ManualCameraController({ camPos, targetPos, zoomLevel }: CameraProps) {
     const vCam = useRef(new THREE.Vector3());
@@ -218,6 +185,7 @@ interface Props {
 }
 
 export default function Viewer({ dialog, model_path, tabs }: Props) {
+    console.log('tabs', tabs)
     const [currentColorObject, setOb] = useState<any>({});
     const [color, setColor] = useState('');
     const [newColorObject, setnewOb] = useState<any>({});
@@ -226,8 +194,10 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
     const [isLocked, setIsLocked] = useState(false);
     const [scrollableTab, setScrollableTab] = useState(tabs?.[0]?.tab_name);
     const targetXYZ: [number, number, number] = [0, 0, 0];
+    const customizedPopover = usePopover();
 
     const handleChange = (tab_name: string, newValue: any) => {
+        console.log("handleChange");
         setOb((prevState: any) => ({
             ...prevState,
             [tab_name]: newValue,
@@ -240,7 +210,6 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
 
     const handleSelectColors = (color: any, tab_name: string) => {
         setColor(color)
-        // setTabName(tab_name)
         handleChange(tab_name, color);
     }
 
@@ -259,19 +228,16 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
 
     return (
 
-        <Dialog open={dialog.value} onClose={dialog.onFalse} fullScreen
-
+        <Dialog
+            open={dialog.value}
+            onClose={dialog.onFalse}
+            fullScreen
             PaperProps={{
                 sx: {
                     backgroundColor: '#f4f4f2'
                 }
             }}
         >
-            {/* <DialogTitle sx={{ backgroundColor: 'transparent!important' }}>
-                <IconButton color='error' onClick={dialog.onFalse}>
-                    Close
-                </IconButton>
-            </DialogTitle> */}
             <DialogContent sx={{ px: 0 }}>
                 <Box component={'div'} position={'absolute'} zIndex={10} top={20} right={20}>
                     <Button color='secondary' variant='outlined' onClick={() => {
@@ -294,7 +260,7 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
                                     tab_name={scrollableTab}
                                     text={text}
                                     color={color}
-                                    colors={tabs.find((t) => t.tab_name === scrollableTab)?.colors}
+                                    tab_details={tabs.find((t) => t.tab_name === scrollableTab)}
                                     colorObject={currentColorObject}
                                     model_path={model_path}
                                     onSendColor={(obj: any) => setnewOb(obj)}
@@ -310,19 +276,9 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
                                     <OrbitControls />
                                 )}
 
-
-                                {/* <color attach="background" args={['#f4f4f2']} /> */}
-
-                                {/* <CameraController zoom={currentTab?.zoom || 1} position={[currentTab?.x || 0, currentTab?.y || 10, currentTab?.z || 0]} /> */}
-
                                 <color attach="background" args={['#eeeeee']} />
                                 <Environment files='/city.exr' blur={60} />
-
                                 <ambientLight intensity={0.05} />
-
-
-
-
                             </Canvas>
                         </Box>
 
@@ -359,21 +315,47 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
                     </Tabs>
                 </Box>
 
-                <Stack direction={{ xs: 'column', md: 'row' }} sx={{ mx: 0, mt: 2 }} justifyContent={'center'} spacing={1}>
-                    <Box component={'div'} textAlign={'center'}>
-                        {(model_path === '/models/salib-clock.glb') && (
-                            <input onChange={(e) => setText(e.target.value)} />
-                        )}
-                        <ColorPicker
-                            colors={tabs.find((tab) => tab.tab_name === scrollableTab)?.colors.map((color) => color.code) || ['#fff']}
-                            selected={currentColorObject[scrollableTab] || ''}
-                            onSelectColor={(color: any) => handleSelectColors(color, currentTab?.tab_name || '')}
+                {/* <Stack direction={{ xs: 'column', md: 'row' }} sx={{ mx: 0, mt: 2 }} justifyContent={'center'} spacing={1}> */}
+                <Box component={'div'} textAlign={'center'} mt={2} gap={1} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                    {(model_path === '/models/salib-clock.glb') && (
+                        <input onChange={(e) => setText(e.target.value)} />
+                    )}
+                    <ColorPicker
+                        colors={tabs.find((tab) => tab.tab_name === scrollableTab)?.colors.map((color) => color.code) || ['#fff']}
+                        selected={currentColorObject[scrollableTab] || ''}
+                        onSelectColor={(color: any) => handleSelectColors(color, currentTab?.tab_name || '')}
+                    />
+                    <Box sx={{ width: '2px', height: '20px', bgcolor: '#d3d3d3' }} component={'div'} />
+                    <Box
+                        sx={{
+                            ml: 1,
+                            background:
+                                "linear-gradient(45deg, #ff0000 0%, #ea00ff 50%,#ff7cff  100%)",
+                            width: 20, height: 20,
+                            borderRadius: 2,
+                            border: '0.5px solid #bbbbbb'
+                        }}
+                        component={'div'}
+                        onClick={customizedPopover.onOpen}
+                    />
+                    <CustomPopover
+                        open={customizedPopover.open}
+                        onClose={customizedPopover.onClose}
+                        arrow={'bottom-left'}
+                    >
+                        <CustomColorPicker
+                            onChange={(hex) => {
+                                if (!hex) return
+
+                                console.log('calling hex', hex)
+                                handleSelectColors(`#${hex}`, currentTab?.tab_name || '')
+                            }}
                         />
-                        <CustomColorPicker />
-                    </Box>
+                    </CustomPopover>
+                </Box>
 
 
-                    {/* {Object.keys(ob).map((key: string) => {
+                {/* {Object.keys(ob).map((key: string) => {
                         return (
                             <Stack direction={'column'}>
                                 <Box component={'div'}>
@@ -383,13 +365,10 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
                             </Stack>
                         )
                     })} */}
-                </Stack>
+                {/* </Stack> */}
 
                 {/* <Button variant='contained' color='primary'>Send This To Cart</Button> */}
             </DialogActions>
         </Dialog>
-
-
-
     )
 }

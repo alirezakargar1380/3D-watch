@@ -49,7 +49,7 @@ export default function ProductDetailsSummary({
   ...other
 }: Props) {
   const router = useRouter();
-  const dialog = useBoolean(false);
+  const dialog = useBoolean(true);
   const {
     id,
     name,
