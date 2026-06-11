@@ -28,6 +28,7 @@ import IncrementerButton from './common/incrementer-button';
 import Viewer from './watch';
 import { useBoolean } from 'src/hooks/use-boolean';
 import axiosInstance, { customer_axios, endpoints } from 'src/utils/axios';
+import CustomazationDialog from './watch';
 
 // ----------------------------------------------------------------------
 
@@ -49,7 +50,7 @@ export default function ProductDetailsSummary({
   ...other
 }: Props) {
   const router = useRouter();
-  const dialog = useBoolean(true);
+  const dialog = useBoolean();
   const {
     id,
     name,
@@ -272,6 +273,13 @@ export default function ProductDetailsSummary({
     <Stack direction="row" spacing={2}>
       <Button
         fullWidth
+        size="large"
+        // type="submit" 
+        variant="contained" onClick={dialog.onTrue} disabled={disabledActions}>
+        Customize Clock
+      </Button>
+      <Button
+        fullWidth
         disabled={isMaxQuantity || disabledActions}
         size="large"
         color="warning"
@@ -283,13 +291,7 @@ export default function ProductDetailsSummary({
         Add to Cart
       </Button>
 
-      <Button
-        fullWidth
-        size="large"
-        // type="submit" 
-        variant="contained" onClick={dialog.onTrue} disabled={disabledActions}>
-        Customize Clock
-      </Button>
+      
     </Stack>
   );
 
@@ -366,7 +368,7 @@ export default function ProductDetailsSummary({
         {renderActions}
 
 
-        <Viewer
+        <CustomazationDialog
           dialog={dialog}
           model_path={product.clock}
           tabs={product.tabs}

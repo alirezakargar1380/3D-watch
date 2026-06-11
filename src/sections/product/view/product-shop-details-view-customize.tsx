@@ -29,6 +29,7 @@ import { ProductDetailsSkeleton } from '../product-skeleton';
 import ProductDetailsSummary from '../product-details-summary';
 import ProductDetailsCarousel from '../product-details-carousel';
 import ProductDetailsDescription from '../product-details-description';
+import { Viewer } from '../watch';
 
 // ----------------------------------------------------------------------
 
@@ -61,7 +62,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
 
   const checkout = useCheckoutContext();
 
-  
+
 
   const [currentTab, setCurrentTab] = useState('description');
 
@@ -108,14 +109,23 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
 
       <Grid container spacing={{ xs: 3, md: 5, lg: 8 }}>
         <Grid xs={12} md={6} lg={7}>
-          <ProductDetailsCarousel product={{
+          <Viewer
+            model_path={product.clock}
+            tabs={product.tabs}
+            isLocked={true}
+            // targetXYZ={[0, 0, 0]}
+            tab_name={product?.tabs?.[0].tab_name}
+            color={product?.tabs?.[0].default_color}
+            currentColorObject={{}}
+          />
+          {/* <ProductDetailsCarousel product={{
             images: [
               '/assets/images/Untitled3.jpg',
               '/assets/images/Untitled2.jpg',
               '/assets/images/Untitled4.jpg',
 
             ]
-          }} />
+          }} /> */}
         </Grid>
 
         <Grid xs={12} md={6} lg={5}>

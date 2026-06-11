@@ -1,7 +1,7 @@
 "use client"
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Environment, OrbitControls, Text, Center, Text3D, useGLTF } from '@react-three/drei'
+import { Environment, OrbitControls, Text, Center, Text3D, useGLTF, CameraControls } from '@react-three/drei'
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { Box, Button, Dialog, DialogActions, DialogContent, IconButton, Stack, Tab, Tabs } from '@mui/material'
 import { ColorPicker, ColorPreview } from 'src/components/color-utils'
@@ -11,19 +11,6 @@ import * as THREE from 'three';
 import { IProductTabs } from 'src/types/product';
 import CustomColorPicker from './color-picker'
 import CustomPopover, { usePopover } from 'src/components/custom-popover'
-
-function CameraController({ zoom, position }: { zoom: number, position: any }) {
-    const { camera } = useThree();
-
-    useEffect(() => {
-        camera.zoom = zoom;
-        camera.position.set(position[0], position[1], position[2])
-        camera.updateProjectionMatrix()
-    }, [zoom, position, camera])
-
-    return null
-}
-
 
 function Watch({ text, tab_name, color, colorObject, model_path, tab_details, onSendColor }: any) {
     const { materials, nodes }: any = useGLTF(model_path)
@@ -65,16 +52,21 @@ function Watch({ text, tab_name, color, colorObject, model_path, tab_details, on
                 child.material.color.set(selectedColorObject.code);
                 if (selectedColorObject?.roughness)
                     child.material.roughness = +selectedColorObject.roughness;
+
+                return
             } else {
                 if (selectedColorObject?.objects.includes(child.name)) {
                     child.material = materials[selectedColorObject.material_name].clone();
                     child.material.color.set(selectedColorObject.code);
                     if (selectedColorObject?.roughness)
                         child.material.roughness = +colorObject.roughness;
+
+                    return
                 }
             }
 
-            if (!selectedColorObject) {
+            // SHOUD CHANGE
+            if (!selectedColorObject && tab_details) {
                 child.material = materials[tab_details.key].clone();
                 child.material.color.set(color);
                 console.log('cant find color object', tab_details, colorObject, color)
@@ -184,12 +176,122 @@ interface Props {
     tabs: IProductTabs[];
 }
 
-export default function Viewer({ dialog, model_path, tabs }: Props) {
+interface ViewerProps {
+    isLocked?: boolean;
+    tabs: IProductTabs[];
+    tab_name?: string
+    text?: string
+    color?: string
+    model_path?: string
+    currentColorObject: any
+    targetXYZ?: [number, number, number]
+    onGetColor?: () => void
+}
+
+// function FreeLookControls({
+//     camPos,
+// }: {
+//     camPos: [number, number, number];
+// }) {
+//     const controlsRef = useRef<any>(null);
+//     const { camera } = useThree();
+
+//     useEffect(() => {
+//         camera.position.set(...camPos);
+//         controlsRef.current?.update();
+//     }, [camera, camPos]);
+
+//     return <OrbitControls ref={controlsRef} makeDefault />;
+// }
+
+function FreeLookControls({
+  camPos,
+  targetPos = [0, 0, 0],
+  zoomLevel = 1,
+}: {
+  camPos: [number, number, number];
+  targetPos?: [number, number, number];
+  zoomLevel?: number;
+}) {
+  const controlsRef = useRef<any>(null);
+  const { camera } = useThree();
+
+  useEffect(() => {
+    const target = new THREE.Vector3(...targetPos);
+    const cam = new THREE.Vector3(...camPos);
+
+    const dir = cam.clone().sub(target).normalize();
+
+    // smaller zoomLevel = closer, larger = farther
+    const distance = 10 / zoomLevel;
+
+    camera.position.copy(target.clone().add(dir.multiplyScalar(distance)));
+    controlsRef.current?.target.copy(target);
+    controlsRef.current?.update();
+  }, []);
+
+  return <OrbitControls ref={controlsRef} makeDefault enableZoom />;
+}
+
+export function Viewer({
+    isLocked,
+    tabs,
+    tab_name,
+    text = '',
+    color,
+    model_path,
+    currentColorObject,
+    targetXYZ = [0, 10, 0],
+    onGetColor
+}: ViewerProps) {
+
+    const currentTab = tabs.find((tb) => tb.tab_name === tab_name);
+
+    console.log('currentTab', currentTab)
+
+    return (
+        <Box height={1} component={'div'}>
+            <Canvas shadows>
+                <Watch
+                    tab_name={tab_name}
+                    text={text}
+                    color={color}
+                    tab_details={tabs.find((t) => t.tab_name === tab_name)}
+                    colorObject={currentColorObject}
+                    model_path={model_path}
+                    // ON GET FUNC Should use in here
+                    onSendColor={(obj: any) => { }}
+                />
+                {(!isLocked) && (
+                    <ManualCameraController
+                        zoomLevel={currentTab?.zoom || 1}
+                        camPos={[Number(currentTab?.x) || 0, Number(currentTab?.y) || 10, Number(currentTab?.z) || 0]}
+                        targetPos={targetXYZ}
+                    />
+                )}
+                {(isLocked) && (
+                    <FreeLookControls
+                        camPos={[
+                            0,10,0
+                        ]}
+                        zoomLevel={4}
+                    />
+                )}
+
+                <color attach="background" args={['#f8f8f8']} />
+                <Environment files='/city.exr' blur={60} />
+                <ambientLight intensity={0.05} />
+            </Canvas>
+        </Box>
+    )
+
+}
+
+export default function CustomazationDialog({ dialog, model_path, tabs }: Props) {
     console.log('tabs', tabs)
     const [currentColorObject, setOb] = useState<any>({});
     const [color, setColor] = useState('');
     const [newColorObject, setnewOb] = useState<any>({});
-    const [zoom, setZoom] = useState(4);
     const [text, setText] = useState('');
     const [isLocked, setIsLocked] = useState(false);
     const [scrollableTab, setScrollableTab] = useState(tabs?.[0]?.tab_name);
@@ -197,7 +299,6 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
     const customizedPopover = usePopover();
 
     const handleChange = (tab_name: string, newValue: any) => {
-        console.log("handleChange");
         setOb((prevState: any) => ({
             ...prevState,
             [tab_name]: newValue,
@@ -220,11 +321,32 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
         for (let i = 0; i < tabs.length; i++) {
             const tab = tabs[i];
             if (tab.tab_name === scrollableTab) {
-                console.log('tab def', tab)
                 handleSelectColors(tab.default_color, tab.tab_name)
             }
         }
     }, [scrollableTab])
+
+    const Header = () => (
+        <>
+            <Box component={'div'} position={'absolute'} zIndex={10} top={20} right={20}>
+                <Button
+                    color='secondary'
+                    variant='outlined'
+                    onClick={() => {
+                        dialog.onFalse()
+                        // afterSubmit(currentColorObject)
+                    }}
+                >
+                    done
+                </Button>
+            </Box>
+            <Box component={'div'} position={'absolute'} zIndex={10} top={20} left={20}>
+                <IconButton onClick={() => setIsLocked(!isLocked)}>
+                    <Iconify color={'black'} icon={!isLocked ? "ic:twotone-lock" : "eva:unlock-outline"} width={36} />
+                </IconButton>
+            </Box>
+        </>
+    )
 
     return (
 
@@ -239,50 +361,18 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
             }}
         >
             <DialogContent sx={{ px: 0 }}>
-                <Box component={'div'} position={'absolute'} zIndex={10} top={20} right={20}>
-                    <Button color='secondary' variant='outlined' onClick={() => {
-                        dialog.onFalse()
-                        // afterSubmit(currentColorObject)
-                    }}>
-                        done
-                    </Button>
-                </Box>
-                <Box component={'div'} position={'absolute'} zIndex={10} top={20} left={20}>
-                    <IconButton onClick={() => setIsLocked(!isLocked)}>
-                        <Iconify color={'black'} icon={!isLocked ? "ic:twotone-lock" : "eva:unlock-outline"} width={36} />
-                    </IconButton>
-                </Box>
-                <Box height={1} component={'div'}>
-                    <Box component={'div'} sx={{ height: 1 }}>
-                        <Box component={'div'} sx={{ height: 1 }}>
-                            <Canvas shadows>
-                                <Watch
-                                    tab_name={scrollableTab}
-                                    text={text}
-                                    color={color}
-                                    tab_details={tabs.find((t) => t.tab_name === scrollableTab)}
-                                    colorObject={currentColorObject}
-                                    model_path={model_path}
-                                    onSendColor={(obj: any) => setnewOb(obj)}
-                                />
-                                {(!isLocked) && (
-                                    <ManualCameraController
-                                        zoomLevel={currentTab?.zoom || 1}
-                                        camPos={[Number(currentTab?.x) || 0, Number(currentTab?.y) || 10, Number(currentTab?.z) || 0]}
-                                        targetPos={targetXYZ}
-                                    />
-                                )}
-                                {(isLocked) && (
-                                    <OrbitControls />
-                                )}
-
-                                <color attach="background" args={['#eeeeee']} />
-                                <Environment files='/city.exr' blur={60} />
-                                <ambientLight intensity={0.05} />
-                            </Canvas>
-                        </Box>
-
-                    </Box>
+                <Box component={'div'}>
+                    <Header />
+                    <Viewer
+                        isLocked
+                        tabs={tabs}
+                        tab_name={scrollableTab}
+                        color={color}
+                        currentColorObject={currentColorObject}
+                        model_path={model_path}
+                        text={text}
+                        targetXYZ={targetXYZ}
+                    />
                 </Box>
             </DialogContent>
             <DialogActions sx={{
@@ -346,28 +436,11 @@ export default function Viewer({ dialog, model_path, tabs }: Props) {
                         <CustomColorPicker
                             onChange={(hex) => {
                                 if (!hex) return
-
-                                console.log('calling hex', hex)
                                 handleSelectColors(`#${hex}`, currentTab?.tab_name || '')
                             }}
                         />
                     </CustomPopover>
                 </Box>
-
-
-                {/* {Object.keys(ob).map((key: string) => {
-                        return (
-                            <Stack direction={'column'}>
-                                <Box component={'div'}>
-                                    {key}
-                                </Box>
-                                <MuiColorInput format="hex" value={'#f4f4f2'} onChange={(color) => handleChange(TABS.find((tb) => tb.value === scrollableTab)?.key || '', color)} />
-                            </Stack>
-                        )
-                    })} */}
-                {/* </Stack> */}
-
-                {/* <Button variant='contained' color='primary'>Send This To Cart</Button> */}
             </DialogActions>
         </Dialog>
     )
