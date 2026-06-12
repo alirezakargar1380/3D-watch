@@ -30,6 +30,8 @@ import ProductDetailsSummary from '../product-details-summary';
 import ProductDetailsCarousel from '../product-details-carousel';
 import ProductDetailsDescription from '../product-details-description';
 import { Viewer } from '../watch';
+import { fonts, IFont } from 'src/utils/fonts';
+import { IFontFunction } from 'src/types/product';
 
 // ----------------------------------------------------------------------
 
@@ -62,8 +64,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
 
   const checkout = useCheckoutContext();
 
-  const [text, setText] = useState('');
-
+  const [font, setFont] = useState<IFontFunction>();
 
   const [currentTab, setCurrentTab] = useState('description');
 
@@ -114,7 +115,9 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
             model_path={product.clock}
             tabs={product.tabs}
             isLocked={true}
-            text={text}
+            text={font?.text}
+            font={font?.font_file}
+            font_size={font?.font_size}
             // targetXYZ={[0, 0, 0]}
             tab_name={product?.tabs?.[0].tab_name}
             color={product?.tabs?.[0].default_color}
@@ -136,7 +139,11 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
             items={checkout.items}
             onAddCart={checkout.onAddToCart}
             onGotoStep={checkout.onGotoStep}
-            onSendText={(text: string) => setText(text)}
+            onSendText={(font: IFontFunction) => {
+              setFont({
+                ...font
+              })
+            }}
           />
         </Grid>
       </Grid>

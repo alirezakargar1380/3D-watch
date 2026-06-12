@@ -1,5 +1,7 @@
 // ----------------------------------------------------------------------
 
+import { IFont } from "src/utils/fonts";
+
 export type IProductFilterValue = string | string[] | number | number[];
 
 export type IProductFilters = {
@@ -95,6 +97,12 @@ export type IProductItem = {
 };
 
 export type IProductTableFilterValue = string | string[];
+
+export type IFontFunction = {
+  text: string;
+  font_file: string
+  font_size: number
+}
 
 export type IProductTableFilters = {
   name: string;

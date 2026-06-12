@@ -21,7 +21,7 @@ import Iconify from 'src/components/iconify';
 import { ColorPicker } from 'src/components/color-utils';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-import { IProductItem } from 'src/types/product';
+import { IFontFunction, IProductItem } from 'src/types/product';
 import { ICheckoutItem } from 'src/types/checkout';
 
 import IncrementerButton from './common/incrementer-button';
@@ -29,6 +29,7 @@ import Viewer from './watch';
 import { useBoolean } from 'src/hooks/use-boolean';
 import axiosInstance, { customer_axios, endpoints } from 'src/utils/axios';
 import CustomazationDialog from './watch';
+import { fonts, FontSizes, IFont } from 'src/utils/fonts';
 
 // ----------------------------------------------------------------------
 
@@ -39,7 +40,7 @@ type Props = {
   onGotoStep?: (step: number) => void;
   onAddCart?: (cartItem: ICheckoutItem) => void;
   onCustomize?: () => void;
-  onSendText: (text: string) => void;
+  onSendText: (font: IFontFunction) => void;
 };
 
 export default function ProductDetailsSummary({
@@ -82,6 +83,8 @@ export default function ProductDetailsSummary({
     // available,
     // price,
     text: 'hello',
+    font_file: fonts[0].file,
+    font_size: FontSizes[0],
     clock: product.clock,
     product: { id },
     colors: "#fff",
@@ -98,8 +101,12 @@ export default function ProductDetailsSummary({
   const values = watch();
 
   useEffect(() => {
-    onSendText(values.text)
-  }, [values.text])
+    onSendText({
+      text: values.text,
+      font_file: values.font_file,
+      font_size: values.font_size
+    })
+  }, [values.text, values.font_file, values.font_size])
 
   useEffect(() => {
     if (product) {
@@ -233,7 +240,7 @@ export default function ProductDetailsSummary({
         </Typography>
 
         <RHFSelect
-          name="font_family"
+          name="font_file"
           size="small"
           sx={{
             maxWidth: 88,
@@ -244,8 +251,33 @@ export default function ProductDetailsSummary({
             },
           }}
         >
-          {['Robo', 'Shabnam', 'Vladimir'].map((size) => (
-            <MenuItem key={size} value={size}>
+          {fonts.map((font: IFont, index: number) => (
+            <MenuItem key={index} value={font.file}>
+              {font.name}
+            </MenuItem>
+          ))}
+        </RHFSelect>
+      </Stack>
+
+      <Stack direction="row">
+        <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
+          Font Size
+        </Typography>
+
+        <RHFSelect
+          name="font_size"
+          size="small"
+          sx={{
+            maxWidth: 88,
+            [`& .${formHelperTextClasses.root}`]: {
+              mx: 0,
+              mt: 1,
+              textAlign: 'right',
+            },
+          }}
+        >
+          {FontSizes.map((size: number, index: number) => (
+            <MenuItem key={index} value={size}>
               {size}
             </MenuItem>
           ))}

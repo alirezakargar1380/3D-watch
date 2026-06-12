@@ -12,15 +12,14 @@ import { IProductTabs } from 'src/types/product';
 import CustomColorPicker from './color-picker'
 import CustomPopover, { usePopover } from 'src/components/custom-popover'
 
-function Watch({ text, tab_name, color, colorObject, model_path, tab_details, onSendColor }: any) {
+function Watch({ text, font, font_size, tab_name, color, colorObject, model_path, tab_details, onSendColor }: any) {
     const { materials, nodes }: any = useGLTF(model_path)
 
-    useEffect(() => {
-        // const selectedColorObject = colors?.find((c: any) => c. === color);
-        // return console.log('watch effect', colorObject, tab_name, tab_details)
-        const selectedColorObject = tab_details?.colors.find((c: any) => c.code === color);
+    console.log('font size', font_size)
 
-        // return console.log(selectedColorObject, tab_details)
+    useEffect(() => {
+
+        const selectedColorObject = tab_details?.colors.find((c: any) => c.code === color);
 
         const newObjectColor = { ...colorObject }
         Object.keys(nodes)?.map((key, index) => {
@@ -87,25 +86,27 @@ function Watch({ text, tab_name, color, colorObject, model_path, tab_details, on
     return (
         <>
             <group position={[0, 0, 0.5]}>
-                <Center key={text}>
-                    <Text3D          // x, y, z relative to scene
-                        size={0.1}
-                        font="/fonts/VLADIMIR.json"  // optional custom font
-                        // bevelEnabled
-                        bevelThickness={0.002}
-                        bevelSize={0.005}
-                        height={0.002}
-                        position={[0, 0, 0]}
-                        rotation={[-Math.PI / 2, 0, 0]}      // 90 deg around X axis
-                    // anchorX="center"                    // center text horizontally at position.x
-                    // anchorY="middle"  
-                    >
-                        {text}
-                        {(model_path === '/models/salib-clock.glb') && (
-                            <primitive object={materials['salib']?.clone()} />
-                        )}
-                    </Text3D>
-                </Center>
+                {(text && font_size) && (
+                    <Center key={`${text}-${font}-${font_size}`}>
+                        <Text3D          // x, y, z relative to scene
+                            size={font_size}
+                            font={`/fonts/${font}`}  // optional custom font
+                            // bevelEnabled
+                            bevelThickness={0.002}
+                            bevelSize={0.005}
+                            height={0.002}
+                            position={[0, 0, 0]}
+                            rotation={[-Math.PI / 2, 0, 0]}      // 90 deg around X axis
+                            // anchorX="center"                  // center text horizontally at position.x
+                            // anchorY="middle"
+                        >
+                            {text}
+                            {(model_path === '/models/salib-clock.glb') && (
+                                <primitive object={materials['salib']?.clone()} />
+                            )}
+                        </Text3D>
+                    </Center>
+                )}
             </group>
 
 
@@ -181,6 +182,8 @@ interface ViewerProps {
     tabs: IProductTabs[];
     tab_name?: string
     text?: string
+    font?: string
+    font_size?: number
     color?: string
     model_path?: string
     currentColorObject: any
@@ -205,32 +208,32 @@ interface ViewerProps {
 // }
 
 function FreeLookControls({
-  camPos,
-  targetPos = [0, 0, 0],
-  zoomLevel = 1,
+    camPos,
+    targetPos = [0, 0, 0],
+    zoomLevel = 1,
 }: {
-  camPos: [number, number, number];
-  targetPos?: [number, number, number];
-  zoomLevel?: number;
+    camPos: [number, number, number];
+    targetPos?: [number, number, number];
+    zoomLevel?: number;
 }) {
-  const controlsRef = useRef<any>(null);
-  const { camera } = useThree();
+    const controlsRef = useRef<any>(null);
+    const { camera } = useThree();
 
-  useEffect(() => {
-    const target = new THREE.Vector3(...targetPos);
-    const cam = new THREE.Vector3(...camPos);
+    useEffect(() => {
+        const target = new THREE.Vector3(...targetPos);
+        const cam = new THREE.Vector3(...camPos);
 
-    const dir = cam.clone().sub(target).normalize();
+        const dir = cam.clone().sub(target).normalize();
 
-    // smaller zoomLevel = closer, larger = farther
-    const distance = 10 / zoomLevel;
+        // smaller zoomLevel = closer, larger = farther
+        const distance = 10 / zoomLevel;
 
-    camera.position.copy(target.clone().add(dir.multiplyScalar(distance)));
-    controlsRef.current?.target.copy(target);
-    controlsRef.current?.update();
-  }, []);
+        camera.position.copy(target.clone().add(dir.multiplyScalar(distance)));
+        controlsRef.current?.target.copy(target);
+        controlsRef.current?.update();
+    }, []);
 
-  return <OrbitControls ref={controlsRef} makeDefault enableZoom />;
+    return <OrbitControls ref={controlsRef} makeDefault enableZoom />;
 }
 
 export function Viewer({
@@ -238,6 +241,8 @@ export function Viewer({
     tabs,
     tab_name,
     text = '',
+    font,
+    font_size,
     color,
     model_path,
     currentColorObject,
@@ -247,14 +252,14 @@ export function Viewer({
 
     const currentTab = tabs.find((tb) => tb.tab_name === tab_name);
 
-    console.log('currentTab', currentTab)
-
     return (
         <Box height={1} component={'div'}>
             <Canvas shadows>
                 <Watch
                     tab_name={tab_name}
                     text={text}
+                    font={font}
+                    font_size={font_size}
                     color={color}
                     tab_details={tabs.find((t) => t.tab_name === tab_name)}
                     colorObject={currentColorObject}
@@ -272,7 +277,7 @@ export function Viewer({
                 {(isLocked) && (
                     <FreeLookControls
                         camPos={[
-                            0,10,0
+                            0, 10, 0
                         ]}
                         zoomLevel={3.5}
                     />
