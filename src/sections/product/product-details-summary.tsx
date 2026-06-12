@@ -101,6 +101,7 @@ export default function ProductDetailsSummary({
   const values = watch();
 
   useEffect(() => {
+    console
     onSendText({
       text: values.text,
       font_file: values.font_file,
@@ -232,7 +233,7 @@ export default function ProductDetailsSummary({
           Text
         </Typography>
 
-        <RHFTextField name='text' label='Text' size='small' sx={{ width: 0.5 }} />
+        <RHFTextField name='text' label='Text' size='small' sx={{ maxWidth: 150, }} />
       </Stack>
       <Stack direction="row">
         <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
@@ -243,7 +244,7 @@ export default function ProductDetailsSummary({
           name="font_file"
           size="small"
           sx={{
-            maxWidth: 88,
+            maxWidth: 150,
             [`& .${formHelperTextClasses.root}`]: {
               mx: 0,
               mt: 1,
@@ -268,7 +269,7 @@ export default function ProductDetailsSummary({
           name="font_size"
           size="small"
           sx={{
-            maxWidth: 88,
+            maxWidth: 150,
             [`& .${formHelperTextClasses.root}`]: {
               mx: 0,
               mt: 1,
