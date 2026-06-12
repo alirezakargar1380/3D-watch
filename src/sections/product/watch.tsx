@@ -89,8 +89,8 @@ function Watch({ text, tab_name, color, colorObject, model_path, tab_details, on
             <group position={[0, 0, 0.5]}>
                 <Center key={text}>
                     <Text3D          // x, y, z relative to scene
-                        size={0.05}
-                        font="/fonts/Roboto_Regular.json"  // optional custom font
+                        size={0.1}
+                        font="/fonts/VLADIMIR.json"  // optional custom font
                         // bevelEnabled
                         bevelThickness={0.002}
                         bevelSize={0.005}
@@ -274,7 +274,7 @@ export function Viewer({
                         camPos={[
                             0,10,0
                         ]}
-                        zoomLevel={4}
+                        zoomLevel={3.5}
                     />
                 )}
 

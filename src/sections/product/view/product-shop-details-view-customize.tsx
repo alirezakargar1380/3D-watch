@@ -62,6 +62,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
 
   const checkout = useCheckoutContext();
 
+  const [text, setText] = useState('');
 
 
   const [currentTab, setCurrentTab] = useState('description');
@@ -113,6 +114,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
             model_path={product.clock}
             tabs={product.tabs}
             isLocked={true}
+            text={text}
             // targetXYZ={[0, 0, 0]}
             tab_name={product?.tabs?.[0].tab_name}
             color={product?.tabs?.[0].default_color}
@@ -134,6 +136,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
             items={checkout.items}
             onAddCart={checkout.onAddToCart}
             onGotoStep={checkout.onGotoStep}
+            onSendText={(text: string) => setText(text)}
           />
         </Grid>
       </Grid>

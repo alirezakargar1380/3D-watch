@@ -19,7 +19,7 @@ import { fCurrency, fShortenNumber } from 'src/utils/format-number';
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { ColorPicker } from 'src/components/color-utils';
-import FormProvider, { RHFSelect } from 'src/components/hook-form';
+import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
 import { IProductItem } from 'src/types/product';
 import { ICheckoutItem } from 'src/types/checkout';
@@ -39,6 +39,7 @@ type Props = {
   onGotoStep?: (step: number) => void;
   onAddCart?: (cartItem: ICheckoutItem) => void;
   onCustomize?: () => void;
+  onSendText: (text: string) => void;
 };
 
 export default function ProductDetailsSummary({
@@ -47,6 +48,7 @@ export default function ProductDetailsSummary({
   onAddCart,
   onGotoStep,
   disabledActions,
+  onSendText,
   ...other
 }: Props) {
   const router = useRouter();
@@ -79,6 +81,7 @@ export default function ProductDetailsSummary({
     // coverUrl,
     // available,
     // price,
+    text: 'hello',
     clock: product.clock,
     product: { id },
     colors: "#fff",
@@ -93,6 +96,10 @@ export default function ProductDetailsSummary({
   const { reset, watch, control, setValue, handleSubmit } = methods;
 
   const values = watch();
+
+  useEffect(() => {
+    onSendText(values.text)
+  }, [values.text])
 
   useEffect(() => {
     if (product) {
@@ -211,6 +218,43 @@ export default function ProductDetailsSummary({
     </Stack>
   );
 
+  const renderText = (
+    <>
+      <Stack direction="row">
+        <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
+          Text
+        </Typography>
+
+        <RHFTextField name='text' label='Text' size='small' sx={{ width: 0.5 }} />
+      </Stack>
+      <Stack direction="row">
+        <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
+          Text Font
+        </Typography>
+
+        <RHFSelect
+          name="font_family"
+          size="small"
+          sx={{
+            maxWidth: 88,
+            [`& .${formHelperTextClasses.root}`]: {
+              mx: 0,
+              mt: 1,
+              textAlign: 'right',
+            },
+          }}
+        >
+          {['Robo', 'Shabnam', 'Vladimir'].map((size) => (
+            <MenuItem key={size} value={size}>
+              {size}
+            </MenuItem>
+          ))}
+        </RHFSelect>
+      </Stack>
+
+    </>
+  );
+
   const renderSizeOptions = (
     <Stack direction="row">
       <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
@@ -291,7 +335,7 @@ export default function ProductDetailsSummary({
         Add to Cart
       </Button>
 
-      
+
     </Stack>
   );
 
@@ -359,6 +403,8 @@ export default function ProductDetailsSummary({
 
         {renderColorOptions}
 
+        {renderText}
+
         {renderSizeOptions}
 
         {renderQuantity}
@@ -372,10 +418,10 @@ export default function ProductDetailsSummary({
           dialog={dialog}
           model_path={product.clock}
           tabs={product.tabs}
-          // afterSubmit={(object: any) => {
-          //   setValue('colors', JSON.stringify(object))
-          //   onSubmit();
-          // }}
+        // afterSubmit={(object: any) => {
+        //   setValue('colors', JSON.stringify(object))
+        //   onSubmit();
+        // }}
         />
 
         {renderShare}
