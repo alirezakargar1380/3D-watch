@@ -294,7 +294,14 @@ export default function ProductDetailsSummary({
         </Typography>
         <Stack direction="row" spacing={2}>
           {FontPositions.map((position: any, index: number) => (
-            <Box component={'div'} onClick={() => setValue('position', position)} sx={{ width: 64, textAlign: 'center', borderRadius: 1.25, p: 1, border: '2px solid #e6e6e6', cursor: 'pointer' }}>
+            <Box component={'div'} onClick={() => setValue('position', position)} sx={{
+              width: 64, textAlign: 'center', borderRadius: 1.25, p: 1,
+              border: '2px solid #e6e6e6',
+              ...(position.id === values.position.id && {
+                border: '2px solid #858585',
+              }),
+              cursor: 'pointer'
+            }}>
               <Image src='/images.png' sx={{ width: 0.7 }} />
               <Typography textAlign={'center'} variant='caption'>{position.name}</Typography>
             </Box>
