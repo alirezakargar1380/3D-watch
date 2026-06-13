@@ -12,10 +12,8 @@ import { IProductTabs } from 'src/types/product';
 import CustomColorPicker from './color-picker'
 import CustomPopover, { usePopover } from 'src/components/custom-popover'
 
-function Watch({ text, font, font_size, tab_name, color, colorObject, model_path, tab_details, onSendColor }: any) {
-    const { materials, nodes }: any = useGLTF(model_path)
-
-    console.log('font size', font_size)
+function Watch({ tab_name, text, font, font_size, position, color, colorObject, model_path, tab_details, onSendColor }: any) {
+    const { materials, nodes }: any = useGLTF(model_path);
 
     useEffect(() => {
 
@@ -85,20 +83,25 @@ function Watch({ text, font, font_size, tab_name, color, colorObject, model_path
 
     return (
         <>
-            <group position={[0, 0, 0.5]}>
+            {/* change this position */}
+            <group
+                position={position !== undefined ? [position.x, 0, position.y] : [0, 0, 0]}
+            // position={position !== undefined ? [0, position.x, position.y] : [0, 0, 0]}
+            >
                 {(text && font_size) && (
-                    <Center key={`${text}-${font}-${font_size}`}>
+                    <Center key={`${text}-${font}-${font_size}-${position?.x}-${position?.y}`}>
                         <Text3D          // x, y, z relative to scene
                             size={font_size}
                             font={`/fonts/${font}`}  // optional custom font
                             // bevelEnabled
-                            bevelThickness={0.002}
-                            bevelSize={0.005}
-                            height={0.002}
+                            // bevelThickness={11}
+                            curveSegments={100}
+                            bevelSize={10}
+                            height={0.01}
                             position={[0, 0, 0]}
                             rotation={[-Math.PI / 2, 0, 0]}      // 90 deg around X axis
-                            // anchorX="center"                  // center text horizontally at position.x
-                            // anchorY="middle"
+                        // anchorX="center"                  // center text horizontally at position.x
+                        // anchorY="middle"
                         >
                             {text}
                             {(model_path === '/models/salib-clock.glb') && (
@@ -108,7 +111,6 @@ function Watch({ text, font, font_size, tab_name, color, colorObject, model_path
                     </Center>
                 )}
             </group>
-
 
             <group>
 
@@ -184,6 +186,7 @@ interface ViewerProps {
     text?: string
     font?: string
     font_size?: number
+    position?: any
     color?: string
     model_path?: string
     currentColorObject: any
@@ -243,6 +246,7 @@ export function Viewer({
     text = '',
     font,
     font_size,
+    position,
     color,
     model_path,
     currentColorObject,
@@ -260,6 +264,7 @@ export function Viewer({
                     text={text}
                     font={font}
                     font_size={font_size}
+                    position={position}
                     color={color}
                     tab_details={tabs.find((t) => t.tab_name === tab_name)}
                     colorObject={currentColorObject}

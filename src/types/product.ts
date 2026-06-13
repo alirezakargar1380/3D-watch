@@ -102,6 +102,7 @@ export type IFontFunction = {
   text: string;
   font_file: string
   font_size: number
+  position: any
 }
 
 export type IProductTableFilters = {

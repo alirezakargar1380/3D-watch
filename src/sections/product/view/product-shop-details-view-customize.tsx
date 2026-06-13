@@ -118,6 +118,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
             text={font?.text}
             font={font?.font_file}
             font_size={font?.font_size}
+            position={font?.position}
             // targetXYZ={[0, 0, 0]}
             tab_name={product?.tabs?.[0].tab_name}
             color={product?.tabs?.[0].default_color}

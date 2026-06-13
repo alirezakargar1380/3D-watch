@@ -29,7 +29,8 @@ import Viewer from './watch';
 import { useBoolean } from 'src/hooks/use-boolean';
 import axiosInstance, { customer_axios, endpoints } from 'src/utils/axios';
 import CustomazationDialog from './watch';
-import { fonts, FontSizes, IFont } from 'src/utils/fonts';
+import { FontPositions, fonts, FontSizes, IFont } from 'src/utils/fonts';
+import Image from 'src/components/image';
 
 // ----------------------------------------------------------------------
 
@@ -83,6 +84,7 @@ export default function ProductDetailsSummary({
     // available,
     // price,
     text: 'hello',
+    position: FontPositions[0],
     font_file: fonts[0].file,
     font_size: FontSizes[0],
     clock: product.clock,
@@ -101,13 +103,13 @@ export default function ProductDetailsSummary({
   const values = watch();
 
   useEffect(() => {
-    console
     onSendText({
       text: values.text,
       font_file: values.font_file,
-      font_size: values.font_size
+      font_size: values.font_size,
+      position: values.position
     })
-  }, [values.text, values.font_file, values.font_size])
+  }, [values.text, values.font_file, values.font_size, values.position.id])
 
   useEffect(() => {
     if (product) {
@@ -284,6 +286,23 @@ export default function ProductDetailsSummary({
           ))}
         </RHFSelect>
       </Stack>
+
+
+      <Box component={'div'}>
+        <Typography variant="subtitle2" sx={{ flexGrow: 1, mb: 2 }}>
+          Text positon
+        </Typography>
+        <Stack direction="row" spacing={2}>
+          {FontPositions.map((position: any, index: number) => (
+            <Box component={'div'} onClick={() => setValue('position', position)} sx={{ width: 64, textAlign: 'center', borderRadius: 1.25, p: 1, border: '2px solid #e6e6e6', cursor: 'pointer' }}>
+              <Image src='/images.png' sx={{ width: 0.7 }} />
+              <Typography textAlign={'center'} variant='caption'>{position.name}</Typography>
+            </Box>
+          ))}
+        </Stack>
+      </Box>
+
+
 
     </>
   );
