@@ -42,8 +42,7 @@ export function useGetProduct(productId: string) {
       productError: false,
       productValidating: false,
     }),
-    []
-    // [data, error, isLoading, isValidating]
+    [data, error, isLoading, isValidating]
   );
 
   return memoizedValue;

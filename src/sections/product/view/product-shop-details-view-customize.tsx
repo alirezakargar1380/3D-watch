@@ -95,7 +95,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
   );
 
   const renderProduct = product && (
-    // const renderProduct = (
+  // const renderProduct = (
     <>
       <CustomBreadcrumbs
         links={[
@@ -212,7 +212,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
     </>
   );
 
-  return product && (
+  return (
     <Container
       maxWidth={settings.themeStretch ? false : 'lg'}
       sx={{
@@ -228,8 +228,8 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
 
       {/* {productError && renderError} */}
 
-      {/* {product && renderProduct} */}
-      {renderProduct}
+      {product && renderProduct}
+      {/* {renderProduct} */}
     </Container>
   );
 }

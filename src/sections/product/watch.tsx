@@ -11,6 +11,7 @@ import * as THREE from 'three';
 import { IProductTabs } from 'src/types/product';
 import CustomColorPicker from './color-picker'
 import CustomPopover, { usePopover } from 'src/components/custom-popover'
+import ARViewer from './ar-viewer';
 
 function Watch({ tab_name, text, font, font_size, position, color, colorObject, model_path, tab_details, onSendColor }: any) {
     const { materials, nodes }: any = useGLTF(model_path);
@@ -257,7 +258,7 @@ export function Viewer({
     const currentTab = tabs.find((tb) => tb.tab_name === tab_name);
 
     return (
-        <Box height={1} component={'div'}>
+        <Box component={'div'}>
             <Canvas shadows>
                 <Watch
                     tab_name={tab_name}
@@ -298,13 +299,13 @@ export function Viewer({
 }
 
 export default function CustomazationDialog({ dialog, model_path, tabs }: Props) {
-    console.log('tabs', tabs)
     const [currentColorObject, setOb] = useState<any>({});
     const [color, setColor] = useState('');
     const [newColorObject, setnewOb] = useState<any>({});
     const [text, setText] = useState('');
     const [isLocked, setIsLocked] = useState(false);
     const [scrollableTab, setScrollableTab] = useState(tabs?.[0]?.tab_name);
+    const [isARMode, setIsARMode] = useState(false);
     const targetXYZ: [number, number, number] = [0, 0, 0];
     const customizedPopover = usePopover();
 
@@ -350,7 +351,20 @@ export default function CustomazationDialog({ dialog, model_path, tabs }: Props)
                     done
                 </Button>
             </Box>
-            <Box component={'div'} position={'absolute'} zIndex={10} top={20} left={20}>
+            <Box component={'div'} position={'absolute'} zIndex={10} top={20} left={20} display={'flex'} gap={1}>
+                <IconButton 
+                    onClick={() => setIsARMode(!isARMode)}
+                    title={isARMode ? "Exit AR Mode" : "Enter AR Mode"}
+                    sx={{
+                        backgroundColor: isARMode ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.3)',
+                        color: '#fff',
+                        '&:hover': {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        }
+                    }}
+                >
+                    <Iconify color={'white'} icon={isARMode ? "game-icons:cube" : "eva:eye-outline"} width={36} />
+                </IconButton>
                 <IconButton onClick={() => setIsLocked(!isLocked)}>
                     <Iconify color={'black'} icon={!isLocked ? "ic:twotone-lock" : "eva:unlock-outline"} width={36} />
                 </IconButton>
@@ -359,30 +373,37 @@ export default function CustomazationDialog({ dialog, model_path, tabs }: Props)
     )
 
     return (
-
         <Dialog
             open={dialog.value}
             onClose={dialog.onFalse}
             fullScreen
-            PaperProps={{
-                sx: {
-                    backgroundColor: '#f4f4f2'
-                }
-            }}
+            // PaperProps={{
+            //     sx: {
+            //         backgroundColor: '#f4f4f2'
+            //     }
+            // }}
         >
             <DialogContent sx={{ px: 0 }}>
                 <Box component={'div'}>
                     <Header />
-                    <Viewer
-                        isLocked
-                        tabs={tabs}
-                        tab_name={scrollableTab}
-                        color={color}
-                        currentColorObject={currentColorObject}
-                        model_path={model_path}
-                        text={text}
-                        targetXYZ={targetXYZ}
-                    />
+                    
+                    {isARMode ? (
+                        <ARViewer 
+                            modelPath={model_path} 
+                            onClose={() => setIsARMode(false)}
+                        />
+                    ) : (
+                        <Viewer
+                            isLocked={isLocked}
+                            tabs={tabs}
+                            tab_name={scrollableTab}
+                            color={color}
+                            currentColorObject={currentColorObject}
+                            model_path={model_path}
+                            text={text}
+                            targetXYZ={targetXYZ}
+                        />
+                    )}
                 </Box>
             </DialogContent>
             <DialogActions sx={{
@@ -390,7 +411,9 @@ export default function CustomazationDialog({ dialog, model_path, tabs }: Props)
                 display: 'block',
                 borderTopRightRadius: 24,
                 borderTopLeftRadius: 24,
-                boxShadow: '1px 0px 20px 11px #00000008'
+                boxShadow: '1px 0px 20px 11px #00000008',
+                visibility: isARMode ? 'hidden' : 'visible',
+                height: isARMode ? 0 : 'auto',
             }}>
                 <Box width={1} component={'div'} mb={2}>
                     <Box component={'span'} display={'block'} height={'4px'} width={'60px'} mx={'auto'} borderRadius={'16px'} bgcolor={'#bfbfbf'} />
