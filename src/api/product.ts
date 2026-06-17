@@ -36,13 +36,14 @@ export function useGetProduct(productId: string) {
 
   const memoizedValue = useMemo(
     () => ({
-      product: data as IProductItem,
-      // product: SAMPLE_PRODUCTS.find((p) => p.id === +productId),
+      // product: data as IProductItem,
+      product: SAMPLE_PRODUCTS.find((p) => p.id === +productId),
       productLoading: false,
       productError: false,
       productValidating: false,
     }),
-    [data, error, isLoading, isValidating]
+    []
+    // [data, error, isLoading, isValidating]
   );
 
   return memoizedValue;
