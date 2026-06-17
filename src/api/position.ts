@@ -5,21 +5,22 @@ import { fetcher, endpoints } from 'src/utils/axios';
 
 import { IProductItem } from 'src/types/product';
 import { SAMPLE_PRODUCTS } from 'src/_mock';
+import { IPosition } from 'src/types/position';
 
 // ----------------------------------------------------------------------
 
-export function useGetProducts() {
-  const URL = endpoints.product.list;
+export function useGetPositions() {
+  const URL = endpoints.positions.list;
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
   const memoizedValue = useMemo(
     () => ({
-      products: (data as IProductItem[]) || [],
-      productsLoading: isLoading,
-      productsError: error,
-      productsValidating: isValidating,
-      productsEmpty: !isLoading && !data?.length,
+      positions: (data as IPosition[]) || [],
+      positionsLoading: isLoading,
+      positionsError: error,
+      positionsValidating: isValidating,
+      positionsEmpty: !isLoading && !data?.length,
     }),
     [data, error, isLoading, isValidating]
   );
@@ -29,21 +30,20 @@ export function useGetProducts() {
 
 // ----------------------------------------------------------------------
 
-export function useGetProduct(productId: string) {
-  const URL = productId ? endpoints.product.details(productId) : '';
+export function useGetPosition(productId: string) {
+  const URL = productId ? endpoints.positions.details(productId) : '';
 
   const { data, isLoading, error, isValidating } = useSWR(URL, fetcher);
 
   const memoizedValue = useMemo(
     () => ({
-      product: data as IProductItem,
+      position: data as IPosition,
       // product: SAMPLE_PRODUCTS.find((p) => p.id === +productId),
-      productLoading: false,
-      productError: false,
-      productValidating: false,
+      positionLoading: false,
+      positionError: false,
+      positionValidating: false,
     }),
-    []
-    // [data, error, isLoading, isValidating]
+    [data, error, isLoading, isValidating]
   );
 
   return memoizedValue;

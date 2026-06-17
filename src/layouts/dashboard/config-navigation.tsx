@@ -126,6 +126,22 @@ export function useNavData() {
             ],
           },
 
+          // PRODUCT POSITIONS
+          {
+            title: t('product positions'),
+            path: paths.dashboard.productPosition.root,
+            icon: <Iconify icon='material-symbols:position-bottom-left' />,
+            children: [
+              { title: t('list'), path: paths.dashboard.productPosition.root },
+              // {
+              //   title: t('details'),
+              //   path: paths.dashboard.product.demo.details,
+              // },
+              // { title: t('create'), path: paths.dashboard.product.new },
+              // { title: t('edit'), path: paths.dashboard.product.demo.edit },
+            ],
+          },
+
           // ORDER
           {
             title: t('order'),

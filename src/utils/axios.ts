@@ -79,6 +79,14 @@ export const endpoints = {
     list: '/api/cart',
     delete: (id: any) => `/api/cart/${id}`,
   },
+  positions: {
+    create: '/api/positions',
+    list: '/api/positions',
+    upload_icon:  (id: any) => `/api/positions/${id}/icon`,
+    get_icon:  (id: any) => `${HOST_API}/api/positions/${id}/icon`,
+    details:  (id: any) => `/api/positions/${id}`,
+    update: (id: any) => `/api/positions/${id}`,
+  },
   product: {
     list: '/api/products',
     details: (id: any) => `/api/products/${id}`,
