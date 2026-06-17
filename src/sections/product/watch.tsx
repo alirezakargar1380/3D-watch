@@ -13,6 +13,58 @@ import CustomColorPicker from './color-picker'
 import CustomPopover, { usePopover } from 'src/components/custom-popover'
 import ARViewer from './ar-viewer';
 
+
+export function CameraBackground() {
+    const { scene } = useThree();
+    const videoRef: React.RefObject<HTMLVideoElement> | any = useRef(null);
+
+    useEffect(() => {
+        let stream = null;
+
+        async function setupCamera() {
+            try {
+                // Request rear camera (use 'user' for front)
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
+                });
+
+                // Create a hidden video element
+                const video: any = document.createElement('video');
+                video.srcObject = stream;
+                video.setAttribute('playsinline', ''); // Required for iOS
+                await video.play();
+
+                // Create a VideoTexture and set as scene background
+                const texture = new THREE.VideoTexture(video);
+                // Flip if needed (front camera may need flipY = false)
+                // texture.flipY = false;
+                scene.background = texture;
+
+                // Store video ref for cleanup
+                videoRef.current = video;
+            } catch (err) {
+                console.error('Camera access denied:', err);
+                // Fallback to a solid color if camera fails
+                scene.background = new THREE.Color(0x111122);
+            }
+        }
+
+        setupCamera();
+
+        // Cleanup: stop camera tracks and remove texture
+        return () => {
+            if (videoRef.current && videoRef.current.srcObject) {
+                videoRef.current.srcObject.getTracks().forEach((track: any) => track.stop());
+                videoRef.current.srcObject = null;
+            }
+            // Reset background to avoid memory leaks
+            scene.background = null;
+        };
+    }, [scene]);
+
+    return null; // This component only does setup
+}
+
 function Watch({ tab_name, text, font, font_size, position, color, colorObject, model_path, tab_details, onSendColor }: any) {
     const { materials, nodes }: any = useGLTF(model_path);
 
@@ -259,9 +311,9 @@ export function Viewer({
 
     return (
         <Box height={1} component={'div'}>
-            <Canvas 
-                shadows 
-                camera={{ 
+            <Canvas
+                shadows
+                camera={{
                     type: 'PerspectiveCamera',
                     position: [Number(currentTab?.x) || 0, Number(currentTab?.y) || 10, Number(currentTab?.z) || 15],
                     fov: 50,
@@ -269,6 +321,9 @@ export function Viewer({
                     far: 1000
                 }}
             >
+                {/* NEW: Camera feed as background */}
+                <CameraBackground />
+
                 <Watch
                     tab_name={tab_name}
                     text={text}
@@ -298,7 +353,7 @@ export function Viewer({
                     />
                 )}
 
-                <color attach="background" args={['#f8f8f8']} />
+                {/* <color attach="background" args={['#f8f8f8']} /> */}
                 <Environment files='/city.exr' blur={60} />
                 <ambientLight intensity={0.05} />
             </Canvas>
