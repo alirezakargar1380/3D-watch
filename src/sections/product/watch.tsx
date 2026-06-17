@@ -45,7 +45,7 @@ export function CameraBackground() {
             } catch (err) {
                 console.error('Camera access denied:', err);
                 // Fallback to a solid color if camera fails
-                scene.background = new THREE.Color(0x111122);
+                scene.background = new THREE.Color(0xF8F8F8);
             }
         }
 
