@@ -258,8 +258,17 @@ export function Viewer({
     const currentTab = tabs.find((tb) => tb.tab_name === tab_name);
 
     return (
-        <Box component={'div'}>
-            <Canvas shadows>
+        <Box height={1} component={'div'}>
+            <Canvas 
+                shadows 
+                camera={{ 
+                    type: 'PerspectiveCamera',
+                    position: [Number(currentTab?.x) || 0, Number(currentTab?.y) || 10, Number(currentTab?.z) || 15],
+                    fov: 50,
+                    near: 0.1,
+                    far: 1000
+                }}
+            >
                 <Watch
                     tab_name={tab_name}
                     text={text}
@@ -352,7 +361,7 @@ export default function CustomazationDialog({ dialog, model_path, tabs }: Props)
                 </Button>
             </Box>
             <Box component={'div'} position={'absolute'} zIndex={10} top={20} left={20} display={'flex'} gap={1}>
-                <IconButton 
+                <IconButton
                     onClick={() => setIsARMode(!isARMode)}
                     title={isARMode ? "Exit AR Mode" : "Enter AR Mode"}
                     sx={{
@@ -377,20 +386,24 @@ export default function CustomazationDialog({ dialog, model_path, tabs }: Props)
             open={dialog.value}
             onClose={dialog.onFalse}
             fullScreen
-            // PaperProps={{
-            //     sx: {
-            //         backgroundColor: '#f4f4f2'
-            //     }
-            // }}
+        // PaperProps={{
+        //     sx: {
+        //         backgroundColor: '#f4f4f2'
+        //     }
+        // }}
         >
-            <DialogContent sx={{ px: 0 }}>
-                <Box component={'div'}>
+            <DialogContent sx={{ px: 0, height: 1, display: 'flex', flexDirection: 'column' }}>
+                <Box component={'div'} sx={{ height: 1, position: 'relative' }}>
                     <Header />
-                    
+
                     {isARMode ? (
-                        <ARViewer 
-                            modelPath={model_path} 
+                        <ARViewer
+                            modelPath={model_path}
                             onClose={() => setIsARMode(false)}
+                            tabs={tabs}
+                            currentColorObject={currentColorObject}
+                            color={color}
+                            scrollableTab={scrollableTab}
                         />
                     ) : (
                         <Viewer

@@ -9,9 +9,13 @@ interface ARViewerProps {
     modelPath: string
     onClose?: () => void
     title?: string
+    tabs?: any[]
+    currentColorObject?: any
+    color?: string
+    scrollableTab?: string
 }
 
-export function ARViewer({ modelPath, onClose, title }: ARViewerProps) {
+export function ARViewer({ modelPath, onClose, title, tabs = [], currentColorObject = {}, color = '', scrollableTab = '' }: ARViewerProps) {
     const containerRef = useRef<HTMLDivElement>(null)
     const [arSupported, setArSupported] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
@@ -162,8 +166,23 @@ export function ARViewer({ modelPath, onClose, title }: ARViewerProps) {
                         padding: '8px 12px',
                         borderRadius: '24px',
                         boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                        alignItems: 'center',
                     }}
                 >
+                    {/* Color indicator */}
+                    {color && (
+                        <Box
+                            sx={{
+                                width: '24px',
+                                height: '24px',
+                                borderRadius: '50%',
+                                backgroundColor: color,
+                                border: '2px solid #999',
+                                cursor: 'default',
+                            }}
+                            title={`Selected color: ${color}`}
+                        />
+                    )}
                     <Button
                         size="small"
                         variant="contained"

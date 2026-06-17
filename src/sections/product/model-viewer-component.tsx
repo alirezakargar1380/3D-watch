@@ -29,6 +29,7 @@ export const ModelViewerComponent = ({
     arModes = 'webxr scene-viewer quick-look',
     exposure = 1,
     shadowIntensity = 1,
+    environmentImage,
     onLoad,
     onError,
 }: ModelViewerProps) => {
@@ -88,13 +89,15 @@ export const ModelViewerComponent = ({
             auto-rotate={autoRotate ? 'true' : 'false'}
             ar={ar ? 'true' : 'false'}
             ar-modes={arModes}
+            // environment-image={environmentImage}
             exposure={exposure.toString()}
             shadow-intensity={shadowIntensity.toString()}
             style={{
                 width: '100%',
                 height: '100%',
                 minHeight: '600px',
-                backgroundColor: '#fff',
+                backgroundColor: 'transparent',
+                // backgroundColor: '#fff',
             }}
         />
     )
