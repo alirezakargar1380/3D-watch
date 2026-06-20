@@ -43,13 +43,15 @@ import FormProvider, {
 
 import { IImage, IProductItem } from 'src/types/product';
 import WatchDemoViewer from './watch-item';
-import { Button, IconButton, MenuItem } from '@mui/material';
+import { Button, IconButton, MenuItem, Select } from '@mui/material';
 import axiosInstance, { endpoints } from 'src/utils/axios';
 import { MuiColorInput } from 'mui-color-input';
 import { ColorPicker } from 'src/components/color-utils';
 import { RoundedColorPicker } from 'src/components/color-utils/rounded-color-picker';
 import { TabItem } from './product-tab-item';
 import { MultiFilePreview } from 'src/components/upload';
+import { useGetPositions } from 'src/api/position';
+import { IPosition } from 'src/types/position';
 
 // ----------------------------------------------------------------------
 const clockPaths = [
@@ -119,6 +121,12 @@ const tabDefaultValue = {
   ]
 }
 
+const posDefaultValue = {
+  x: 0.5,
+  y: 0,
+  position: { id: 0 }
+}
+
 export default function ProductNewEditForm({ currentProduct }: Props) {
   const [shape, setShapes] = useState([]);
   const [mainImage, setMainImage] = useState<number>(0);
@@ -126,6 +134,8 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
   const [currentImages, setCurrentImages] = useState<any>([]);
   const [materials, setMaterials] = useState<any>([]);
   const [objects, setObjects] = useState<string[]>([]);
+
+  const { positions } = useGetPositions();
 
   const router = useRouter();
 
@@ -169,6 +179,12 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
         ).required('')
       })
     )
+    // positions: Yup.array().of(
+    //   Yup.object().shape({
+    //     x: Yup.number(),
+    //     y: Yup.number(),
+    //   })
+    // )
   });
 
   const defaultValues = useMemo(
@@ -192,7 +208,10 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
       // sizes: currentProduct?.sizes || [],
       // newLabel: currentProduct?.newLabel || { enabled: false, content: '' },
       // saleLabel: currentProduct?.saleLabel || { enabled: false, content: '' },
-
+      positions: currentProduct?.positions || [],
+      // positions: currentProduct?.positions?.map((pos) => {
+      //   return pos.position.id.toString()
+      // }) || [],
       tabs: currentProduct?.tabs.map((tab) => {
         return {
           ...tab,
@@ -206,7 +225,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
   );
 
   const methods = useForm({
-    resolver: yupResolver(NewProductSchema),
+    resolver: yupResolver<any>(NewProductSchema),
     defaultValues,
   });
 
@@ -224,6 +243,11 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
     name: 'tabs',
   });
 
+  const { fields: posFields, append: posAppend, remove: posRemove } = useFieldArray({
+    control,
+    name: 'positions',
+  });
+
   const values = watch();
 
   useEffect(() => {
@@ -232,7 +256,7 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
     }
   }, [currentProduct, defaultValues, reset]);
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data: any) => {
     try {
       // await new Promise((resolve) => setTimeout(resolve, 500));
       // reset();
@@ -314,6 +338,10 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
 
   const handleAddTab = () => {
     append(tabDefaultValue)
+  }
+
+  const handleAddPos = () => {
+    posAppend(posDefaultValue)
   }
 
   // const handleRemoveFile = useCallback(
@@ -461,6 +489,17 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
                 InputLabelProps={{ shrink: true }}
               />
 
+              <RHFMultiSelect
+                label='Text Positions'
+                name={`positions`}
+                options={positions.length > 0 ? positions.map((position: IPosition) => {
+                  return {
+                    label: position.name,
+                    value: position.id.toString()
+                  }
+                }) : []}
+              />
+
               {/* <RHFSelect native name="category" label="Category" InputLabelProps={{ shrink: true }}>
                 {PRODUCT_CATEGORY_GROUP_OPTIONS.map((category) => (
                   <optgroup key={category.group} label={category.group}>
@@ -515,6 +554,39 @@ export default function ProductNewEditForm({ currentProduct }: Props) {
               <RHFMultiCheckbox row name="gender" spacing={2} options={PRODUCT_GENDER_OPTIONS} />
             </Stack> */}
 
+            <Divider sx={{ borderStyle: 'dashed' }} />
+            <Typography variant='subtitle2'>Text Positions</Typography>
+
+            {posFields.map((pos: any, i) => {
+              return (
+                <Box component={'section'}>
+                  <Select value={pos.position.id} onChange={(e) => {
+                    const val = e.target.value;
+                    setValue(`positions[${i}].position.id`, val)
+                    console.log('val', val)
+                  }}>
+                    <MenuItem value={0}>انتخاب</MenuItem>
+                    {positions.map((position: IPosition) => {
+                      return (
+                        <MenuItem value={position.id} key={position.id}>{position.name}</MenuItem>
+                      )
+                    })}
+                  </Select>
+                  <RHFTextField name={`positions[${i}].x`} label='x' />
+                  <RHFTextField name={`positions[${i}].y`} label='y' />
+                </Box>
+              )
+            })}
+
+            <Button
+              fullWidth={false}
+              color='secondary'
+              variant='contained'
+              sx={{ width: 'fit-content' }}
+              onClick={handleAddPos}
+            >
+              add Text Position
+            </Button>
             <Divider sx={{ borderStyle: 'dashed' }} />
 
             {/* <Stack direction="row" alignItems="center" spacing={3}>

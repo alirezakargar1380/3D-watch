@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, useFieldArray } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -31,6 +31,7 @@ import axiosInstance, { customer_axios, endpoints } from 'src/utils/axios';
 import CustomazationDialog from './watch';
 import { FontPositions, fonts, FontSizes, IFont } from 'src/utils/fonts';
 import Image from 'src/components/image';
+import { IPosition } from 'src/types/position';
 
 // ----------------------------------------------------------------------
 
@@ -58,6 +59,7 @@ export default function ProductDetailsSummary({
   const {
     id,
     name,
+    positions,
     // sizes,
     // price,
     // coverUrl,
@@ -85,6 +87,16 @@ export default function ProductDetailsSummary({
     // price,
     text: 'hello',
     position: FontPositions[0],
+    positions: positions.map((position: any) => {
+      return {
+        text: 'random t',
+        font_file: fonts[0].file,
+        font_size: FontSizes[0],
+        ...position.position,
+        x: position.x,
+        y: position.y,
+      }
+    }),
     font_file: fonts[0].file,
     font_size: FontSizes[0],
     clock: product.clock,
@@ -101,15 +113,26 @@ export default function ProductDetailsSummary({
   const { reset, watch, control, setValue, handleSubmit } = methods;
 
   const values = watch();
+  const positions_w = watch('positions');
+
+  const {
+    fields,
+    append,
+    remove
+  } = useFieldArray({
+    control,
+    name: `positions`
+  });
 
   useEffect(() => {
     onSendText({
       text: values.text,
       font_file: values.font_file,
       font_size: values.font_size,
-      position: values.position
+      position: values.position,
+      positions: positions_w,
     })
-  }, [values.text, values.font_file, values.font_size, values.position.id])
+  }, [values.text, values.font_file, values.font_size, JSON.stringify(positions_w)])
 
   useEffect(() => {
     if (product) {
@@ -292,9 +315,17 @@ export default function ProductDetailsSummary({
         <Typography variant="subtitle2" sx={{ flexGrow: 1, mb: 2 }}>
           Text positon
         </Typography>
+        <Stack direction="column" spacing={2}>
+          {fields.map((position: any, index) => (
+            <Box component={'div'} display={'flex'} gap={1} alignItems={'end'} key={index}>
+              <Image src={endpoints.positions.get_icon(position.img)} sx={{ width: 90, borderRadius: 1 }} />
+              <RHFTextField name={`positions.${index}.text`} label={'text'} />
+            </Box>
+          ))}
+        </Stack>
         <Stack direction="row" spacing={2}>
           {FontPositions.map((position: any, index: number) => (
-            <Box component={'div'} onClick={() => setValue('position', position)} sx={{
+            <Box component={'div'} onClick={() => setValue('position', position)} key={index * 324} sx={{
               width: 64, textAlign: 'center', borderRadius: 1.25, p: 1,
               border: '2px solid #e6e6e6',
               ...(position.id === values.position.id && {

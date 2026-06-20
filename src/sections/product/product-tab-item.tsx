@@ -91,7 +91,7 @@ export const TabItem = ({
                 </RHFSelect>
               </Box>
 
-              <RHFTextField name={`tabs.${index}.colors.${colorIndex}.roughness`} sx={{ width: 80 }} size="small" />
+              <RHFTextField name={`tabs.${index}.colors.${colorIndex}.roughness`} label={'Roughness'} sx={{ width: 80 }} size="small" />
 
               <Box component={'div'}>
                 <RHFMultiSelect
@@ -107,7 +107,7 @@ export const TabItem = ({
               </Box>
 
 
-              <RHFCheckbox name={`tabs.${index}.colors.${colorIndex}.all`} label='Apply For All' />
+              <RHFCheckbox name={`tabs.${index}.colors.${colorIndex}.all`} label='Apply *' />
 
               <IconButton onClick={() => removeColor(colorIndex)}>
                 ❌

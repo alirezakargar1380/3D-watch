@@ -65,7 +65,7 @@ export function CameraBackground() {
     return null; // This component only does setup
 }
 
-function Watch({ tab_name, text, font, font_size, position, color, colorObject, model_path, tab_details, onSendColor }: any) {
+function Watch({ tab_name, text, font, font_size, position, positions, color, colorObject, model_path, tab_details, onSendColor }: any) {
     const { materials, nodes }: any = useGLTF(model_path);
 
     useEffect(() => {
@@ -137,6 +137,35 @@ function Watch({ tab_name, text, font, font_size, position, color, colorObject, 
     return (
         <>
             {/* change this position */}
+            {positions?.map((pos: any) => (
+                <group
+                    position={position !== undefined ? [+pos.x, 0, +pos.y] : [0, 0, 0]}
+                // position={position !== undefined ? [0, position.x, position.y] : [0, 0, 0]}
+                >
+                    {(pos.text && font_size) && (
+                        <Center key={`${pos.text}-${font}-${font_size}-${position?.x}-${position?.y}`}>
+                            <Text3D          // x, y, z relative to scene
+                                size={font_size}
+                                font={`/fonts/${font}`}  // optional custom font
+                                // bevelEnabled
+                                // bevelThickness={11}
+                                curveSegments={100}
+                                bevelSize={10}
+                                height={0.01}
+                                position={[0, 0, 0]}
+                                rotation={[-Math.PI / 2, 0, 0]}      // 90 deg around X axis
+                            // anchorX="center"                  // center text horizontally at position.x
+                            // anchorY="middle"
+                            >
+                                {pos.text}
+                                {(model_path === '/models/salib-clock.glb') && (
+                                    <primitive object={materials['salib']?.clone()} />
+                                )}
+                            </Text3D>
+                        </Center>
+                    )}
+                </group>
+            ))}
             <group
                 position={position !== undefined ? [position.x, 0, position.y] : [0, 0, 0]}
             // position={position !== undefined ? [0, position.x, position.y] : [0, 0, 0]}
@@ -240,6 +269,7 @@ interface ViewerProps {
     font?: string
     font_size?: number
     position?: any
+    positions?: any
     color?: string
     model_path?: string
     currentColorObject: any
@@ -300,6 +330,7 @@ export function Viewer({
     font,
     font_size,
     position,
+    positions,
     color,
     model_path,
     currentColorObject,
@@ -330,6 +361,7 @@ export function Viewer({
                     font={font}
                     font_size={font_size}
                     position={position}
+                    positions={positions}
                     color={color}
                     tab_details={tabs.find((t) => t.tab_name === tab_name)}
                     colorObject={currentColorObject}

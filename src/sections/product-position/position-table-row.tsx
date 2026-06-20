@@ -44,8 +44,6 @@ export default function PositionTableRow({
 }: Props) {
   const {
     name,
-    x,
-    y,
     img,
     createdAt
   } = row;
@@ -71,8 +69,6 @@ export default function PositionTableRow({
             primary={name}
           />
         </TableCell>
-
-        <TableCell>{x},{y}</TableCell>
 
         <TableCell>
           <ListItemText

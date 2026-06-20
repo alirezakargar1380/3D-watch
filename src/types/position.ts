@@ -1,7 +1,6 @@
 export type IPosition = {
+  id: number
   name: string;
   img: string;
-  x: string;
-  y: string;
   createdAt: string;
 };

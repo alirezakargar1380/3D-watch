@@ -49,7 +49,6 @@ import { IPosition } from 'src/types/position';
 
 const TABLE_HEAD = [
     { id: 'name', label: 'Position Name', width: 220 },
-    { id: 'inventoryType', label: 'Position', width: 160 },
     { id: 'createdAt', label: 'Create at', width: 160 },
     { id: '', width: 88 },
 ];

@@ -1,6 +1,7 @@
 // ----------------------------------------------------------------------
 
 import { IFont } from "src/utils/fonts";
+import { IPosition } from "./position";
 
 export type IProductFilterValue = string | string[] | number | number[];
 
@@ -79,6 +80,9 @@ export type IProductItem = {
   priceSale: number | null;
   reviews: IProductReview[];
   createdAt: Date;
+  positions: {
+    position: IPosition
+  }[];
   images: IImage[];
   ratings: {
     name: string;
@@ -103,6 +107,7 @@ export type IFontFunction = {
   font_file: string
   font_size: number
   position: any
+  positions: any[]
 }
 
 export type IProductTableFilters = {
