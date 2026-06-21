@@ -508,6 +508,8 @@ export default function ProductDetailsSummary({
           dialog={dialog}
           model_path={product.clock}
           tabs={product.tabs}
+          values={values}
+          textFields={fields}
         // afterSubmit={(object: any) => {
         //   setValue('colors', JSON.stringify(object))
         //   onSubmit();

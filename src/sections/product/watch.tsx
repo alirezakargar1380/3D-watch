@@ -3,7 +3,7 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Environment, OrbitControls, Text, Center, Text3D, useGLTF, CameraControls } from '@react-three/drei'
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
-import { Box, Button, Dialog, DialogActions, DialogContent, IconButton, Stack, Tab, Tabs } from '@mui/material'
+import { Box, Button, Dialog, DialogActions, DialogContent, IconButton, Stack, Tab, Tabs, Collapse } from '@mui/material'
 import { ColorPicker, ColorPreview } from 'src/components/color-utils'
 import { ReturnType } from 'src/hooks/use-boolean'
 import Iconify from 'src/components/iconify'
@@ -11,9 +11,42 @@ import * as THREE from 'three';
 import { IProductTabs } from 'src/types/product';
 import CustomColorPicker from './color-picker'
 import CustomPopover, { usePopover } from 'src/components/custom-popover'
-import ARViewer from './ar-viewer';
+import { m } from 'framer-motion';
+import { MotionContainer, varFade } from 'src/components/animate';
+import Image from 'src/components/image'
+import { RHFTextField } from 'src/components/hook-form'
+import { endpoints } from 'src/utils/axios'
 
+interface CameraProps {
+    camPos: [number, number, number];    // Where the camera is
+    targetPos: [number, number, number]; // What the camera looks at
+    zoomLevel: number;
+}
 
+interface Props {
+    dialog: ReturnType;
+    model_path: string;
+    tabs: IProductTabs[];
+    values?: any
+    textFields?: any
+}
+
+interface ViewerProps {
+    isLocked?: boolean;
+    isAr?: boolean;
+    tabs: IProductTabs[];
+    tab_name?: string
+    text?: string
+    font?: string
+    font_size?: number
+    position?: any
+    positions?: any
+    color?: string
+    model_path?: string
+    currentColorObject: any
+    targetXYZ?: [number, number, number]
+    onGetColor?: () => void
+}
 export function CameraBackground() {
     const { scene } = useThree();
     const videoRef: React.RefObject<HTMLVideoElement> | any = useRef(null);
@@ -136,17 +169,17 @@ function Watch({ tab_name, text, font, font_size, position, positions, color, co
 
     return (
         <>
-            {/* change this position */}
-            {positions?.map((pos: any) => (
+            {/* TEXT */}
+            {positions?.map((pos: any, i: number) => (
                 <group
-                    position={position !== undefined ? [+pos.x, 0, +pos.y] : [0, 0, 0]}
-                // position={position !== undefined ? [0, position.x, position.y] : [0, 0, 0]}
+                    key={i}
+                    position={[+pos.x, 0, +pos.y]}
                 >
                     {(pos.text && font_size) && (
-                        <Center key={`${pos.text}-${font}-${font_size}-${position?.x}-${position?.y}`}>
+                        <Center key={`${pos.text}-${pos.font_size}-${pos.font_size}-${position?.x}-${position?.y}`}>
                             <Text3D          // x, y, z relative to scene
-                                size={font_size}
-                                font={`/fonts/${font}`}  // optional custom font
+                                size={pos.font_size}
+                                font={`/fonts/${pos.font_file}`}  // optional custom font
                                 // bevelEnabled
                                 // bevelThickness={11}
                                 curveSegments={100}
@@ -166,33 +199,6 @@ function Watch({ tab_name, text, font, font_size, position, positions, color, co
                     )}
                 </group>
             ))}
-            <group
-                position={position !== undefined ? [position.x, 0, position.y] : [0, 0, 0]}
-            // position={position !== undefined ? [0, position.x, position.y] : [0, 0, 0]}
-            >
-                {(text && font_size) && (
-                    <Center key={`${text}-${font}-${font_size}-${position?.x}-${position?.y}`}>
-                        <Text3D          // x, y, z relative to scene
-                            size={font_size}
-                            font={`/fonts/${font}`}  // optional custom font
-                            // bevelEnabled
-                            // bevelThickness={11}
-                            curveSegments={100}
-                            bevelSize={10}
-                            height={0.01}
-                            position={[0, 0, 0]}
-                            rotation={[-Math.PI / 2, 0, 0]}      // 90 deg around X axis
-                        // anchorX="center"                  // center text horizontally at position.x
-                        // anchorY="middle"
-                        >
-                            {text}
-                            {(model_path === '/models/salib-clock.glb') && (
-                                <primitive object={materials['salib']?.clone()} />
-                            )}
-                        </Text3D>
-                    </Center>
-                )}
-            </group>
 
             <group>
 
@@ -206,15 +212,9 @@ function Watch({ tab_name, text, font, font_size, position, positions, color, co
                 })}
             </group>
         </>
-
     )
 }
 
-interface CameraProps {
-    camPos: [number, number, number];    // Where the camera is
-    targetPos: [number, number, number]; // What the camera looks at
-    zoomLevel: number;
-}
 
 function ManualCameraController({ camPos, targetPos, zoomLevel }: CameraProps) {
     const vCam = useRef(new THREE.Vector3());
@@ -255,44 +255,6 @@ function ManualCameraController({ camPos, targetPos, zoomLevel }: CameraProps) {
     return null;
 }
 
-interface Props {
-    dialog: ReturnType;
-    model_path: string;
-    tabs: IProductTabs[];
-}
-
-interface ViewerProps {
-    isLocked?: boolean;
-    tabs: IProductTabs[];
-    tab_name?: string
-    text?: string
-    font?: string
-    font_size?: number
-    position?: any
-    positions?: any
-    color?: string
-    model_path?: string
-    currentColorObject: any
-    targetXYZ?: [number, number, number]
-    onGetColor?: () => void
-}
-
-// function FreeLookControls({
-//     camPos,
-// }: {
-//     camPos: [number, number, number];
-// }) {
-//     const controlsRef = useRef<any>(null);
-//     const { camera } = useThree();
-
-//     useEffect(() => {
-//         camera.position.set(...camPos);
-//         controlsRef.current?.update();
-//     }, [camera, camPos]);
-
-//     return <OrbitControls ref={controlsRef} makeDefault />;
-// }
-
 function FreeLookControls({
     camPos,
     targetPos = [0, 0, 0],
@@ -324,9 +286,10 @@ function FreeLookControls({
 
 export function Viewer({
     isLocked,
+    isAr,
     tabs,
     tab_name,
-    text = '',
+    text = 'eeee',
     font,
     font_size,
     position,
@@ -352,8 +315,11 @@ export function Viewer({
                     far: 1000
                 }}
             >
+                
                 {/* NEW: Camera feed as background */}
-                <CameraBackground />
+                {(isAr) && (
+                    <CameraBackground />
+                )}
 
                 <Watch
                     tab_name={tab_name}
@@ -394,14 +360,15 @@ export function Viewer({
 
 }
 
-export default function CustomazationDialog({ dialog, model_path, tabs }: Props) {
+export default function CustomazationDialog({ dialog, model_path, tabs, values, textFields }: Props) {
     const [currentColorObject, setOb] = useState<any>({});
     const [color, setColor] = useState('');
     const [newColorObject, setnewOb] = useState<any>({});
     const [text, setText] = useState('');
     const [isLocked, setIsLocked] = useState(false);
-    const [scrollableTab, setScrollableTab] = useState(tabs?.[0]?.tab_name);
+    const [textTyping, setTextType] = useState(false);
     const [isARMode, setIsARMode] = useState(false);
+    const [scrollableTab, setScrollableTab] = useState(tabs?.[0]?.tab_name);
     const targetXYZ: [number, number, number] = [0, 0, 0];
     const customizedPopover = usePopover();
 
@@ -433,6 +400,16 @@ export default function CustomazationDialog({ dialog, model_path, tabs }: Props)
         }
     }, [scrollableTab])
 
+    // Auto toggle dialog back up after going down
+    // useEffect(() => {
+    //     if (!textTyping) {
+    //         const timer = setTimeout(() => {
+    //             setTextType(true);
+    //         }, 500); // 3 seconds delay
+    //         return () => clearTimeout(timer);
+    //     }
+    // }, [textTyping])
+
     const Header = () => (
         <>
             <Box component={'div'} position={'absolute'} zIndex={10} top={20} right={20}>
@@ -452,129 +429,145 @@ export default function CustomazationDialog({ dialog, model_path, tabs }: Props)
                     onClick={() => setIsARMode(!isARMode)}
                     title={isARMode ? "Exit AR Mode" : "Enter AR Mode"}
                     sx={{
-                        backgroundColor: isARMode ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.3)',
-                        color: '#fff',
+                        backgroundColor: isARMode ? 'rgba(0, 0, 0, 0.7)' : 'rgba(0, 0, 0, 0.1)',
+                        color: '#000000',
                         '&:hover': {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            backgroundColor: 'rgba(122, 122, 122, 0.8)',
                         }
                     }}
                 >
-                    <Iconify color={'white'} icon={isARMode ? "game-icons:cube" : "eva:eye-outline"} width={36} />
+                    <Iconify color={'black'} icon={!isARMode ? "game-icons:cube" : "eva:eye-outline"} width={36} />
                 </IconButton>
                 <IconButton onClick={() => setIsLocked(!isLocked)}>
                     <Iconify color={'black'} icon={!isLocked ? "ic:twotone-lock" : "eva:unlock-outline"} width={36} />
+                </IconButton>
+                <IconButton
+                    onClick={() => setTextType(!textTyping)}
+                    sx={{
+                        ...(textTyping && {
+                            backgroundColor: '#cacaca'
+                        })
+                    }}
+                >
+                    <Iconify color={'black'} icon={'cuida:text-outline'} width={36} />
                 </IconButton>
             </Box>
         </>
     )
 
     return (
-        <Dialog
-            open={dialog.value}
-            onClose={dialog.onFalse}
-            fullScreen
-        // PaperProps={{
-        //     sx: {
-        //         backgroundColor: '#f4f4f2'
-        //     }
-        // }}
-        >
-            <DialogContent sx={{ px: 0, height: 1, display: 'flex', flexDirection: 'column' }}>
-                <Box component={'div'} sx={{ height: 1, position: 'relative' }}>
-                    <Header />
-
-                    {isARMode ? (
-                        <ARViewer
-                            modelPath={model_path}
-                            onClose={() => setIsARMode(false)}
-                            tabs={tabs}
-                            currentColorObject={currentColorObject}
-                            color={color}
-                            scrollableTab={scrollableTab}
-                        />
-                    ) : (
+        <Box component={MotionContainer}>
+            <Dialog
+                open={dialog.value}
+                onClose={dialog.onFalse}
+                fullScreen
+            // PaperProps={{
+            //     sx: {
+            //         backgroundColor: '#f4f4f2'
+            //     }
+            // }}
+            >
+                <DialogContent sx={{ px: 0, height: 1, display: 'flex', flexDirection: 'column' }}>
+                    <Box component={'div'} sx={{ height: 1, position: 'relative' }}>
+                        <Header />
                         <Viewer
                             isLocked={isLocked}
+                            isAr={isARMode}
                             tabs={tabs}
                             tab_name={scrollableTab}
                             color={color}
                             currentColorObject={currentColorObject}
                             model_path={model_path}
-                            text={text}
+                            // text={text}
                             targetXYZ={targetXYZ}
-                        />
-                    )}
-                </Box>
-            </DialogContent>
-            <DialogActions sx={{
-                backgroundColor: '#fff',
-                display: 'block',
-                borderTopRightRadius: 24,
-                borderTopLeftRadius: 24,
-                boxShadow: '1px 0px 20px 11px #00000008',
-                visibility: isARMode ? 'hidden' : 'visible',
-                height: isARMode ? 0 : 'auto',
-            }}>
-                <Box width={1} component={'div'} mb={2}>
-                    <Box component={'span'} display={'block'} height={'4px'} width={'60px'} mx={'auto'} borderRadius={'16px'} bgcolor={'#bfbfbf'} />
-                </Box>
+                            positions={values?.positions}
+                            font={values?.font}
+                            font_size={values?.font_size}
 
-                <Box component={'div'}>
-                    <Tabs
-                        value={scrollableTab}
-                        sx={{
-                            '& .MuiTabs-flexContainer': {
-                                justifyContent: 'center'
-                            }
-                        }}
-                        onChange={handleChangeScrollableTab}
-                    >
-                        {tabs.map((tab: IProductTabs) => (
-                            <Tab key={tab.tab_name} label={tab.tab_name} value={tab.tab_name} />
-                        ))}
-                        {(model_path === '/models/salib-clock.glb') && (
-                            <Tab label={'Text'} value={'text'} />
-                        )}
-                    </Tabs>
-                </Box>
-
-                {/* <Stack direction={{ xs: 'column', md: 'row' }} sx={{ mx: 0, mt: 2 }} justifyContent={'center'} spacing={1}> */}
-                <Box component={'div'} textAlign={'center'} mt={2} gap={1} display={'flex'} alignItems={'center'} justifyContent={'center'}>
-                    {(model_path === '/models/salib-clock.glb') && (
-                        <input onChange={(e) => setText(e.target.value)} />
-                    )}
-                    <ColorPicker
-                        colors={tabs.find((tab) => tab.tab_name === scrollableTab)?.colors.map((color) => color.code) || ['#fff']}
-                        selected={currentColorObject[scrollableTab] || ''}
-                        onSelectColor={(color: any) => handleSelectColors(color, currentTab?.tab_name || '')}
-                    />
-                    <Box sx={{ width: '2px', height: '20px', bgcolor: '#d3d3d3' }} component={'div'} />
-                    <Box
-                        sx={{
-                            ml: 1,
-                            background:
-                                "linear-gradient(45deg, #ff0000 0%, #ea00ff 50%,#ff7cff  100%)",
-                            width: 20, height: 20,
-                            borderRadius: 2,
-                            border: '0.5px solid #bbbbbb'
-                        }}
-                        component={'div'}
-                        onClick={customizedPopover.onOpen}
-                    />
-                    <CustomPopover
-                        open={customizedPopover.open}
-                        onClose={customizedPopover.onClose}
-                        arrow={'bottom-left'}
-                    >
-                        <CustomColorPicker
-                            onChange={(hex) => {
-                                if (!hex) return
-                                handleSelectColors(`#${hex}`, currentTab?.tab_name || '')
-                            }}
                         />
-                    </CustomPopover>
-                </Box>
-            </DialogActions>
-        </Dialog>
+                    </Box>
+                </DialogContent>
+                <DialogActions sx={{
+                    // height: '168px',
+                    backgroundColor: '#fff',
+                    display: 'block',
+                    borderTopRightRadius: 24,
+                    borderTopLeftRadius: 24,
+                    boxShadow: '1px 0px 20px 11px #00000008',
+                }}>
+                    <Box width={1} component={'div'} mb={2}>
+                        <Box component={'span'} display={'block'} height={'4px'} width={'60px'} mx={'auto'} borderRadius={'16px'} bgcolor={'#bfbfbf'} />
+                    </Box>
+
+                    {(textTyping) ? (
+                        <m.div key={`${textTyping}-text`} variants={textTyping ? varFade().in : varFade().out}>
+                            <Box component={'div'} height={'100px'} width={0.5} mx={'auto'}>
+                                {textFields.map((position: any, index: number) => (
+                                    <Box component={'div'} display={'flex'} gap={1} alignItems={'end'} key={index}>
+                                        <Image src={endpoints.positions.get_icon(position.img)} sx={{ width: 50, borderRadius: 1 }} />
+                                        <RHFTextField name={`positions.${index}.text`} label={'text'} size='small' />
+                                    </Box>
+                                ))}
+                            </Box>
+                        </m.div>
+                    ) : (
+                        <m.div key={`${textTyping}`} variants={textTyping ? varFade().out : varFade().in}>
+                            <Box component={'div'} height={'100px'}>
+                                <Box component={'div'}>
+                                    <Tabs
+                                        value={scrollableTab}
+                                        sx={{
+                                            '& .MuiTabs-flexContainer': {
+                                                justifyContent: 'center'
+                                            }
+                                        }}
+                                        onChange={handleChangeScrollableTab}
+                                    >
+                                        {tabs.map((tab: IProductTabs) => (
+                                            <Tab key={tab.tab_name} label={tab.tab_name} value={tab.tab_name} />
+                                        ))}
+                                    </Tabs>
+                                </Box>
+
+                                {/* <Stack direction={{ xs: 'column', md: 'row' }} sx={{ mx: 0, mt: 2 }} justifyContent={'center'} spacing={1}> */}
+                                <Box component={'div'} textAlign={'center'} mt={2} gap={1} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                                    <ColorPicker
+                                        colors={tabs.find((tab) => tab.tab_name === scrollableTab)?.colors.map((color) => color.code) || ['#fff']}
+                                        selected={currentColorObject[scrollableTab] || ''}
+                                        onSelectColor={(color: any) => handleSelectColors(color, currentTab?.tab_name || '')}
+                                    />
+                                    <Box sx={{ width: '2px', height: '20px', bgcolor: '#d3d3d3' }} component={'div'} />
+                                    <Box
+                                        sx={{
+                                            ml: 1,
+                                            background:
+                                                "linear-gradient(45deg, #ff0000 0%, #ea00ff 50%,#ff7cff  100%)",
+                                            width: 20, height: 20,
+                                            borderRadius: 2,
+                                            border: '0.5px solid #bbbbbb'
+                                        }}
+                                        component={'div'}
+                                        onClick={customizedPopover.onOpen}
+                                    />
+                                    <CustomPopover
+                                        open={customizedPopover.open}
+                                        onClose={customizedPopover.onClose}
+                                        arrow={'bottom-left'}
+                                    >
+                                        <CustomColorPicker
+                                            onChange={(hex) => {
+                                                if (!hex) return
+                                                handleSelectColors(`#${hex}`, currentTab?.tab_name || '')
+                                            }}
+                                        />
+                                    </CustomPopover>
+                                </Box>
+                            </Box>
+                        </m.div>
+                    )}
+
+                </DialogActions>
+            </Dialog>
+        // </Box>
     )
 }
