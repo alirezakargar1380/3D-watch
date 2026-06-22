@@ -114,9 +114,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
           <Viewer
             model_path={product.clock}
             tabs={product.tabs}
-            isLocked={true}
-            text={font?.text}
-            font={font?.font_file}
+            isLocked={false}
             font_size={font?.font_size}
             position={font?.position}
             positions={font?.positions}
@@ -124,6 +122,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
             tab_name={product?.tabs?.[0].tab_name}
             color={product?.tabs?.[0].default_color}
             currentColorObject={{}}
+            height={400}
           />
           {/* <ProductDetailsCarousel product={{
             images: [

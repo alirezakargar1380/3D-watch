@@ -35,9 +35,7 @@ interface ViewerProps {
     isLocked?: boolean;
     isAr?: boolean;
     tabs: IProductTabs[];
-    tab_name?: string
-    text?: string
-    font?: string
+    tab_name: string
     font_size?: number
     position?: any
     positions?: any
@@ -45,6 +43,7 @@ interface ViewerProps {
     model_path?: string
     currentColorObject: any
     targetXYZ?: [number, number, number]
+    height?: number
     onGetColor?: () => void
 }
 export function CameraBackground() {
@@ -98,39 +97,23 @@ export function CameraBackground() {
     return null; // This component only does setup
 }
 
-function Watch({ tab_name, text, font, font_size, position, positions, color, colorObject, model_path, tab_details, onSendColor }: any) {
+function Watch({ font_size, position, positions, color, colorObject, model_path, tab_details, onSendColor }: any) {
     const { materials, nodes }: any = useGLTF(model_path);
 
     useEffect(() => {
-
+        console.log('use Effect')
         const selectedColorObject = tab_details?.colors.find((c: any) => c.code === color);
 
         const newObjectColor = { ...colorObject }
+
+        console.log('color', color)
+        console.log('selectedColorObject', selectedColorObject)
+
         Object.keys(nodes)?.map((key, index) => {
             const child = nodes[key];
 
-            // if (!selectedColorObject) return console.log('cant find color object')
-
-            // if (colorObject[child?.material?.name]) {
-            //     console.log(child.material.name, colorObject[child?.material?.name])
-            //     const color = colors?.find((c: any) => c.material_name === child?.material?.name && c.code === colorObject[child?.material?.name])
-
-
-            //     child.material = materials[child?.material?.name].clone();
-            //     child.material.color.set(colorObject[child?.material?.name]);
-
-            //     if (color?.roughness)
-            //         child.material.roughness = +color.roughness;
-            //     const name = child?.material?.name;
-            //     newObjectColor[name] = colorObject[name];
-            // }
-
-            // console.log(child)
-
-            // if (colorObject?.material_name && child?.material?.name) {
-
-            if (selectedColorObject?.all) {
-                console.log('selectedColorObject', selectedColorObject)
+            if (selectedColorObject?.all === true) {
+                console.log('selectedColorObject (all)', selectedColorObject)
                 child.material = materials[selectedColorObject.material_name].clone();
                 child.material.color.set(selectedColorObject.code);
                 if (selectedColorObject?.roughness)
@@ -139,6 +122,7 @@ function Watch({ tab_name, text, font, font_size, position, positions, color, co
                 return
             } else {
                 if (selectedColorObject?.objects.includes(child.name)) {
+                    console.log('im else', selectedColorObject)
                     child.material = materials[selectedColorObject.material_name].clone();
                     child.material.color.set(selectedColorObject.code);
                     if (selectedColorObject?.roughness)
@@ -150,20 +134,21 @@ function Watch({ tab_name, text, font, font_size, position, positions, color, co
 
             // SHOUD CHANGE
             if (!selectedColorObject && tab_details) {
-                child.material = materials[tab_details.key].clone();
-                child.material.color.set(color);
-                console.log('cant find color object', tab_details, colorObject, color)
+                console.log('tab det', tab_details.key)
+                // make a copy of material
+                const mat = materials[tab_details.key].clone();
+                mat.color.set(color);
+
+                // pasted it in all object that contain its material
+                if (child.material?.name === tab_details.key) {
+                    child.material = mat
+                }
+                // console.log('cant find color object', tab_details, colorObject, color, materials[tab_details.key].name)
+                return
             }
 
         })
-        // Object.keys(nodes)?.map((key, index) => {
-        //     const child = nodes[key];
-        //     if (child.isMesh && colorObject[child.name]) {
-        //         child.material = child.material.clone()
-        //         newObjectColor[child.name] = colorObject[child.name];
-        //         child.material.color.set(colorObject[child.name])
-        //     }
-        // })
+
         onSendColor(newObjectColor)
     }, [colorObject])
 
@@ -177,7 +162,7 @@ function Watch({ tab_name, text, font, font_size, position, positions, color, co
                 >
                     {(pos.text && font_size) && (
                         <Center key={`${pos.text}-${pos.font_size}-${pos.font_size}-${position?.x}-${position?.y}`}>
-                            <Text3D          // x, y, z relative to scene
+                            <Text3D
                                 size={pos.font_size}
                                 font={`/fonts/${pos.font_file}`}  // optional custom font
                                 // bevelEnabled
@@ -201,12 +186,11 @@ function Watch({ tab_name, text, font, font_size, position, positions, color, co
             ))}
 
             <group>
-
                 {Object.keys(nodes)?.map((key, index) => {
                     const mesh = nodes[key];
                     if (mesh.type === 'Mesh') {
                         return (
-                            <primitive object={mesh} key={index}></primitive>
+                            <primitive object={mesh} key={index} />
                         )
                     }
                 })}
@@ -274,7 +258,7 @@ function FreeLookControls({
         const dir = cam.clone().sub(target).normalize();
 
         // smaller zoomLevel = closer, larger = farther
-        const distance = 10 / zoomLevel;
+        const distance = zoomLevel*12;
 
         camera.position.copy(target.clone().add(dir.multiplyScalar(distance)));
         controlsRef.current?.target.copy(target);
@@ -289,8 +273,6 @@ export function Viewer({
     isAr,
     tabs,
     tab_name,
-    text = 'eeee',
-    font,
     font_size,
     position,
     positions,
@@ -298,33 +280,30 @@ export function Viewer({
     model_path,
     currentColorObject,
     targetXYZ = [0, 10, 0],
+    height = 1,
     onGetColor
 }: ViewerProps) {
 
     const currentTab = tabs.find((tb) => tb.tab_name === tab_name);
 
     return (
-        <Box height={1} component={'div'}>
+        <Box height={height} component={'div'} sx={{ borderRadius: 2, overflow: 'hidden' }}>
             <Canvas
                 shadows
                 camera={{
                     type: 'PerspectiveCamera',
-                    position: [Number(currentTab?.x) || 0, Number(currentTab?.y) || 10, Number(currentTab?.z) || 15],
+                    position: [Number(currentTab?.x) || 0, Number(currentTab?.y) || 10, Number(currentTab?.z) || 0],
                     fov: 50,
                     near: 0.1,
                     far: 1000
                 }}
             >
-                
                 {/* NEW: Camera feed as background */}
                 {(isAr) && (
                     <CameraBackground />
                 )}
-
                 <Watch
                     tab_name={tab_name}
-                    text={text}
-                    font={font}
                     font_size={font_size}
                     position={position}
                     positions={positions}
@@ -347,11 +326,11 @@ export function Viewer({
                         camPos={[
                             0, 10, 0
                         ]}
-                        zoomLevel={3.5}
+                        zoomLevel={1}
                     />
                 )}
 
-                {/* <color attach="background" args={['#f8f8f8']} /> */}
+                <color attach="background" args={['#f8f8f8']} />
                 <Environment files='/city.exr' blur={60} />
                 <ambientLight intensity={0.05} />
             </Canvas>
@@ -373,6 +352,7 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
     const customizedPopover = usePopover();
 
     const handleChange = (tab_name: string, newValue: any) => {
+        console.log('handleChange Color', tab_name, newValue)
         setOb((prevState: any) => ({
             ...prevState,
             [tab_name]: newValue,
@@ -380,10 +360,12 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
     }
 
     const handleChangeScrollableTab = useCallback((event: React.SyntheticEvent, newValue: string) => {
+        console.log('newValue', newValue)
         setScrollableTab(newValue);
     }, []);
 
     const handleSelectColors = (color: any, tab_name: string) => {
+        console.log('handle select colreo: ', color)
         setColor(color)
         handleChange(tab_name, color);
     }
@@ -392,23 +374,15 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
 
     // add the default colors
     useEffect(() => {
+        console.log('defult color')
         for (let i = 0; i < tabs.length; i++) {
             const tab = tabs[i];
             if (tab.tab_name === scrollableTab) {
                 handleSelectColors(tab.default_color, tab.tab_name)
             }
         }
+    // }, [])
     }, [scrollableTab])
-
-    // Auto toggle dialog back up after going down
-    // useEffect(() => {
-    //     if (!textTyping) {
-    //         const timer = setTimeout(() => {
-    //             setTextType(true);
-    //         }, 500); // 3 seconds delay
-    //         return () => clearTimeout(timer);
-    //     }
-    // }, [textTyping])
 
     const Header = () => (
         <>
@@ -481,9 +455,7 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
                             // text={text}
                             targetXYZ={targetXYZ}
                             positions={values?.positions}
-                            font={values?.font}
                             font_size={values?.font_size}
-
                         />
                     </Box>
                 </DialogContent>
@@ -557,6 +529,7 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
                                         <CustomColorPicker
                                             onChange={(hex) => {
                                                 if (!hex) return
+                                                console.log('hex', hex)
                                                 handleSelectColors(`#${hex}`, currentTab?.tab_name || '')
                                             }}
                                         />

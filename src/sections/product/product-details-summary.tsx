@@ -474,7 +474,7 @@ export default function ProductDetailsSummary({
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Stack spacing={3} sx={{ pt: 3 }} {...other}>
+      <Stack spacing={3} {...other}>
         <Stack spacing={2} alignItems="flex-start">
           {/* {renderLabels} */}
 
