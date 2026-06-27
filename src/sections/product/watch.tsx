@@ -3,7 +3,7 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Environment, OrbitControls, Text, Center, Text3D, useGLTF, CameraControls } from '@react-three/drei'
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
-import { Box, Button, Dialog, DialogActions, DialogContent, IconButton, Stack, Tab, Tabs, Collapse } from '@mui/material'
+import { Box, Button, Dialog, DialogActions, DialogContent, IconButton, Stack, Tab, Tabs, Collapse, Typography, MenuItem, formHelperTextClasses } from '@mui/material'
 import { ColorPicker, ColorPreview } from 'src/components/color-utils'
 import { ReturnType } from 'src/hooks/use-boolean'
 import Iconify from 'src/components/iconify'
@@ -14,8 +14,10 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover'
 import { m } from 'framer-motion';
 import { MotionContainer, varFade } from 'src/components/animate';
 import Image from 'src/components/image'
-import { RHFTextField } from 'src/components/hook-form'
+import { RHFSelect, RHFTextField } from 'src/components/hook-form'
 import { endpoints } from 'src/utils/axios'
+import { IPosition } from 'src/types/position'
+import { fonts, FontSizes, IFont } from 'src/utils/fonts'
 
 interface CameraProps {
     camPos: [number, number, number];    // Where the camera is
@@ -258,7 +260,7 @@ function FreeLookControls({
         const dir = cam.clone().sub(target).normalize();
 
         // smaller zoomLevel = closer, larger = farther
-        const distance = zoomLevel*12;
+        const distance = zoomLevel * 12;
 
         camera.position.copy(target.clone().add(dir.multiplyScalar(distance)));
         controlsRef.current?.target.copy(target);
@@ -351,6 +353,10 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
     const targetXYZ: [number, number, number] = [0, 0, 0];
     const customizedPopover = usePopover();
 
+    const [position, setPosition] = useState<IPosition>();
+    const [index, setIndex] = useState<number>();
+
+
     const handleChange = (tab_name: string, newValue: any) => {
         console.log('handleChange Color', tab_name, newValue)
         setOb((prevState: any) => ({
@@ -381,7 +387,7 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
                 handleSelectColors(tab.default_color, tab.tab_name)
             }
         }
-    // }, [])
+        // }, [])
     }, [scrollableTab])
 
     const Header = () => (
@@ -472,16 +478,78 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
                     </Box>
 
                     {(textTyping) ? (
-                        <m.div key={`${textTyping}-text`} variants={textTyping ? varFade().in : varFade().out}>
-                            <Box component={'div'} height={'100px'} width={0.5} mx={'auto'}>
-                                {textFields.map((position: any, index: number) => (
-                                    <Box component={'div'} display={'flex'} gap={1} alignItems={'end'} key={index}>
-                                        <Image src={endpoints.positions.get_icon(position.img)} sx={{ width: 50, borderRadius: 1 }} />
-                                        <RHFTextField name={`positions.${index}.text`} label={'text'} size='small' />
-                                    </Box>
-                                ))}
+                        <Box component={'div'} sx={{ m: 0, ml: '0px!important' }}>
+                            <m.div key={`${textTyping}-text`} variants={textTyping ? varFade().in : varFade().out}>
+                                <Stack direction={'row'} justifyContent={'center'} spacing={1}>
+                                    {textFields.map((pos: any, index: number) => (
+                                        <Box
+                                            component={'div'}
+                                            onClick={() => {
+                                                setPosition(pos)
+                                                setIndex(index)
+                                            }}
+                                            key={index * 324}
+                                            sx={{
+                                                width: 64, textAlign: 'center', borderRadius: 1.25, p: 1,
+                                                border: '2px solid #e6e6e6',
+                                                ...(pos.id === position?.id && {
+                                                    border: '2px solid #858585',
+                                                }),
+                                                cursor: 'pointer'
+                                            }}>
+                                            <Image src={endpoints.positions.get_icon(pos.img)} sx={{ width: 0.7 }} />
+                                            <Typography textAlign={'center'} variant='caption'>{pos.name}</Typography>
+                                        </Box>
+                                    ))}
+
+                                </Stack>
+                            </m.div>
+                            <Box component={'div'}key={`${index}`}>
+                                <Stack direction="row" spacing={1}>
+                                    <RHFTextField  label='Text' name={`positions.${index}.text`} size='small' />
+
+                                    <RHFSelect
+                                        name={`positions.${index}.font_file`}
+                                        label="font"
+                                        size="small"
+                                        sx={{
+                                            maxWidth: 150,
+                                            [`& .${formHelperTextClasses.root}`]: {
+                                                mx: 0,
+                                                mt: 1,
+                                                textAlign: 'right',
+                                            },
+                                        }}
+                                    >
+                                        {fonts.map((font: IFont, index: number) => (
+                                            <MenuItem key={index} value={font.file}>
+                                                {font.name}
+                                            </MenuItem>
+                                        ))}
+                                    </RHFSelect>
+
+                                    <RHFSelect
+                                        name={`positions.${index}.font_size`}
+                                        size="small"
+                                        label="font size"
+                                        sx={{
+                                            maxWidth: 150,
+                                            [`& .${formHelperTextClasses.root}`]: {
+                                                mx: 0,
+                                                mt: 1,
+                                                textAlign: 'right',
+                                            },
+                                        }}
+                                    >
+                                        {FontSizes.map((size: number, index: number) => (
+                                            <MenuItem key={index} value={size}>
+                                                {size}
+                                            </MenuItem>
+                                        ))}
+                                    </RHFSelect>
+                                </Stack>
                             </Box>
-                        </m.div>
+                        </Box>
                     ) : (
                         <m.div key={`${textTyping}`} variants={textTyping ? varFade().out : varFade().in}>
                             <Box component={'div'} height={'100px'}>
