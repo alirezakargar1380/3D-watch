@@ -4,7 +4,7 @@ import { varTranExit, varTranEnter } from './transition';
 // ----------------------------------------------------------------------
 
 export const varSlide = (props?: VariantsType) => {
-  const distance = props?.distance || 160;
+  const distance = props?.distance || 80;
   const durationIn = props?.durationIn;
   const durationOut = props?.durationOut;
   const easeIn = props?.easeIn;
@@ -21,6 +21,11 @@ export const varSlide = (props?: VariantsType) => {
       initial: { y: -distance },
       animate: { y: 0, transition: varTranEnter({ durationIn, easeIn }) },
       exit: { y: -distance, transition: varTranExit({ durationOut, easeOut }) },
+    },
+    inDownFade: {
+      initial: { opacity: 0 },
+      animate: { opacity: [0,0,0,1], transition: varTranEnter({ durationIn, easeIn }) },
+      exit: { transition: varTranExit({ durationOut, easeOut }) },
     },
     inLeft: {
       initial: { x: -distance },

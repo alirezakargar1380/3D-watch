@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
@@ -32,6 +32,8 @@ import CustomazationDialog from './watch';
 import { FontPositions, fonts, FontSizes, IFont } from 'src/utils/fonts';
 import Image from 'src/components/image';
 import { IPosition } from 'src/types/position';
+import { MotionContainer, varFade, varSlide } from 'src/components/animate';
+import { m } from 'framer-motion';
 
 // ----------------------------------------------------------------------
 
@@ -76,6 +78,9 @@ export default function ProductDetailsSummary({
 
   const existProduct = !!items?.length && items.map((item) => item.id).includes(id);
 
+  const [position, setPosition] = useState<IPosition>();
+  const [index, setIndex] = useState<number>();
+
   const isMaxQuantity =
     !!items?.length
 
@@ -86,13 +91,14 @@ export default function ProductDetailsSummary({
     // available,
     // price,
     text: 'hello',
-    position: FontPositions[0],
+    position: positions?.[0].position,
     positions: positions.map((position: any) => {
       return {
         text: 'random t',
         font_file: fonts[0].file,
         font_size: FontSizes[0],
         ...position.position,
+        p_id: position.position.id,
         x: position.x,
         y: position.y,
       }
@@ -253,128 +259,83 @@ export default function ProductDetailsSummary({
 
   const renderText = (
     <>
-      <Stack direction="row">
-        <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
-          Text
-        </Typography>
-
-        <RHFTextField name='text' label='Text' size='small' sx={{ maxWidth: 150, }} />
-      </Stack>
-      <Stack direction="row">
-        <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
-          Text Font
-        </Typography>
-
-        <RHFSelect
-          name="font_file"
-          size="small"
-          sx={{
-            maxWidth: 150,
-            [`& .${formHelperTextClasses.root}`]: {
-              mx: 0,
-              mt: 1,
-              textAlign: 'right',
-            },
-          }}
-        >
-          {fonts.map((font: IFont, index: number) => (
-            <MenuItem key={index} value={font.file}>
-              {font.name}
-            </MenuItem>
-          ))}
-        </RHFSelect>
-      </Stack>
-
-      <Stack direction="row">
-        <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
-          Font Size
-        </Typography>
-
-        <RHFSelect
-          name="font_size"
-          size="small"
-          sx={{
-            maxWidth: 150,
-            [`& .${formHelperTextClasses.root}`]: {
-              mx: 0,
-              mt: 1,
-              textAlign: 'right',
-            },
-          }}
-        >
-          {FontSizes.map((size: number, index: number) => (
-            <MenuItem key={index} value={size}>
-              {size}
-            </MenuItem>
-          ))}
-        </RHFSelect>
-      </Stack>
-
 
       <Box component={'div'}>
         <Typography variant="subtitle2" sx={{ flexGrow: 1, mb: 2 }}>
-          Text positon
+          Typography
         </Typography>
-        <Stack direction="column" spacing={2}>
-          {fields.map((position: any, index) => (
-            <Box component={'div'} display={'flex'} gap={1} alignItems={'end'} key={index}>
-              <Image src={endpoints.positions.get_icon(position.img)} sx={{ width: 90, borderRadius: 1 }} />
-              <RHFTextField name={`positions.${index}.text`} label={'text'} />
-            </Box>
-          ))}
-        </Stack>
-        <Stack direction="row" spacing={2}>
-          {FontPositions.map((position: any, index: number) => (
-            <Box component={'div'} onClick={() => setValue('position', position)} key={index * 324} sx={{
-              width: 64, textAlign: 'center', borderRadius: 1.25, p: 1,
-              border: '2px solid #e6e6e6',
-              ...(position.id === values.position.id && {
-                border: '2px solid #858585',
-              }),
-              cursor: 'pointer'
-            }}>
-              <Image src='/images.png' sx={{ width: 0.7 }} />
-              <Typography textAlign={'center'} variant='caption'>{position.name}</Typography>
+        <Stack direction="row" spacing={1}>
+          {fields.map((pos: any, index) => (
+            <Box
+              component={'div'}
+              onClick={() => {
+                setPosition(pos)
+                setIndex(index)
+              }}
+              key={index * 324}
+              sx={{
+                width: 64, textAlign: 'center', borderRadius: 1.25, p: 1,
+                border: '2px solid #e6e6e6',
+                ...(pos.id === position?.id && {
+                  border: '2px solid #858585',
+                }),
+                cursor: 'pointer'
+              }}>
+              <Image src={endpoints.positions.get_icon(pos.img)} sx={{ width: 0.7 }} />
+              <Typography textAlign={'center'} variant='caption'>{pos.name}</Typography>
             </Box>
           ))}
         </Stack>
       </Box>
 
+      {position && (
+        <m.div key={`${position?.id}-text`} variants={varSlide({ durationOut: 5000, durationIn: 0.9 }).inDownFade}>
+          <Stack direction="row" spacing={1}>
+            <RHFTextField label='Text' name={`positions.${index}.text`} size='small' />
 
+            <RHFSelect
+              name={`positions.${index}.font_file`}
+              label="font"
+              size="small"
+              sx={{
+                maxWidth: 150,
+                [`& .${formHelperTextClasses.root}`]: {
+                  mx: 0,
+                  mt: 1,
+                  textAlign: 'right',
+                },
+              }}
+            >
+              {fonts.map((font: IFont, index: number) => (
+                <MenuItem key={index} value={font.file}>
+                  {font.name}
+                </MenuItem>
+              ))}
+            </RHFSelect>
 
+            <RHFSelect
+              name={`positions.${index}.font_size`}
+              size="small"
+              label="font size"
+              sx={{
+                maxWidth: 150,
+                [`& .${formHelperTextClasses.root}`]: {
+                  mx: 0,
+                  mt: 1,
+                  textAlign: 'right',
+                },
+              }}
+            >
+              {FontSizes.map((size: number, index: number) => (
+                <MenuItem key={index} value={size}>
+                  {size}
+                </MenuItem>
+              ))}
+            </RHFSelect>
+          </Stack>
+        </m.div>
+      )}
     </>
-  );
-
-  const renderSizeOptions = (
-    <Stack direction="row">
-      <Typography variant="subtitle2" sx={{ flexGrow: 1 }}>
-        Size
-      </Typography>
-
-      <RHFSelect
-        name="size"
-        size="small"
-        helperText={
-          <Link underline="always" color="textPrimary">
-            Size Chart
-          </Link>
-        }
-        sx={{
-          maxWidth: 88,
-          [`& .${formHelperTextClasses.root}`]: {
-            mx: 0,
-            mt: 1,
-            textAlign: 'right',
-          },
-        }}
-      >
-        {[12, 45, 70].map((size) => (
-          <MenuItem key={size} value={size}>
-            {size}
-          </MenuItem>
-        ))}
-      </RHFSelect>
-    </Stack>
   );
 
   const renderQuantity = (
@@ -474,50 +435,51 @@ export default function ProductDetailsSummary({
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
-      <Stack spacing={3} {...other}>
-        <Stack spacing={2} alignItems="flex-start">
-          {/* {renderLabels} */}
+      <Box component={MotionContainer}>
 
-          {renderInventoryType}
+        <Stack spacing={3} {...other}>
+          <Stack spacing={2} alignItems="flex-start">
+            {/* {renderLabels} */}
 
-          <Typography variant="h5">{name}</Typography>
+            {renderInventoryType}
 
-          {renderRating}
+            <Typography variant="h5">{name}</Typography>
 
-          {renderPrice}
+            {renderRating}
 
-          {renderSubDescription}
+            {renderPrice}
+
+            {renderSubDescription}
+          </Stack>
+
+          <Divider sx={{ borderStyle: 'dashed' }} />
+
+          {renderQuantity}
+
+          {renderColorOptions}
+
+          {renderText}
+
+          <Divider sx={{ borderStyle: 'dashed' }} />
+
+          {renderActions}
+
+
+          <CustomazationDialog
+            dialog={dialog}
+            model_path={product.clock}
+            tabs={product.tabs}
+            values={values}
+            textFields={fields}
+          // afterSubmit={(object: any) => {
+          //   setValue('colors', JSON.stringify(object))
+          //   onSubmit();
+          // }}
+          />
+
+          {renderShare}
         </Stack>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        {renderColorOptions}
-
-        {renderText}
-
-        {renderSizeOptions}
-
-        {renderQuantity}
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        {renderActions}
-
-
-        <CustomazationDialog
-          dialog={dialog}
-          model_path={product.clock}
-          tabs={product.tabs}
-          values={values}
-          textFields={fields}
-        // afterSubmit={(object: any) => {
-        //   setValue('colors', JSON.stringify(object))
-        //   onSubmit();
-        // }}
-        />
-
-        {renderShare}
-      </Stack>
+      </Box>
     </FormProvider>
   );
 }
