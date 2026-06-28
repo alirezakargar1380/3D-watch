@@ -32,6 +32,7 @@ import ProductDetailsDescription from '../product-details-description';
 import { Viewer } from '../watch';
 import { fonts, IFont } from 'src/utils/fonts';
 import { IFontFunction } from 'src/types/product';
+import { useBoolean } from 'src/hooks/use-boolean';
 
 // ----------------------------------------------------------------------
 
@@ -60,11 +61,14 @@ type Props = {
 };
 
 export default function ProductShopDetailsViewCustomize({ id }: Props) {
+  const dialog = useBoolean();
+
   const settings = useSettingsContext();
 
   const checkout = useCheckoutContext();
 
   const [font, setFont] = useState<IFontFunction>();
+  const [colorObj, setColorObj] = useState<any>({});
 
   const [currentTab, setCurrentTab] = useState('description');
 
@@ -79,7 +83,8 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
   const renderError = (
     <EmptyContent
       filled
-      title={`${productError?.message}`}
+      // title={`${productError?.message}`}
+      // title={`${productError?.message}`}
       action={
         <Button
           component={RouterLink}
@@ -95,7 +100,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
   );
 
   const renderProduct = product && (
-  // const renderProduct = (
+    // const renderProduct = (
     <>
       <CustomBreadcrumbs
         links={[
@@ -111,19 +116,21 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
 
       <Grid container spacing={{ xs: 3, md: 5, lg: 8 }}>
         <Grid xs={12} md={6} lg={7}>
-          <Viewer
-            model_path={product.clock}
-            tabs={product.tabs}
-            isLocked={false}
-            font_size={font?.font_size}
-            position={font?.position}
-            positions={font?.positions}
-            // targetXYZ={[0, 0, 0]}
-            tab_name={product?.tabs?.[0].tab_name}
-            color={product?.tabs?.[0].default_color}
-            currentColorObject={{}}
-            height={400}
-          />
+          {(!dialog.value) && (
+            <Viewer
+              key={'a3d-vlock-viewor'}
+              model_path={product.clock}
+              tabs={product.tabs}
+              isLocked={false}
+              font_size={font?.font_size}
+              positions={font?.positions}
+              // targetXYZ={[0, 0, 0]}
+              tab_name={product?.tabs?.[0].tab_name}
+              color={product?.tabs?.[0].default_color}
+              currentColorObject={colorObj}
+              height={400}
+            />
+          )}
           {/* <ProductDetailsCarousel product={{
             images: [
               '/assets/images/Untitled3.jpg',
@@ -140,6 +147,11 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
             items={checkout.items}
             onAddCart={checkout.onAddToCart}
             onGotoStep={checkout.onGotoStep}
+            dialog={dialog}
+            onSendColorObj={(colorObj: any) => {
+              console.log('colorObj', colorObj)
+              setColorObj(colorObj)
+            }}
             onSendText={(font: IFontFunction) => {
               setFont({
                 ...font

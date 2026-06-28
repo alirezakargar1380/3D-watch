@@ -103,10 +103,8 @@ export type IProductItem = {
 export type IProductTableFilterValue = string | string[];
 
 export type IFontFunction = {
-  text: string;
   font_file: string
   font_size: number
-  position: any
   positions: any[]
 }
 

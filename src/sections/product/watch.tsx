@@ -31,6 +31,7 @@ interface Props {
     tabs: IProductTabs[];
     values?: any
     textFields?: any
+    colorObject?: any
 }
 
 interface ViewerProps {
@@ -99,17 +100,13 @@ export function CameraBackground() {
     return null; // This component only does setup
 }
 
-function Watch({ font_size, position, positions, color, colorObject, model_path, tab_details, onSendColor }: any) {
+function Watch({ font_size, positions, color, colorObject, model_path, tab_details, onSendColor }: any) {
     const { materials, nodes }: any = useGLTF(model_path);
 
     useEffect(() => {
-        console.log('use Effect')
         const selectedColorObject = tab_details?.colors.find((c: any) => c.code === color);
 
         const newObjectColor = { ...colorObject }
-
-        console.log('color', color)
-        console.log('selectedColorObject', selectedColorObject)
 
         Object.keys(nodes)?.map((key, index) => {
             const child = nodes[key];
@@ -126,7 +123,7 @@ function Watch({ font_size, position, positions, color, colorObject, model_path,
                 if (selectedColorObject?.objects.includes(child.name)) {
                     console.log('im else', selectedColorObject)
                     child.material = materials[selectedColorObject.material_name].clone();
-                    child.material.color.set(selectedColorObject.code);
+                    child.material.color.set(newObjectColor[tab_details.tab_name]);
                     if (selectedColorObject?.roughness)
                         child.material.roughness = +colorObject.roughness;
 
@@ -163,7 +160,7 @@ function Watch({ font_size, position, positions, color, colorObject, model_path,
                     position={[+pos.x, 0, +pos.y]}
                 >
                     {(pos.text && font_size) && (
-                        <Center key={`${pos.text}-${pos.font_size}-${pos.font_size}-${position?.x}-${position?.y}`}>
+                        <Center key={`${pos.text}-${pos.font_size}-${pos.font_size}-${pos.x}-${pos.y}`}>
                             <Text3D
                                 size={pos.font_size}
                                 font={`/fonts/${pos.font_file}`}  // optional custom font
@@ -276,7 +273,6 @@ export function Viewer({
     tabs,
     tab_name,
     font_size,
-    position,
     positions,
     color,
     model_path,
@@ -307,7 +303,6 @@ export function Viewer({
                 <Watch
                     tab_name={tab_name}
                     font_size={font_size}
-                    position={position}
                     positions={positions}
                     color={color}
                     tab_details={tabs.find((t) => t.tab_name === tab_name)}
@@ -341,7 +336,7 @@ export function Viewer({
 
 }
 
-export default function CustomazationDialog({ dialog, model_path, tabs, values, textFields }: Props) {
+export default function CustomazationDialog({ dialog, model_path, tabs, values, textFields, colorObject }: Props) {
     const [currentColorObject, setOb] = useState<any>({});
     const [color, setColor] = useState('');
     const [newColorObject, setnewOb] = useState<any>({});
@@ -358,7 +353,6 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
 
 
     const handleChange = (tab_name: string, newValue: any) => {
-        console.log('handleChange Color', tab_name, newValue)
         setOb((prevState: any) => ({
             ...prevState,
             [tab_name]: newValue,
@@ -366,7 +360,6 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
     }
 
     const handleChangeScrollableTab = useCallback((event: React.SyntheticEvent, newValue: string) => {
-        console.log('newValue', newValue)
         setScrollableTab(newValue);
     }, []);
 
@@ -390,6 +383,13 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
         // }, [])
     }, [scrollableTab])
 
+    useEffect(() => {
+        setOb((prevState: any) => ({
+            ...prevState,
+            ...colorObject,
+        }))
+    }, [colorObject])
+
     const Header = () => (
         <>
             <Box component={'div'} position={'absolute'} zIndex={10} top={20} right={20}>
@@ -397,14 +397,17 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
                     color='secondary'
                     variant='outlined'
                     onClick={() => {
-                        dialog.onFalse()
+                        dialog.onFalse();
                         // afterSubmit(currentColorObject)
                     }}
                 >
                     done
                 </Button>
             </Box>
-            <Box component={'div'} position={'absolute'} zIndex={10} top={20} left={20} display={'flex'} gap={1}>
+            <Stack component={'div'} position={'absolute'} zIndex={10} top={20} left={20} display={'flex'} gap={1}>
+                <IconButton onClick={() => setIsLocked(!isLocked)}>
+                    <Iconify color={'black'} icon={!isLocked ? "ic:twotone-lock" : "eva:unlock-outline"} width={36} />
+                </IconButton>
                 <IconButton
                     onClick={() => setIsARMode(!isARMode)}
                     title={isARMode ? "Exit AR Mode" : "Enter AR Mode"}
@@ -418,9 +421,6 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
                 >
                     <Iconify color={'black'} icon={!isARMode ? "game-icons:cube" : "eva:eye-outline"} width={36} />
                 </IconButton>
-                <IconButton onClick={() => setIsLocked(!isLocked)}>
-                    <Iconify color={'black'} icon={!isLocked ? "ic:twotone-lock" : "eva:unlock-outline"} width={36} />
-                </IconButton>
                 <IconButton
                     onClick={() => setTextType(!textTyping)}
                     sx={{
@@ -431,7 +431,7 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
                 >
                     <Iconify color={'black'} icon={'cuida:text-outline'} width={36} />
                 </IconButton>
-            </Box>
+            </Stack>
         </>
     )
 
@@ -441,6 +441,8 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
                 open={dialog.value}
                 onClose={dialog.onFalse}
                 fullScreen
+            // fullWidth
+            // maxWidth={'xl'}
             // PaperProps={{
             //     sx: {
             //         backgroundColor: '#f4f4f2'
@@ -478,77 +480,79 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
                     </Box>
 
                     {(textTyping) ? (
-                        <Box component={'div'} sx={{ m: 0, ml: '0px!important' }}>
-                            <m.div key={`${textTyping}-text`} variants={textTyping ? varFade().in : varFade().out}>
-                                <Stack direction={'row'} justifyContent={'center'} spacing={1}>
-                                    {textFields.map((pos: any, index: number) => (
-                                        <Box
-                                            component={'div'}
-                                            onClick={() => {
-                                                setPosition(pos)
-                                                setIndex(index)
-                                            }}
-                                            key={index * 324}
-                                            sx={{
-                                                width: 64, textAlign: 'center', borderRadius: 1.25, p: 1,
-                                                border: '2px solid #e6e6e6',
-                                                ...(pos.id === position?.id && {
-                                                    border: '2px solid #858585',
-                                                }),
-                                                cursor: 'pointer'
-                                            }}>
-                                            <Image src={endpoints.positions.get_icon(pos.img)} sx={{ width: 0.7 }} />
-                                            <Typography textAlign={'center'} variant='caption'>{pos.name}</Typography>
-                                        </Box>
-                                    ))}
+                        <Box component={'div'} sx={{ mr: 'auto!important', ml: 'auto!important', width: { xs: 1, md: 0.3 } }}>
+                            <Stack direction={'row'} justifyContent={'left'} spacing={1} mb={3}>
+                                {textFields.map((pos: any, index: number) => (
+                                    <Box
+                                        component={'div'}
+                                        onClick={() => {
+                                            setPosition(pos)
+                                            setIndex(index)
+                                        }}
+                                        key={index * 324}
+                                        sx={{
+                                            width: 64, textAlign: 'center', borderRadius: 1.25, p: 1,
+                                            border: '2px solid #e6e6e6',
+                                            ...(pos.id === position?.id && {
+                                                border: '2px solid #858585',
+                                            }),
+                                            cursor: 'pointer',
+                                        }}>
+                                        <Image src={endpoints.positions.get_icon(pos.img)} sx={{ width: 0.7 }} />
+                                        <Typography textAlign={'center'} variant='caption'>{pos.name}</Typography>
+                                    </Box>
+                                ))}
 
-                                </Stack>
+                            </Stack>
+                            <m.div key={`${index}`} variants={textTyping ? varFade().in : varFade().out}>
+                                {(index !== undefined) && (
+                                    <Box component={'div'}>
+                                        <Stack direction="row" spacing={1}>
+                                            <RHFTextField label='Text' name={`positions.${index}.text`} size='small' />
+
+                                            <RHFSelect
+                                                name={`positions.${index}.font_file`}
+                                                label="font"
+                                                size="small"
+                                                sx={{
+                                                    maxWidth: 150,
+                                                    [`& .${formHelperTextClasses.root}`]: {
+                                                        mx: 0,
+                                                        mt: 1,
+                                                        textAlign: 'right',
+                                                    },
+                                                }}
+                                            >
+                                                {fonts.map((font: IFont, index: number) => (
+                                                    <MenuItem key={index} value={font.file}>
+                                                        {font.name}
+                                                    </MenuItem>
+                                                ))}
+                                            </RHFSelect>
+
+                                            <RHFSelect
+                                                name={`positions.${index}.font_size`}
+                                                size="small"
+                                                label="font size"
+                                                sx={{
+                                                    maxWidth: 150,
+                                                    [`& .${formHelperTextClasses.root}`]: {
+                                                        mx: 0,
+                                                        mt: 1,
+                                                        textAlign: 'right',
+                                                    },
+                                                }}
+                                            >
+                                                {FontSizes.map((size: number, index: number) => (
+                                                    <MenuItem key={index} value={size}>
+                                                        {size}
+                                                    </MenuItem>
+                                                ))}
+                                            </RHFSelect>
+                                        </Stack>
+                                    </Box>
+                                )}
                             </m.div>
-                            <Box component={'div'}key={`${index}`}>
-                                <Stack direction="row" spacing={1}>
-                                    <RHFTextField  label='Text' name={`positions.${index}.text`} size='small' />
-
-                                    <RHFSelect
-                                        name={`positions.${index}.font_file`}
-                                        label="font"
-                                        size="small"
-                                        sx={{
-                                            maxWidth: 150,
-                                            [`& .${formHelperTextClasses.root}`]: {
-                                                mx: 0,
-                                                mt: 1,
-                                                textAlign: 'right',
-                                            },
-                                        }}
-                                    >
-                                        {fonts.map((font: IFont, index: number) => (
-                                            <MenuItem key={index} value={font.file}>
-                                                {font.name}
-                                            </MenuItem>
-                                        ))}
-                                    </RHFSelect>
-
-                                    <RHFSelect
-                                        name={`positions.${index}.font_size`}
-                                        size="small"
-                                        label="font size"
-                                        sx={{
-                                            maxWidth: 150,
-                                            [`& .${formHelperTextClasses.root}`]: {
-                                                mx: 0,
-                                                mt: 1,
-                                                textAlign: 'right',
-                                            },
-                                        }}
-                                    >
-                                        {FontSizes.map((size: number, index: number) => (
-                                            <MenuItem key={index} value={size}>
-                                                {size}
-                                            </MenuItem>
-                                        ))}
-                                    </RHFSelect>
-                                </Stack>
-                            </Box>
                         </Box>
                     ) : (
                         <m.div key={`${textTyping}`} variants={textTyping ? varFade().out : varFade().in}>
@@ -609,6 +613,6 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
 
                 </DialogActions>
             </Dialog>
-        // </Box>
+        </Box>
     )
 }

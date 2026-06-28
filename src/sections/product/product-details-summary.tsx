@@ -21,12 +21,12 @@ import Iconify from 'src/components/iconify';
 import { ColorPicker } from 'src/components/color-utils';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-import { IFontFunction, IProductItem } from 'src/types/product';
+import { IFontFunction, IProductItem, IProductTabs } from 'src/types/product';
 import { ICheckoutItem } from 'src/types/checkout';
 
 import IncrementerButton from './common/incrementer-button';
 import Viewer from './watch';
-import { useBoolean } from 'src/hooks/use-boolean';
+import { ReturnType, useBoolean } from 'src/hooks/use-boolean';
 import axiosInstance, { customer_axios, endpoints } from 'src/utils/axios';
 import CustomazationDialog from './watch';
 import { FontPositions, fonts, FontSizes, IFont } from 'src/utils/fonts';
@@ -38,26 +38,29 @@ import { m } from 'framer-motion';
 // ----------------------------------------------------------------------
 
 type Props = {
+  dialog: ReturnType;
   product: IProductItem;
   items?: ICheckoutItem[];
   disabledActions?: boolean;
   onGotoStep?: (step: number) => void;
   onAddCart?: (cartItem: ICheckoutItem) => void;
-  onCustomize?: () => void;
+  onSendColorObj: (obj: any) => void;
   onSendText: (font: IFontFunction) => void;
 };
 
 export default function ProductDetailsSummary({
+  dialog,
   items,
   product,
   onAddCart,
   onGotoStep,
+  onSendColorObj,
   disabledActions,
   onSendText,
   ...other
 }: Props) {
   const router = useRouter();
-  const dialog = useBoolean();
+
   const {
     id,
     name,
@@ -90,8 +93,7 @@ export default function ProductDetailsSummary({
     // coverUrl,
     // available,
     // price,
-    text: 'hello',
-    position: positions?.[0].position,
+    currentColorObject: {} as any,
     positions: positions.map((position: any) => {
       return {
         text: 'random t',
@@ -132,13 +134,11 @@ export default function ProductDetailsSummary({
 
   useEffect(() => {
     onSendText({
-      text: values.text,
       font_file: values.font_file,
       font_size: values.font_size,
-      position: values.position,
       positions: positions_w,
     })
-  }, [values.text, values.font_file, values.font_size, JSON.stringify(positions_w)])
+  }, [values.font_file, values.font_size, JSON.stringify(positions_w)])
 
   useEffect(() => {
     if (product) {
@@ -167,15 +167,15 @@ export default function ProductDetailsSummary({
 
   const handleAddCart = useCallback(() => {
     try {
-      // onAddCart?.({
-      //   ...values,
-      //   colors: [values.colors],
-      //   subTotal: values.price * values.quantity,
-      // });
+      console.log(values)
     } catch (error) {
       console.error(error);
     }
   }, [onAddCart, values]);
+
+  useEffect(() => {
+    onSendColorObj(values.currentColorObject)
+  }, [values.currentColorObject])
 
   const renderPrice = (
     <Box sx={{ typography: 'h5' }} component={'div'}>
@@ -242,7 +242,30 @@ export default function ProductDetailsSummary({
         Color
       </Typography>
 
-      <Controller
+      {product.tabs.map((tab: IProductTabs, index: number) => {
+        if (index === 0)
+          return (
+            // <Controller
+            //   name="colors"
+            //   control={control}
+            //   render={({ field }) => (
+            <ColorPicker
+              colors={tab.colors.map((color) => color.code)}
+              selected={values.currentColorObject[tab.tab_name] || ''}
+              onSelectColor={(color) => setValue('currentColorObject', {
+                [tab.tab_name]: color
+              })
+              }
+              limit={4}
+            />
+
+            // />
+          )
+        // return (
+        //   <>{tab.colors.map((color) => color.code)}</>
+        // )
+      })}
+      {/* <Controller
         name="colors"
         control={control}
         render={({ field }) => (
@@ -253,7 +276,7 @@ export default function ProductDetailsSummary({
             limit={4}
           />
         )}
-      />
+      /> */}
     </Stack>
   );
 
@@ -368,14 +391,7 @@ export default function ProductDetailsSummary({
     <Stack direction="row" spacing={2}>
       <Button
         fullWidth
-        size="large"
-        // type="submit" 
-        variant="contained" onClick={dialog.onTrue} disabled={disabledActions}>
-        Customize Clock
-      </Button>
-      <Button
-        fullWidth
-        disabled={isMaxQuantity || disabledActions}
+        // disabled={isMaxQuantity || disabledActions}
         size="large"
         color="warning"
         variant="contained"
@@ -385,8 +401,13 @@ export default function ProductDetailsSummary({
       >
         Add to Cart
       </Button>
-
-
+      <Button
+        fullWidth
+        size="large"
+        // type="submit" 
+        variant="contained" onClick={dialog.onTrue} disabled={disabledActions}>
+        Customize Clock
+      </Button>
     </Stack>
   );
 
@@ -464,13 +485,13 @@ export default function ProductDetailsSummary({
 
           {renderActions}
 
-
           <CustomazationDialog
             dialog={dialog}
             model_path={product.clock}
             tabs={product.tabs}
             values={values}
             textFields={fields}
+            colorObject={values.currentColorObject}
           // afterSubmit={(object: any) => {
           //   setValue('colors', JSON.stringify(object))
           //   onSubmit();
