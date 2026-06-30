@@ -23,23 +23,29 @@ export default function ProductCarousel({ data }: Props) {
     const carousel = useCarousel({
         // slidesToShow: 4.5,
         // adaptiveHeight: true,
-        infinite: false,
+        // infinite: false,
         // className: "slider variable-width",
         // variableWidth: true,
-        slidesToShow: 4.2,
+        slidesToShow: 4.3,
+        // slidesToScroll: 1.3,
+        centerMode: true,
         responsive: [
             {
                 breakpoint: 1024,
-                settings: { slidesToShow: 4 },
+                settings: { slidesToShow: 3 },
             },
             {
-                breakpoint: 600,
+                breakpoint: 850,
                 settings: { slidesToShow: 2 },
             },
             {
-                breakpoint: 480,
-                settings: { slidesToShow: 1, centerPadding: '0' },
+                breakpoint: 600,
+                settings: { slidesToShow: 1 },
             },
+            // {
+            //     breakpoint: 0,
+            //     settings: { slidesToShow: 1 },
+            // },
         ],
         // ...CarouselDots({
         //     rounded: true,

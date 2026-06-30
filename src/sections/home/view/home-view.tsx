@@ -175,8 +175,8 @@ export default function HomeView() {
 
       </Box>
 
-      <Container maxWidth={'xl'} sx={{ mt: 16, pb: 16 }}>
-        <Stack direction={'row'} justifyContent={'space-between'}>
+      <Container maxWidth={'xl'} sx={{ mt: { xs: 0, md: 16 }, pb: 16 }}>
+        <Stack direction={{ xs: 'column-reverse', md: 'row' }} justifyContent={'space-between'}>
           <Box component={'div'}>
             <Typography variant='h2' fontWeight={800} mb={2}>Build Wierd Clocks!</Typography>
             <Typography variant='body1' fontWeight={400} mb={2}>

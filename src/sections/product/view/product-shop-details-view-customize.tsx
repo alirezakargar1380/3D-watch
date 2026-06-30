@@ -128,7 +128,7 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
               tab_name={product?.tabs?.[0].tab_name}
               color={product?.tabs?.[0].default_color}
               currentColorObject={colorObj}
-              height={400}
+              height={600}
             />
           )}
           {/* <ProductDetailsCarousel product={{

@@ -59,10 +59,10 @@ const clockPaths = [
     path: '/models/golden-ring-clock.glb',
     zoom: 3
   },
-  {
-    path: '/models/mile-watch.glb',
-    zoom: 2
-  },
+  // {
+  //   path: '/models/mile-watch.glb',
+  //   zoom: 2
+  // },
   {
     path: '/models/salib-clock.glb',
     zoom: 5
@@ -87,12 +87,16 @@ const clockPaths = [
     path: '/models/wall clock without frame.glb',
     zoom: 3
   },
+  // {
+  //   path: '/models/sozani.glb',
+  //   zoom: 3
+  // },
   {
-    path: '/models/sozani.glb',
+    path: '/models/clock.glb',
     zoom: 3
   },
   {
-    path: '/models/clock.glb',
+    path: '/models/moon.glb',
     zoom: 3
   },
 ]

@@ -121,11 +121,11 @@ function Watch({ font_size, positions, color, colorObject, model_path, tab_detai
                 return
             } else {
                 if (selectedColorObject?.objects.includes(child.name)) {
-                    console.log('im else', selectedColorObject)
+                    console.log('im else', selectedColorObject, +colorObject.roughness)
                     child.material = materials[selectedColorObject.material_name].clone();
                     child.material.color.set(newObjectColor[tab_details.tab_name]);
                     if (selectedColorObject?.roughness)
-                        child.material.roughness = +colorObject.roughness;
+                        child.material.roughness = +selectedColorObject?.roughness;
 
                     return
                 }
@@ -328,8 +328,8 @@ export function Viewer({
                 )}
 
                 <color attach="background" args={['#f8f8f8']} />
-                <Environment files='/city.exr' blur={60} />
-                <ambientLight intensity={0.05} />
+                <Environment files='/sunset.exr' environmentIntensity={3} environmentRotation={[0,0,2]} />
+                {/* <ambientLight intensity={100} /> */}
             </Canvas>
         </Box>
     )
