@@ -328,7 +328,7 @@ export function Viewer({
                 )}
 
                 <color attach="background" args={['#dfdfdf']} />
-                <Environment files='/sunset.exr' environmentIntensity={3} environmentRotation={[0,0,2]} />
+                <Environment files='/sunset.exr' environmentIntensity={3} environmentRotation={[0, 0, 2]} />
                 {/* <ambientLight intensity={100} /> */}
             </Canvas>
         </Box>
@@ -341,7 +341,7 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
     const [color, setColor] = useState('');
     const [newColorObject, setnewOb] = useState<any>({});
     const [text, setText] = useState('');
-    const [isLocked, setIsLocked] = useState(false);
+    const [isLocked, setIsLocked] = useState(true);
     const [textTyping, setTextType] = useState(false);
     const [isARMode, setIsARMode] = useState(false);
     const [scrollableTab, setScrollableTab] = useState(tabs?.[0]?.tab_name);
@@ -419,7 +419,7 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
                         }
                     }}
                 >
-                    <Iconify color={'black'} icon={!isARMode ? "game-icons:cube" : "eva:eye-outline"} width={36} />
+                    <Iconify color={'black'} icon={!isARMode ? "eva:eye-outline" : "game-icons:cube"} width={36} />
                 </IconButton>
                 <IconButton
                     onClick={() => setTextType(!textTyping)}
