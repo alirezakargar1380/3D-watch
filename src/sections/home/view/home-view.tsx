@@ -86,12 +86,14 @@ export default function HomeView() {
       <Container maxWidth={'xl'} sx={{ mt: 12 }}>
         <Stack spacing={10}>
 
-          <video ref={videoRef} 
-          onLoadedData={() => videoRef.current?.play()} 
-          onTouchStart={() => videoRef.current?.play()} 
-          autoPlay playsInline controls={false} loop muted style={{ width: '100%', height: '100%', borderRadius: '24px', objectFit: 'cover' }}>
-            <source src={'./clock 0001-0045sdf_1.mp4'} type="video/mp4" />
-          </video>
+          <Box component={'div'} sx={{ height: { xs: 500, md: 1 } }}>
+            <video ref={videoRef}
+              onLoadedData={() => videoRef.current?.play()}
+              onTouchStart={() => videoRef.current?.play()}
+              autoPlay playsInline controls={false} loop muted style={{ width: '100%', height: '100%', borderRadius: '24px', objectFit: 'cover' }}>
+              <source src={'./clock 0001-0045sdf_1.mp4'} type="video/mp4" />
+            </video>
+          </Box>
 
           {/* <CarouselAnimation data={_carouselsExample.slice(0, 4)} /> */}
 
@@ -178,7 +180,7 @@ export default function HomeView() {
 
       </Box>
 
-      <Container maxWidth={'xl'} sx={{ mt: { xs: 0, md: 16 }, pb: 16 }}>
+      <Container maxWidth={'xl'} sx={{ mt: { xs: 8, md: 16 }, pb: 16 }}>
         <Stack direction={{ xs: 'column-reverse', md: 'row' }} justifyContent={'space-between'}>
           <Box component={'div'}>
             <Typography variant='h2' fontWeight={800} mb={2}>Build Wierd Clocks!</Typography>
