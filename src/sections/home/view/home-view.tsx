@@ -86,15 +86,15 @@ export default function HomeView() {
       <Container maxWidth={'xl'} sx={{ mt: 12 }}>
         <Stack spacing={10}>
 
-          <CarouselAnimation data={_carouselsExample.slice(0, 4)} />
+          {/* <CarouselAnimation data={_carouselsExample.slice(0, 4)} /> */}
 
           <Box component="div">
             <ProductCarousel
-              // data={products.map((product) => {
-              data={SAMPLE_PRODUCTS.map((product) => {
+              data={products.map((product) => {
+              // data={SAMPLE_PRODUCTS.map((product) => {
                 return {
-                  // coverUrl: endpoints.images.get(product.images?.find((img) => img.main === true)?.name || ''),
-                  coverUrl: product.images?.find((img) => img.main === true)?.name || '',
+                  coverUrl: endpoints.images.get(product.images?.find((img) => img.main === true)?.name || ''),
+                  // coverUrl: product.images?.find((img) => img.main === true)?.name || '',
                   description: '',
                   title: product.name,
                   id: product.id
@@ -140,7 +140,7 @@ export default function HomeView() {
         {/* </Container> */}
       </Container>
 
-      <Box component="div" mt={10} bgcolor={'#f5f5f7'} py={18}>
+      <Box component="div" mt={10} bgcolor={'#f5f5f7'} py={18} sx={{ display: 'none' }}>
         <Container maxWidth={'xl'} sx={{ px: { xs: 3, md: 6 } }}>
           <Typography color={"#000000"} variant='h2' fontWeight={700} mb={4}>
             Why Apple is the best <br />

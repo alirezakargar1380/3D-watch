@@ -22,25 +22,25 @@ export default function ProductCarousel({ data }: Props) {
 
     const carousel = useCarousel({
         // slidesToShow: 4.5,
-        adaptiveHeight: true,
+        // adaptiveHeight: true,
         infinite: false,
-        className: "slider variable-width",
-        variableWidth: true,
-
-        // responsive: [
-        //     {
-        //         breakpoint: 1024,
-        //         settings: { slidesToShow: 5.5 },
-        //     },
-        //     {
-        //         breakpoint: 600,
-        //         settings: { slidesToShow: 2 },
-        //     },
-        //     {
-        //         breakpoint: 480,
-        //         settings: { slidesToShow: 1, centerPadding: '0' },
-        //     },
-        // ],
+        // className: "slider variable-width",
+        // variableWidth: true,
+        slidesToShow: 4.2,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: { slidesToShow: 4 },
+            },
+            {
+                breakpoint: 600,
+                settings: { slidesToShow: 2 },
+            },
+            {
+                breakpoint: 480,
+                settings: { slidesToShow: 1, centerPadding: '0' },
+            },
+        ],
         // ...CarouselDots({
         //     rounded: true,
         //     sx: { mt: 3 },
@@ -87,14 +87,14 @@ function CarouselItem({ item }: { item: CarouselItemProps }) {
     return (
         <Link href={paths.product.details(id)}>
             <Box position={'relative'} mr={2} component={'div'}>
-                <Box position={'absolute'} pl={'30px'} pt={'30px'} zIndex={10} component={'div'}>
-                    <Typography color={'white'} variant={'h3'} pt={'24px'} fontSize={'28px!important'}>{title}</Typography>
+                <Box position={'absolute'} pl={'30px'} pt={'24px'} zIndex={10} component={'div'}>
+                    <Typography color={'white'} variant={'h3'} pt={'12px'} fontSize={'28px!important'}>{title}</Typography>
                     <Box pt={'10px'} component={'div'}>
                         <Typography color={'white'} variant={'body1'}>Pro Clock for Wall and Room</Typography>
                         <Typography color={'white'} variant={'caption'}>low price & high quality</Typography>
                     </Box>
                 </Box>
-                <Box width={400} height={500} borderRadius={'18px'} overflow={'hidden'} component={'div'}>
+                <Box width={1} height={460} borderRadius={'18px'} overflow={'hidden'} component={'div'}>
                     <Image src={coverUrl} height={1} width={1} />
                 </Box>
             </Box>
