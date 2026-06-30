@@ -96,7 +96,7 @@ export default function ProductDetailsSummary({
     currentColorObject: {} as any,
     positions: positions.map((position: any) => {
       return {
-        text: 'random t',
+        text: '',
         font_file: fonts[0].file,
         font_size: FontSizes[0],
         ...position.position,
