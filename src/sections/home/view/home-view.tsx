@@ -14,7 +14,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Button, Container, Stack
 import { _mock, SAMPLE_PRODUCTS } from 'src/_mock';
 import ProductCarousel from 'src/sections/_examples/extra/carousel-view/product-carousel';
 import Iconify from 'src/components/iconify';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import ItemsCarousel from 'src/sections/_examples/extra/carousel-view/items-carousel';
 import CarouselAnimation from 'src/sections/_examples/extra/carousel-view/carousel-animation';
 import { useGetProducts } from 'src/api/product';
@@ -68,7 +68,7 @@ const _accordions = [...Array(3)].map((_, index) => ({
 
 export default function HomeView() {
   const { scrollYProgress } = useScroll();
-
+  const videoRef: any = useRef(null);
   const { products } = useGetProducts();
 
   const [controlled, setControlled] = useState<string | false>(false);
@@ -86,7 +86,7 @@ export default function HomeView() {
       <Container maxWidth={'xl'} sx={{ mt: 12 }}>
         <Stack spacing={10}>
 
-          <video autoPlay playsInline controls={false} loop muted style={{ width: '100%', height: '100%', borderRadius: '24px', objectFit: 'cover' }}>
+          <video ref={videoRef} onLoadedData={() => videoRef.current?.play()} autoPlay playsInline controls={false} loop muted style={{ width: '100%', height: '100%', borderRadius: '24px', objectFit: 'cover' }}>
             <source src={'./clock 0001-0045sdf_1.mp4'} type="video/mp4" />
           </video>
 
@@ -94,11 +94,11 @@ export default function HomeView() {
 
           <Box component="div">
             <ProductCarousel
-              data={products.map((product) => {
-                // data={SAMPLE_PRODUCTS.map((product) => {
+              // data={products.map((product) => {
+              data={SAMPLE_PRODUCTS.map((product) => {
                 return {
-                  coverUrl: endpoints.images.get(product.images?.find((img) => img.main === true)?.name || ''),
-                  // coverUrl: product.images?.find((img) => img.main === true)?.name || '',
+                  // coverUrl: endpoints.images.get(product.images?.find((img) => img.main === true)?.name || ''),
+                  coverUrl: product.images?.find((img) => img.main === true)?.name || '',
                   description: '',
                   title: product.name,
                   id: product.id
