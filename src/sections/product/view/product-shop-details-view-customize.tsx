@@ -116,21 +116,24 @@ export default function ProductShopDetailsViewCustomize({ id }: Props) {
 
       <Grid container spacing={{ xs: 3, md: 5, lg: 8 }}>
         <Grid xs={12} md={6} lg={7}>
-          {(!dialog.value) && (
-            <Viewer
-              key={'a3d-vlock-viewor'}
-              model_path={product.clock}
-              tabs={product.tabs}
-              isLocked={false}
-              font_size={font?.font_size}
-              positions={font?.positions}
-              // targetXYZ={[0, 0, 0]}
-              tab_name={product?.tabs?.[0].tab_name}
-              color={product?.tabs?.[0].default_color}
-              currentColorObject={colorObj}
-              height={600}
-            />
-          )}
+          <Box component={'div'} height={{ xs: 400, md: 600 }}>
+            {(!dialog.value) && (
+              <Viewer
+                key={'a3d-vlock-viewor'}
+                model_path={product.clock}
+                tabs={product.tabs}
+                isLocked={false}
+                font_size={font?.font_size}
+                positions={font?.positions}
+                // targetXYZ={[0, 0, 0]}
+                tab_name={product?.tabs?.[0].tab_name}
+                color={product?.tabs?.[0].default_color}
+                currentColorObject={colorObj}
+                height={1}
+              />
+            )}
+          </Box>
+
           {/* <ProductDetailsCarousel product={{
             images: [
               '/assets/images/Untitled3.jpg',

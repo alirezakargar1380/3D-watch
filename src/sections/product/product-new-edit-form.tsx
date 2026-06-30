@@ -77,7 +77,7 @@ const clockPaths = [
   },
   {
     path: '/models/black-without-glass.glb',
-    zoom: 1
+    zoom: 2
   },
   {
     path: '/models/steel-clock-2.glb',

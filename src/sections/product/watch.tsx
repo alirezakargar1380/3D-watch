@@ -257,12 +257,12 @@ function FreeLookControls({
         const dir = cam.clone().sub(target).normalize();
 
         // smaller zoomLevel = closer, larger = farther
-        const distance = zoomLevel * 12;
+        const distance = zoomLevel * 3;
 
         camera.position.copy(target.clone().add(dir.multiplyScalar(distance)));
         controlsRef.current?.target.copy(target);
         controlsRef.current?.update();
-    }, []);
+    }, [zoomLevel]);
 
     return <OrbitControls ref={controlsRef} makeDefault enableZoom />;
 }
@@ -320,10 +320,9 @@ export function Viewer({
                 )}
                 {(isLocked) && (
                     <FreeLookControls
-                        camPos={[
-                            0, 10, 0
-                        ]}
-                        zoomLevel={1}
+                        camPos={[Number(currentTab?.x) || 0, Number(currentTab?.y) || 10, Number(currentTab?.z) || 0]}
+                        targetPos={targetXYZ}
+                        zoomLevel={currentTab?.zoom || 1}
                     />
                 )}
 
@@ -421,7 +420,7 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
                 >
                     <Iconify color={'black'} icon={!isARMode ? "eva:eye-outline" : "game-icons:cube"} width={36} />
                 </IconButton>
-                <IconButton
+                {/* <IconButton
                     onClick={() => setTextType(!textTyping)}
                     sx={{
                         ...(textTyping && {
@@ -430,7 +429,7 @@ export default function CustomazationDialog({ dialog, model_path, tabs, values, 
                     }}
                 >
                     <Iconify color={'black'} icon={'cuida:text-outline'} width={36} />
-                </IconButton>
+                </IconButton> */}
             </Stack>
         </>
     )

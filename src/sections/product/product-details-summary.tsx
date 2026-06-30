@@ -395,6 +395,17 @@ export default function ProductDetailsSummary({
         size="large"
         color="warning"
         variant="contained"
+        onClick={dialog.onTrue}
+        sx={{ whiteSpace: 'nowrap' }}
+      >
+        Customize Clock
+      </Button>
+      {/* <Button
+        fullWidth
+        // disabled={isMaxQuantity || disabledActions}
+        size="large"
+        color="warning"
+        variant="contained"
         startIcon={<Iconify icon="solar:cart-plus-bold" width={24} />}
         onClick={handleAddCart}
         sx={{ whiteSpace: 'nowrap' }}
@@ -407,7 +418,7 @@ export default function ProductDetailsSummary({
         // type="submit" 
         variant="contained" onClick={dialog.onTrue} disabled={disabledActions}>
         Customize Clock
-      </Button>
+      </Button> */}
     </Stack>
   );
 
