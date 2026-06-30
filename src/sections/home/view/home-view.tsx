@@ -86,7 +86,7 @@ export default function HomeView() {
       <Container maxWidth={'xl'} sx={{ mt: 12 }}>
         <Stack spacing={10}>
 
-          <video autoPlay controls={false} loop muted style={{ width: '100%', height: '100%', borderRadius: '24px', objectFit: 'cover' }}>
+          <video autoPlay playsInline controls={false} loop muted style={{ width: '100%', height: '100%', borderRadius: '24px', objectFit: 'cover' }}>
             <source src={'./clock 0001-0045sdf_1.mp4'} type="video/mp4" />
           </video>
 
