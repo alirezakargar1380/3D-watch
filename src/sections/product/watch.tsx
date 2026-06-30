@@ -114,7 +114,7 @@ function Watch({ font_size, positions, color, colorObject, model_path, tab_detai
             if (selectedColorObject?.all === true) {
                 console.log('selectedColorObject (all)', selectedColorObject)
                 child.material = materials[selectedColorObject.material_name].clone();
-                child.material.color.set(selectedColorObject.code);
+                child.material.color.set(newObjectColor[tab_details.tab_name] || selectedColorObject.code);
                 if (selectedColorObject?.roughness)
                     child.material.roughness = +selectedColorObject.roughness;
 
@@ -328,7 +328,7 @@ export function Viewer({
                 )}
 
                 <color attach="background" args={['#f8f8f8']} />
-                <Environment files='/sunset.exr' environmentIntensity={3} environmentRotation={[0,0,2]} />
+                <Environment files='/sunset.exr' environmentIntensity={8} environmentRotation={[0,0,2]} />
                 {/* <ambientLight intensity={100} /> */}
             </Canvas>
         </Box>

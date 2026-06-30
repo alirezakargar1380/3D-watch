@@ -99,6 +99,10 @@ const clockPaths = [
     path: '/models/moon.glb',
     zoom: 3
   },
+  {
+    path: '/models/wierd.glb',
+    zoom: 3
+  },
 ]
 // ----------------------------------------------------------------------
 
