@@ -107,6 +107,10 @@ const clockPaths = [
     path: '/models/noghte.glb',
     zoom: 3
   },
+  {
+    path: '/models/beyzi.glb',
+    zoom: 3
+  },
 ]
 // ----------------------------------------------------------------------
 
