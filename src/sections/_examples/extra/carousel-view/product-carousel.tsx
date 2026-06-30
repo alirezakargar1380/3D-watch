@@ -26,9 +26,9 @@ export default function ProductCarousel({ data }: Props) {
         // infinite: false,
         // className: "slider variable-width",
         // variableWidth: true,
-        slidesToShow: 4.3,
+        slidesToShow: 4,
         // slidesToScroll: 1.3,
-        centerMode: true,
+        // centerMode: true,
         responsive: [
             {
                 breakpoint: 1024,
