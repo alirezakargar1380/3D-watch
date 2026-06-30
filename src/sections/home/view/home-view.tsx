@@ -86,12 +86,16 @@ export default function HomeView() {
       <Container maxWidth={'xl'} sx={{ mt: 12 }}>
         <Stack spacing={10}>
 
+          <video autoPlay loop muted style={{ width: '100%', height: '100%', borderRadius: '24px', objectFit: 'cover' }}>
+            <source src={'./clock 0001-0045sdf_1.mp4'} type="video/mp4" />
+          </video>
+
           {/* <CarouselAnimation data={_carouselsExample.slice(0, 4)} /> */}
 
           <Box component="div">
             <ProductCarousel
               data={products.map((product) => {
-              // data={SAMPLE_PRODUCTS.map((product) => {
+                // data={SAMPLE_PRODUCTS.map((product) => {
                 return {
                   coverUrl: endpoints.images.get(product.images?.find((img) => img.main === true)?.name || ''),
                   // coverUrl: product.images?.find((img) => img.main === true)?.name || '',
@@ -104,7 +108,7 @@ export default function HomeView() {
           </Box>
 
 
-          <Box component="div">
+          {/* <Box component="div">
             <Box component="div" mb={2}>
               <Typography variant='h4'>Customize <span style={{ color: '#ff3d51' }}>Your Watch.</span></Typography>
             </Box>
@@ -134,7 +138,7 @@ export default function HomeView() {
                 </Box>
               </Stack>
             </Box>
-          </Box>
+          </Box> */}
 
         </Stack>
         {/* </Container> */}
