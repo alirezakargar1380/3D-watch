@@ -87,9 +87,10 @@ export default function HomeView() {
         <Stack spacing={10}>
 
           <Box component={'div'} sx={{ height: { xs: 350, md: 1 } }}>
-            <video ref={videoRef}
-              onLoadedData={() => videoRef.current?.play()}
-              onTouchStart={() => videoRef.current?.play()}
+            <video
+              // ref={videoRef}
+              // onLoadedData={() => videoRef.current?.play()}
+              // onTouchStart={() => videoRef.current?.play()}
               autoPlay playsInline controls={false} loop muted style={{ width: '100%', height: '100%', borderRadius: '24px', objectFit: 'cover' }}>
               <source src={'./clock 0001-0045sdf_1.mp4'} type="video/mp4" />
             </video>
