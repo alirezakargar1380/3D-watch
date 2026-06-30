@@ -328,7 +328,7 @@ export function Viewer({
                 )}
 
                 <color attach="background" args={['#f8f8f8']} />
-                <Environment files='/sunset.exr' environmentIntensity={8} environmentRotation={[0,0,2]} />
+                <Environment files='/sunset.exr' environmentIntensity={3} environmentRotation={[0,0,2]} />
                 {/* <ambientLight intensity={100} /> */}
             </Canvas>
         </Box>
