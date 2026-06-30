@@ -86,7 +86,7 @@ export default function HomeView() {
       <Container maxWidth={'xl'} sx={{ mt: 12 }}>
         <Stack spacing={10}>
 
-          <Box component={'div'} sx={{ height: { xs: 500, md: 1 } }}>
+          <Box component={'div'} sx={{ height: { xs: 350, md: 1 } }}>
             <video ref={videoRef}
               onLoadedData={() => videoRef.current?.play()}
               onTouchStart={() => videoRef.current?.play()}
