@@ -1,6 +1,729 @@
 // ----------------------------------------------------------------------
 export const SAMPLE_PRODUCTS = [
   {
+    "id": 30,
+    "name": "Beyzi",
+    "clock": "/models/beyzi.glb",
+    "tabs": [
+      {
+        "id": 70,
+        "colors": [
+          {
+            "id": 118,
+            "code": "#5c5c5c",
+            "material_name": "Gold",
+            "roughness": "0",
+            "objects": "",
+            "all": true,
+            "createdAt": "2026-06-30T10:00:23.939Z",
+            "updatedAt": "2026-06-30T10:03:50.000Z",
+            "deletedAt": null
+          },
+          {
+            "id": 119,
+            "code": "#de8e02",
+            "material_name": "Gold",
+            "roughness": "0",
+            "objects": "",
+            "all": true,
+            "createdAt": "2026-06-30T10:00:23.940Z",
+            "updatedAt": "2026-06-30T10:00:23.940Z",
+            "deletedAt": null
+          },
+          {
+            "id": 120,
+            "code": "#ffa200",
+            "material_name": "Gold",
+            "roughness": "0.5",
+            "objects": "",
+            "all": true,
+            "createdAt": "2026-06-30T10:03:34.173Z",
+            "updatedAt": "2026-06-30T10:03:34.173Z",
+            "deletedAt": null
+          },
+          {
+            "id": 121,
+            "code": "#8adcff",
+            "material_name": "Gold",
+            "roughness": "0.1",
+            "objects": "",
+            "all": true,
+            "createdAt": "2026-06-30T10:04:11.233Z",
+            "updatedAt": "2026-06-30T10:04:34.000Z",
+            "deletedAt": null
+          },
+          {
+            "id": 122,
+            "code": "#a1a1a1",
+            "material_name": "Gold",
+            "roughness": "0.7",
+            "objects": "",
+            "all": true,
+            "createdAt": "2026-06-30T10:05:06.930Z",
+            "updatedAt": "2026-06-30T10:05:06.930Z",
+            "deletedAt": null
+          }
+        ],
+        "tab_name": "All Section",
+        "default_color": "#ffa200",
+        "key": "Gold",
+        "zoom": 1,
+        "x": 0,
+        "y": 15,
+        "z": 0,
+        "createdAt": "2026-06-30T10:00:23.936Z",
+        "updatedAt": "2026-06-30T10:12:15.000Z",
+        "deletedAt": null
+      },
+      {
+        "id": 71,
+        "colors": [
+          {
+            "id": 123,
+            "code": "#5e5e5e",
+            "material_name": "Gold",
+            "roughness": "",
+            "objects": "hand_copy,hand_copy002",
+            "all": false,
+            "createdAt": "2026-06-30T10:06:00.521Z",
+            "updatedAt": "2026-06-30T10:06:00.521Z",
+            "deletedAt": null
+          },
+          {
+            "id": 124,
+            "code": "#adebff",
+            "material_name": "Gold",
+            "roughness": "",
+            "objects": "hand_copy002,hand_copy",
+            "all": false,
+            "createdAt": "2026-06-30T10:06:00.523Z",
+            "updatedAt": "2026-06-30T10:06:00.523Z",
+            "deletedAt": null
+          },
+          {
+            "id": 125,
+            "code": "#dedede",
+            "material_name": "Gold",
+            "roughness": "",
+            "objects": "hand_copy002,hand_copy",
+            "all": false,
+            "createdAt": "2026-06-30T10:06:00.524Z",
+            "updatedAt": "2026-06-30T10:06:00.524Z",
+            "deletedAt": null
+          }
+        ],
+        "tab_name": "Hand",
+        "default_color": "#5e5e5e",
+        "key": "hand material",
+        "zoom": 2,
+        "x": 0,
+        "y": 10,
+        "z": 0,
+        "createdAt": "2026-06-30T10:06:00.520Z",
+        "updatedAt": "2026-06-30T10:11:58.000Z",
+        "deletedAt": null
+      },
+      {
+        "id": 72,
+        "colors": [
+          {
+            "id": 126,
+            "code": "#ff9500",
+            "material_name": "Middle f",
+            "roughness": "0",
+            "objects": "Beizi",
+            "all": false,
+            "createdAt": "2026-06-30T10:06:56.973Z",
+            "updatedAt": "2026-06-30T10:13:33.000Z",
+            "deletedAt": null
+          },
+          {
+            "id": 127,
+            "code": "#f99201",
+            "material_name": "Middle f",
+            "roughness": "1",
+            "objects": "Beizi",
+            "all": false,
+            "createdAt": "2026-06-30T10:07:41.275Z",
+            "updatedAt": "2026-06-30T10:13:33.000Z",
+            "deletedAt": null
+          }
+        ],
+        "tab_name": "Middle Frame",
+        "default_color": "#ff9500",
+        "key": "Middle f",
+        "zoom": 1,
+        "x": 0,
+        "y": 16,
+        "z": 0,
+        "createdAt": "2026-06-30T10:06:56.971Z",
+        "updatedAt": "2026-06-30T10:12:48.000Z",
+        "deletedAt": null
+      }
+    ],
+    "images": [
+      {
+        "id": 32,
+        "name": "./img/Tue Jun 30 2026_6e36d087-cbe9-471c-b519-699474e9f2c7.png",
+        "main": true,
+        "createdAt": "2026-06-30T09:59:33.478Z",
+        "updatedAt": "2026-06-30T09:59:33.478Z",
+        "deletedAt": null
+      }
+    ],
+    "positions": [],
+    "createdAt": "2026-06-30T09:59:33.452Z",
+    "updatedAt": "2026-06-30T09:59:33.452Z",
+    "deletedAt": null
+  },
+  {
+    "id": 29,
+    "name": "Noghte",
+    "clock": "/models/noghte.glb",
+    "tabs": [
+      {
+        "id": 65,
+        "colors": [
+          {
+            "id": 106,
+            "code": "#000",
+            "material_name": "background MATTE",
+            "roughness": "1",
+            "objects": "Clock,Frame",
+            "all": false,
+            "createdAt": "2026-06-30T07:19:50.038Z",
+            "updatedAt": "2026-06-30T09:48:56.000Z",
+            "deletedAt": null
+          },
+          {
+            "id": 107,
+            "code": "#e6e6e6",
+            "material_name": "background MATTE",
+            "roughness": "1",
+            "objects": "Clock,Frame",
+            "all": false,
+            "createdAt": "2026-06-30T07:19:50.039Z",
+            "updatedAt": "2026-06-30T09:48:56.000Z",
+            "deletedAt": null
+          },
+          {
+            "id": 108,
+            "code": "#f97101",
+            "material_name": "background MATTE",
+            "roughness": "1",
+            "objects": "Clock,Frame",
+            "all": false,
+            "createdAt": "2026-06-30T07:20:49.546Z",
+            "updatedAt": "2026-06-30T09:48:56.000Z",
+            "deletedAt": null
+          }
+        ],
+        "tab_name": "Frame",
+        "default_color": "#000",
+        "key": "background MATTE",
+        "zoom": 2,
+        "x": 0,
+        "y": 10,
+        "z": 0,
+        "createdAt": "2026-06-30T07:19:50.036Z",
+        "updatedAt": "2026-06-30T07:19:50.036Z",
+        "deletedAt": null
+      },
+      {
+        "id": 66,
+        "colors": [
+          {
+            "id": 109,
+            "code": "#000",
+            "material_name": "hand white color",
+            "roughness": "1",
+            "objects": "Plane,Plane004",
+            "all": false,
+            "createdAt": "2026-06-30T07:21:52.567Z",
+            "updatedAt": "2026-06-30T07:22:58.000Z",
+            "deletedAt": null
+          },
+          {
+            "id": 110,
+            "code": "#ffffff",
+            "material_name": "hand white color",
+            "roughness": "1",
+            "objects": "Plane,Plane004",
+            "all": false,
+            "createdAt": "2026-06-30T07:21:52.569Z",
+            "updatedAt": "2026-06-30T07:22:58.000Z",
+            "deletedAt": null
+          }
+        ],
+        "tab_name": "Hand",
+        "default_color": "#000",
+        "key": "hand white color",
+        "zoom": 2,
+        "x": 0,
+        "y": 10,
+        "z": 0,
+        "createdAt": "2026-06-30T07:21:52.565Z",
+        "updatedAt": "2026-06-30T07:21:52.565Z",
+        "deletedAt": null
+      },
+      {
+        "id": 67,
+        "colors": [
+          {
+            "id": 111,
+            "code": "#000",
+            "material_name": "Noghte",
+            "roughness": "0",
+            "objects": "dots002",
+            "all": false,
+            "createdAt": "2026-06-30T07:22:58.087Z",
+            "updatedAt": "2026-06-30T07:22:58.087Z",
+            "deletedAt": null
+          },
+          {
+            "id": 113,
+            "code": "#ffffff",
+            "material_name": "Noghte",
+            "roughness": "0",
+            "objects": "dots002",
+            "all": false,
+            "createdAt": "2026-06-30T07:24:06.120Z",
+            "updatedAt": "2026-06-30T07:24:06.120Z",
+            "deletedAt": null
+          }
+        ],
+        "tab_name": "dots",
+        "default_color": "#000",
+        "key": "Noghte",
+        "zoom": 2,
+        "x": 0,
+        "y": 10,
+        "z": 0,
+        "createdAt": "2026-06-30T07:22:58.086Z",
+        "updatedAt": "2026-06-30T07:22:58.086Z",
+        "deletedAt": null
+      },
+      {
+        "id": 68,
+        "colors": [
+          {
+            "id": 114,
+            "code": "#01651f",
+            "material_name": "Noghte",
+            "roughness": "0",
+            "objects": "Cube",
+            "all": false,
+            "createdAt": "2026-06-30T07:24:06.122Z",
+            "updatedAt": "2026-06-30T07:24:06.122Z",
+            "deletedAt": null
+          },
+          {
+            "id": 115,
+            "code": "#ffffff",
+            "material_name": "Noghte",
+            "roughness": "0",
+            "objects": "Cube",
+            "all": false,
+            "createdAt": "2026-06-30T07:24:44.672Z",
+            "updatedAt": "2026-06-30T07:24:44.672Z",
+            "deletedAt": null
+          }
+        ],
+        "tab_name": "Hour",
+        "default_color": "#01651f",
+        "key": "Noghte",
+        "zoom": 2,
+        "x": 0,
+        "y": 10,
+        "z": 0,
+        "createdAt": "2026-06-30T07:24:06.119Z",
+        "updatedAt": "2026-06-30T07:24:06.119Z",
+        "deletedAt": null
+      },
+      {
+        "id": 69,
+        "colors": [
+          {
+            "id": 116,
+            "code": "#000",
+            "material_name": "background MATTE",
+            "roughness": "1",
+            "objects": "safe",
+            "all": false,
+            "createdAt": "2026-06-30T09:50:46.301Z",
+            "updatedAt": "2026-06-30T09:50:46.301Z",
+            "deletedAt": null
+          },
+          {
+            "id": 117,
+            "code": "#ffffff",
+            "material_name": "background MATTE",
+            "roughness": "1",
+            "objects": "safe",
+            "all": false,
+            "createdAt": "2026-06-30T09:50:46.303Z",
+            "updatedAt": "2026-06-30T09:50:46.303Z",
+            "deletedAt": null
+          }
+        ],
+        "tab_name": "Background",
+        "default_color": "#ffffff",
+        "key": "background MATTE.001",
+        "zoom": 2,
+        "x": 0,
+        "y": 10,
+        "z": 0,
+        "createdAt": "2026-06-30T09:50:46.298Z",
+        "updatedAt": "2026-06-30T09:50:46.298Z",
+        "deletedAt": null
+      }
+    ],
+    "images": [
+      {
+        "id": 31,
+        "name": "./img/Tue Jun 30 2026_663bc125-fad4-4391-9c7c-fef87c5348be.png",
+        "main": true,
+        "createdAt": "2026-06-30T07:18:52.579Z",
+        "updatedAt": "2026-06-30T07:18:52.579Z",
+        "deletedAt": null
+      }
+    ],
+    "positions": [],
+    "createdAt": "2026-06-30T07:18:52.554Z",
+    "updatedAt": "2026-06-30T07:18:52.554Z",
+    "deletedAt": null
+  },
+  {
+    "id": 28,
+    "name": "Wierd Shape Clock",
+    "clock": "/models/wierd.glb",
+    "tabs": [
+      {
+        "id": 61,
+        "colors": [
+          {
+            "id": 93,
+            "code": "#8c8c8c",
+            "material_name": "Gold",
+            "roughness": "0",
+            "objects": "",
+            "all": true,
+            "createdAt": "2026-06-30T06:30:53.255Z",
+            "updatedAt": "2026-06-30T06:43:42.000Z",
+            "deletedAt": null
+          },
+          {
+            "id": 94,
+            "code": "#b37100",
+            "material_name": "Gold",
+            "roughness": "0.5",
+            "objects": "",
+            "all": true,
+            "createdAt": "2026-06-30T06:30:53.256Z",
+            "updatedAt": "2026-06-30T06:45:50.000Z",
+            "deletedAt": null
+          },
+          {
+            "id": 103,
+            "code": "#404040",
+            "material_name": "Gold",
+            "roughness": "0",
+            "objects": "",
+            "all": true,
+            "createdAt": "2026-06-30T06:44:52.591Z",
+            "updatedAt": "2026-06-30T06:44:52.591Z",
+            "deletedAt": null
+          },
+          {
+            "id": 104,
+            "code": "#002e0f",
+            "material_name": "Gold",
+            "roughness": "0.8",
+            "objects": "",
+            "all": true,
+            "createdAt": "2026-06-30T06:54:09.125Z",
+            "updatedAt": "2026-06-30T06:54:09.125Z",
+            "deletedAt": null
+          }
+        ],
+        "tab_name": "All Section",
+        "default_color": "#8c8c8c",
+        "key": "Gold",
+        "zoom": 2,
+        "x": 0,
+        "y": 10,
+        "z": 0,
+        "createdAt": "2026-06-30T06:30:53.250Z",
+        "updatedAt": "2026-06-30T06:44:52.000Z",
+        "deletedAt": null
+      },
+      {
+        "id": 62,
+        "colors": [
+          {
+            "id": 95,
+            "code": "#7d7d7d",
+            "material_name": "Gold",
+            "roughness": "0",
+            "objects": "numbers",
+            "all": false,
+            "createdAt": "2026-06-30T06:38:04.159Z",
+            "updatedAt": "2026-06-30T06:38:04.159Z",
+            "deletedAt": null
+          },
+          {
+            "id": 96,
+            "code": "#faf200",
+            "material_name": "Gold",
+            "roughness": "0",
+            "objects": "numbers",
+            "all": false,
+            "createdAt": "2026-06-30T06:38:04.161Z",
+            "updatedAt": "2026-06-30T06:38:04.161Z",
+            "deletedAt": null
+          },
+          {
+            "id": 97,
+            "code": "#fa8805",
+            "material_name": "Gold",
+            "roughness": "0",
+            "objects": "numbers",
+            "all": false,
+            "createdAt": "2026-06-30T06:38:04.164Z",
+            "updatedAt": "2026-06-30T06:38:04.164Z",
+            "deletedAt": null
+          }
+        ],
+        "tab_name": "Numbers",
+        "default_color": "#7d7d7d",
+        "key": "Gold",
+        "zoom": 2,
+        "x": 0,
+        "y": 10,
+        "z": 0,
+        "createdAt": "2026-06-30T06:38:04.157Z",
+        "updatedAt": "2026-06-30T06:38:04.157Z",
+        "deletedAt": null
+      },
+      {
+        "id": 63,
+        "colors": [
+          {
+            "id": 98,
+            "code": "#ffffff",
+            "material_name": "Gold",
+            "roughness": "0.5",
+            "objects": "hand_copy,hand_copy002",
+            "all": false,
+            "createdAt": "2026-06-30T06:39:12.722Z",
+            "updatedAt": "2026-06-30T06:39:12.722Z",
+            "deletedAt": null
+          },
+          {
+            "id": 99,
+            "code": "#ffa200",
+            "material_name": "Gold",
+            "roughness": "0.5",
+            "objects": "hand_copy,hand_copy002",
+            "all": false,
+            "createdAt": "2026-06-30T06:39:12.724Z",
+            "updatedAt": "2026-06-30T06:39:12.724Z",
+            "deletedAt": null
+          }
+        ],
+        "tab_name": "Hand",
+        "default_color": "#ffa200",
+        "key": "Gold",
+        "zoom": 2,
+        "x": 0,
+        "y": 10,
+        "z": 0,
+        "createdAt": "2026-06-30T06:39:12.720Z",
+        "updatedAt": "2026-06-30T06:42:07.000Z",
+        "deletedAt": null
+      },
+      {
+        "id": 64,
+        "colors": [
+          {
+            "id": 100,
+            "code": "#000",
+            "material_name": "Gold",
+            "roughness": "0",
+            "objects": "Frame,Under_Frame,Cylinder",
+            "all": false,
+            "createdAt": "2026-06-30T06:43:10.595Z",
+            "updatedAt": "2026-06-30T06:52:10.000Z",
+            "deletedAt": null
+          },
+          {
+            "id": 101,
+            "code": "#ff9500",
+            "material_name": "Gold",
+            "roughness": "0",
+            "objects": "Frame,Cylinder,Under_Frame",
+            "all": false,
+            "createdAt": "2026-06-30T06:43:10.597Z",
+            "updatedAt": "2026-06-30T06:52:10.000Z",
+            "deletedAt": null
+          },
+          {
+            "id": 102,
+            "code": "#ffea00",
+            "material_name": "Gold",
+            "roughness": "1",
+            "objects": "Frame,Under_Frame,Cylinder",
+            "all": false,
+            "createdAt": "2026-06-30T06:43:10.598Z",
+            "updatedAt": "2026-06-30T06:52:10.000Z",
+            "deletedAt": null
+          },
+          {
+            "id": 105,
+            "code": "#002e0f",
+            "material_name": "Gold",
+            "roughness": "0.7",
+            "objects": "Frame,Under_Frame,Cylinder",
+            "all": false,
+            "createdAt": "2026-06-30T06:54:09.127Z",
+            "updatedAt": "2026-06-30T06:54:09.127Z",
+            "deletedAt": null
+          }
+        ],
+        "tab_name": "Frame",
+        "default_color": "#ffea00",
+        "key": "Gold",
+        "zoom": 2,
+        "x": 0,
+        "y": 10,
+        "z": 0,
+        "createdAt": "2026-06-30T06:43:10.593Z",
+        "updatedAt": "2026-06-30T06:43:10.593Z",
+        "deletedAt": null
+      }
+    ],
+    "images": [
+      {
+        "id": 29,
+        "name": "./img/Tue Jun 30 2026_f2c9c360-f69f-4e66-90c6-9a6e7b4eb6ad.jpg",
+        "main": true,
+        "createdAt": "2026-06-30T06:28:28.048Z",
+        "updatedAt": "2026-06-30T06:28:28.048Z",
+        "deletedAt": null
+      }
+    ],
+    "positions": [],
+    "createdAt": "2026-06-30T06:28:27.993Z",
+    "updatedAt": "2026-06-30T06:30:53.000Z",
+    "deletedAt": null
+  },
+  {
+    "id": 27,
+    "name": "Moon Clock",
+    "clock": "/models/moon.glb",
+    "tabs": [
+      {
+        "id": 59,
+        "colors": [
+          {
+            "id": 88,
+            "code": "#c93131",
+            "material_name": "Metalic Gray",
+            "roughness": "0",
+            "objects": "Helal,Mile,Motor,hand001,pin,hand002",
+            "all": false,
+            "createdAt": "2026-06-30T04:26:59.251Z",
+            "updatedAt": "2026-06-30T05:01:56.000Z",
+            "deletedAt": null
+          },
+          {
+            "id": 89,
+            "code": "#ffd500",
+            "material_name": "Metalic Gray",
+            "roughness": "0",
+            "objects": "Mile,Helal,Motor,hand001,pin,hand002",
+            "all": false,
+            "createdAt": "2026-06-30T04:27:17.573Z",
+            "updatedAt": "2026-06-30T04:45:19.000Z",
+            "deletedAt": null
+          },
+          {
+            "id": 90,
+            "code": "#6b6b6b",
+            "material_name": "Metalic Gray",
+            "roughness": "0.3",
+            "objects": "Helal,Mile,Motor,hand001,pin,hand002",
+            "all": false,
+            "createdAt": "2026-06-30T04:31:39.613Z",
+            "updatedAt": "2026-06-30T04:41:06.000Z",
+            "deletedAt": null
+          }
+        ],
+        "tab_name": "All Section",
+        "default_color": "#6b6b6b",
+        "key": "Metalic Gray",
+        "zoom": 1,
+        "x": 1,
+        "y": 7,
+        "z": 4,
+        "createdAt": "2026-06-30T04:26:59.248Z",
+        "updatedAt": "2026-06-30T04:46:52.000Z",
+        "deletedAt": null
+      },
+      {
+        "id": 60,
+        "colors": [
+          {
+            "id": 91,
+            "code": "#ffc800",
+            "material_name": "Material.001",
+            "roughness": "0.2",
+            "objects": "Gold_Paye",
+            "all": false,
+            "createdAt": "2026-06-30T05:01:03.720Z",
+            "updatedAt": "2026-06-30T05:01:16.000Z",
+            "deletedAt": null
+          },
+          {
+            "id": 92,
+            "code": "#757575",
+            "material_name": "Material.001",
+            "roughness": "0.2",
+            "objects": "Gold_Paye",
+            "all": false,
+            "createdAt": "2026-06-30T05:01:33.181Z",
+            "updatedAt": "2026-06-30T05:01:33.181Z",
+            "deletedAt": null
+          }
+        ],
+        "tab_name": "Stand",
+        "default_color": "#ffc800",
+        "key": "Material.001",
+        "zoom": 2,
+        "x": 0,
+        "y": 10,
+        "z": 0,
+        "createdAt": "2026-06-30T05:01:03.716Z",
+        "updatedAt": "2026-06-30T05:01:03.716Z",
+        "deletedAt": null
+      }
+    ],
+    "images": [
+      {
+        "id": 30,
+        "name": "./img/Tue Jun 30 2026_6f27c17f-7828-4ac9-b481-0cd327fb422b.png",
+        "main": true,
+        "createdAt": "2026-06-30T07:12:21.313Z",
+        "updatedAt": "2026-06-30T07:12:21.313Z",
+        "deletedAt": null
+      }
+    ],
+    "positions": [],
+    "createdAt": "2026-06-30T04:25:48.522Z",
+    "updatedAt": "2026-06-30T04:25:48.522Z",
+    "deletedAt": null
+  },
+  {
     "id": 16,
     "name": "Salib Clock",
     "clock": "/models/salib-clock.glb",
@@ -45,12 +768,12 @@ export const SAMPLE_PRODUCTS = [
         "tab_name": "Frame",
         "default_color": "#000",
         "key": "background MATTE",
-        "zoom": 2,
+        "zoom": 3,
         "x": 0,
         "y": 10,
         "z": 0,
         "createdAt": "2026-05-10T20:32:17.727Z",
-        "updatedAt": "2026-05-10T20:44:24.000Z",
+        "updatedAt": "2026-06-22T06:11:59.000Z",
         "deletedAt": null
       },
       {
@@ -81,23 +804,41 @@ export const SAMPLE_PRODUCTS = [
         ],
         "tab_name": "Hand White Sec",
         "default_color": "#0069cc",
-        "key": "salib",
+        "key": "hand white color",
         "zoom": 2,
         "x": 0,
         "y": 10,
         "z": 0,
         "createdAt": "2026-05-10T20:44:24.917Z",
-        "updatedAt": "2026-05-10T20:44:24.917Z",
+        "updatedAt": "2026-06-22T07:27:54.000Z",
         "deletedAt": null
       }
     ],
     "images": [
       {
-        "id": 21,
-        "name": "./img/Mon May 11 2026_0a4d946a-b26e-4348-829b-b2632ab1f572.jpg",
+        "id": 24,
+        "name": "./img/Tue Jun 30 2026_d0a92d61-2185-45b5-a47b-dde00cf69b7d.png",
         "main": true,
-        "createdAt": "2026-05-10T20:32:17.800Z",
-        "updatedAt": "2026-05-10T20:32:17.800Z",
+        "createdAt": "2026-06-30T02:49:56.347Z",
+        "updatedAt": "2026-06-30T02:49:56.347Z",
+        "deletedAt": null
+      }
+    ],
+    "positions": [
+      {
+        "id": 11,
+        "x": "0",
+        "y": "0.7",
+        "createdAt": "2026-06-19T23:25:37.492Z",
+        "updatedAt": "2026-06-19T23:25:37.492Z",
+        "deletedAt": null
+      },
+      {
+        "id": 10,
+        "x": "-0.8",
+        "y": "0",
+        "createdAt": "2026-06-19T23:18:41.123Z",
+        "updatedAt": "2026-06-19T23:25:06.000Z",
         "deletedAt": null
       }
     ],
@@ -117,7 +858,7 @@ export const SAMPLE_PRODUCTS = [
             "id": 55,
             "code": "#4b4b4b",
             "material_name": "Matte Golden",
-            "roughness": "1.0",
+            "roughness": "",
             "objects": "",
             "all": true,
             "createdAt": "2026-05-06T19:35:10.633Z",
@@ -196,7 +937,7 @@ export const SAMPLE_PRODUCTS = [
           }
         ],
         "tab_name": "Hand",
-        "default_color": "#616161",
+        "default_color": "#000",
         "key": "Matte Golden",
         "zoom": 3,
         "x": 0,
@@ -246,14 +987,15 @@ export const SAMPLE_PRODUCTS = [
     ],
     "images": [
       {
-        "id": 20,
-        "name": "./img/Thu May 07 2026_8b3043e3-c991-44d6-adb4-838d71022ac7.png",
+        "id": 23,
+        "name": "./img/Tue Jun 30 2026_9d836c20-51e2-428c-b1c1-7f8ad7345b67.png",
         "main": true,
-        "createdAt": "2026-05-06T19:35:10.672Z",
-        "updatedAt": "2026-05-06T19:35:10.672Z",
+        "createdAt": "2026-06-30T02:44:57.862Z",
+        "updatedAt": "2026-06-30T02:44:57.862Z",
         "deletedAt": null
       }
     ],
+    "positions": [],
     "createdAt": "2026-05-06T19:35:10.629Z",
     "updatedAt": "2026-05-06T19:35:10.629Z",
     "deletedAt": null
@@ -425,14 +1167,15 @@ export const SAMPLE_PRODUCTS = [
     ],
     "images": [
       {
-        "id": 19,
-        "name": "./img/Thu May 07 2026_0a45ad47-6176-406f-a791-07e4e9c63aa6.jpg",
+        "id": 22,
+        "name": "./img/Tue Jun 30 2026_d9627f57-a8c7-4268-baa2-d0d962706856.png",
         "main": true,
-        "createdAt": "2026-05-06T19:13:28.203Z",
-        "updatedAt": "2026-05-06T19:13:28.203Z",
+        "createdAt": "2026-06-30T02:34:08.738Z",
+        "updatedAt": "2026-06-30T02:34:08.738Z",
         "deletedAt": null
       }
     ],
+    "positions": [],
     "createdAt": "2026-05-06T19:13:28.140Z",
     "updatedAt": "2026-05-06T19:13:28.140Z",
     "deletedAt": null
@@ -512,6 +1255,7 @@ export const SAMPLE_PRODUCTS = [
         "deletedAt": null
       }
     ],
+    "positions": [],
     "createdAt": "2026-05-06T19:06:52.692Z",
     "updatedAt": "2026-05-06T19:06:52.692Z",
     "deletedAt": null
@@ -594,14 +1338,15 @@ export const SAMPLE_PRODUCTS = [
     ],
     "images": [
       {
-        "id": 17,
-        "name": "./img/Thu May 07 2026_1d574a7f-a2a1-4601-b97e-e13c0b62b8f0.jpg",
+        "id": 26,
+        "name": "./img/Tue Jun 30 2026_9e57ca8f-6fb5-4832-8db5-8565bd087852.png",
         "main": true,
-        "createdAt": "2026-05-06T18:58:10.149Z",
-        "updatedAt": "2026-05-06T18:58:10.149Z",
+        "createdAt": "2026-06-30T03:54:31.508Z",
+        "updatedAt": "2026-06-30T03:54:31.508Z",
         "deletedAt": null
       }
     ],
+    "positions": [],
     "createdAt": "2026-05-06T18:58:10.087Z",
     "updatedAt": "2026-05-09T22:34:27.000Z",
     "deletedAt": null
@@ -736,215 +1481,17 @@ export const SAMPLE_PRODUCTS = [
     ],
     "images": [
       {
-        "id": 16,
-        "name": "./img/Thu May 07 2026_33350054-17b3-4fb6-b54b-44ff424b5767.jpg",
+        "id": 25,
+        "name": "./img/Tue Jun 30 2026_5508cfef-1fa2-4266-a279-ae322e460543.png",
         "main": true,
-        "createdAt": "2026-05-06T18:46:48.618Z",
-        "updatedAt": "2026-05-06T18:46:48.618Z",
+        "createdAt": "2026-06-30T03:44:50.209Z",
+        "updatedAt": "2026-06-30T03:44:50.209Z",
         "deletedAt": null
       }
     ],
+    "positions": [],
     "createdAt": "2026-05-06T18:43:52.351Z",
     "updatedAt": "2026-05-06T18:43:52.351Z",
-    "deletedAt": null
-  },
-  {
-    "id": 10,
-    "name": "Mile Clock",
-    "clock": "/models/mile-watch.glb",
-    "tabs": [
-      {
-        "id": 31,
-        "colors": [
-          {
-            "id": 30,
-            "code": "#000",
-            "material_name": "gold metal",
-            "roughness": "",
-            "objects": "mile,wall_holder,handpin,pin,handpin001",
-            "all": false,
-            "createdAt": "2026-05-06T18:09:10.712Z",
-            "updatedAt": "2026-05-11T09:21:43.000Z",
-            "deletedAt": null
-          },
-          {
-            "id": 31,
-            "code": "#ffea00",
-            "material_name": "gold metal",
-            "roughness": "",
-            "objects": "mile,wall_holder,handpin,pin,handpin001",
-            "all": false,
-            "createdAt": "2026-05-06T18:19:51.059Z",
-            "updatedAt": "2026-05-11T09:21:43.000Z",
-            "deletedAt": null
-          }
-        ],
-        "tab_name": "Metal",
-        "default_color": "#ffff00",
-        "key": "gold metal",
-        "zoom": 8,
-        "x": 0,
-        "y": 8,
-        "z": 0,
-        "createdAt": "2026-05-06T18:09:10.709Z",
-        "updatedAt": "2026-05-06T18:38:05.000Z",
-        "deletedAt": null
-      }
-    ],
-    "images": [
-      {
-        "id": 15,
-        "name": "./img/Thu May 07 2026_b0c310f3-77c0-4133-af69-d4b86b0c5cc5.png",
-        "main": true,
-        "createdAt": "2026-05-06T18:19:51.102Z",
-        "updatedAt": "2026-05-06T18:19:51.102Z",
-        "deletedAt": null
-      }
-    ],
-    "createdAt": "2026-05-06T18:09:10.703Z",
-    "updatedAt": "2026-05-11T09:21:43.000Z",
-    "deletedAt": null
-  },
-  {
-    "id": 9,
-    "name": "Sozani Clock",
-    "clock": "/models/sozani.glb",
-    "tabs": [
-      {
-        "id": 28,
-        "colors": [
-          {
-            "id": 24,
-            "code": "#ffd500",
-            "material_name": "frame",
-            "roughness": "",
-            "objects": "NurbsCircle,Frame",
-            "all": false,
-            "createdAt": "2026-05-06T15:29:25.049Z",
-            "updatedAt": "2026-05-11T09:35:02.000Z",
-            "deletedAt": null
-          },
-          {
-            "id": 25,
-            "code": "#004d00",
-            "material_name": "frame",
-            "roughness": "",
-            "objects": "NurbsCircle,Frame",
-            "all": false,
-            "createdAt": "2026-05-06T15:35:05.709Z",
-            "updatedAt": "2026-05-11T09:35:02.000Z",
-            "deletedAt": null
-          },
-          {
-            "id": 84,
-            "code": "#404040",
-            "material_name": "frame",
-            "roughness": "",
-            "objects": "NurbsCircle,Frame",
-            "all": false,
-            "createdAt": "2026-05-11T09:24:32.405Z",
-            "updatedAt": "2026-05-11T09:35:02.000Z",
-            "deletedAt": null
-          }
-        ],
-        "tab_name": "Frame",
-        "default_color": "#404040",
-        "key": "frame",
-        "zoom": 3,
-        "x": 0,
-        "y": 10,
-        "z": 0,
-        "createdAt": "2026-05-06T15:29:25.047Z",
-        "updatedAt": "2026-05-11T09:24:32.000Z",
-        "deletedAt": null
-      },
-      {
-        "id": 29,
-        "colors": [
-          {
-            "id": 26,
-            "code": "#ffdd00",
-            "material_name": "golden",
-            "roughness": "",
-            "objects": "holder,Sozan,mile,circle,handpin001,handpin,pin,holder001",
-            "all": false,
-            "createdAt": "2026-05-06T15:35:05.711Z",
-            "updatedAt": "2026-05-11T09:36:42.000Z",
-            "deletedAt": null
-          },
-          {
-            "id": 27,
-            "code": "#ffa200",
-            "material_name": "golden",
-            "roughness": "",
-            "objects": "holder,Sozan,mile,holder001,circle,handpin001,handpin,pin",
-            "all": false,
-            "createdAt": "2026-05-06T15:35:05.713Z",
-            "updatedAt": "2026-05-11T09:36:42.000Z",
-            "deletedAt": null
-          }
-        ],
-        "tab_name": "golden",
-        "default_color": "#ffdd00",
-        "key": "golden",
-        "zoom": 3,
-        "x": 0,
-        "y": 10,
-        "z": 0,
-        "createdAt": "2026-05-06T15:35:05.703Z",
-        "updatedAt": "2026-05-11T09:36:42.000Z",
-        "deletedAt": null
-      },
-      {
-        "id": 30,
-        "colors": [
-          {
-            "id": 28,
-            "code": "#000",
-            "material_name": "hand",
-            "roughness": "",
-            "objects": "Hand,Hand001",
-            "all": false,
-            "createdAt": "2026-05-06T15:35:05.715Z",
-            "updatedAt": "2026-05-11T09:34:23.000Z",
-            "deletedAt": null
-          },
-          {
-            "id": 29,
-            "code": "#d0a474",
-            "material_name": "hand",
-            "roughness": "",
-            "objects": "Hand001,Hand",
-            "all": false,
-            "createdAt": "2026-05-06T15:35:05.716Z",
-            "updatedAt": "2026-05-11T09:36:42.000Z",
-            "deletedAt": null
-          }
-        ],
-        "tab_name": "Hand",
-        "default_color": "#d0a474",
-        "key": "hand",
-        "zoom": 5,
-        "x": 0,
-        "y": 10,
-        "z": 0,
-        "createdAt": "2026-05-06T15:35:05.706Z",
-        "updatedAt": "2026-05-11T09:37:07.000Z",
-        "deletedAt": null
-      }
-    ],
-    "images": [
-      {
-        "id": 14,
-        "name": "./img/Wed May 06 2026_b5661ea8-7a0b-44bc-9235-79a2cc14ed45.png",
-        "main": true,
-        "createdAt": "2026-05-06T15:29:25.092Z",
-        "updatedAt": "2026-05-06T15:29:25.092Z",
-        "deletedAt": null
-      }
-    ],
-    "createdAt": "2026-05-06T15:29:25.044Z",
-    "updatedAt": "2026-05-06T15:29:25.044Z",
     "deletedAt": null
   },
   {
@@ -1088,14 +1635,15 @@ export const SAMPLE_PRODUCTS = [
     ],
     "images": [
       {
-        "id": 13,
-        "name": "./img/Wed May 06 2026_2e40cf61-b08a-49cd-a94a-32132cab045c.jpg",
+        "id": 27,
+        "name": "./img/Tue Jun 30 2026_a925ef3e-3690-4539-ba82-f1267ccbfdf0.png",
         "main": true,
-        "createdAt": "2026-05-06T11:17:18.743Z",
-        "updatedAt": "2026-05-06T11:17:18.743Z",
+        "createdAt": "2026-06-30T03:56:26.680Z",
+        "updatedAt": "2026-06-30T03:56:26.680Z",
         "deletedAt": null
       }
     ],
+    "positions": [],
     "createdAt": "2026-05-06T10:09:46.244Z",
     "updatedAt": "2026-05-06T11:17:18.000Z",
     "deletedAt": null
@@ -1246,12 +1794,12 @@ export const SAMPLE_PRODUCTS = [
         "deletedAt": null
       }
     ],
+    "positions": [],
     "createdAt": "2026-02-27T07:40:29.396Z",
     "updatedAt": "2026-05-06T11:22:58.000Z",
     "deletedAt": null
   }
 ]
-
 export const PRODUCT_GENDER_OPTIONS = [
   { label: 'Men', value: 'Men' },
   { label: 'Women', value: 'Women' },
